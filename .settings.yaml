@@ -1,5 +1,5 @@
 app_title: "Roni"
-app_root_path: "/"
+app_root_path: ""
 app_docs_url: "/api"
 app_redoc_url:
 
@@ -40,4 +40,4 @@ sqlite_filename: "../data/phoenix_roni_api.db"
 
 log_filename: "../.dev/roni.log"
 
-origins_url: "http://localhost:8020"
+origins_url: "http://localhost:8030"

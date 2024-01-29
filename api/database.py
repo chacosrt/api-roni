@@ -26,12 +26,11 @@ import settings as _settings
 # )
 
 
-if _settings.DATABASE_ENGINE == "MS-SQL":
+if _settings.DATABASE_ENGINE == "MYSQL":
     engine = _sql.create_engine(
-        f"mssql+pyodbc://{_settings.SQL_USERNAME}:{_settings.SQL_PSSWD}@{_settings.SQL_SERVERNAME}/{_settings.SQL_DB}?driver={_settings.SQL_DRIVER}",
-        fast_executemany=True,
+        f"mysql+mysqlconnector://{_settings.MYSQL_USERNAME}:{_settings.MYSQL_PSSWD}@{_settings.MYSQL_SERVERNAME}:3306/{_settings.MYSQL_DB}"
     )
-
+    
 if _settings.DATABASE_ENGINE == "SQLITE3":
     SQLALCHEMY_DATABASE_URL = _settings.SQLALCHEMY_DATABASE_URL
     engine = _sql.create_engine(

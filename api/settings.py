@@ -8,20 +8,11 @@ import json as _json
 # *************************************************************************************************************************************
 # BACKEND
 # *************************************************************************************************************************************
-
-""" with open("../.backend.yaml") as stream:
+with open("../.backend.yaml") as stream:
     config = _yaml.safe_load(stream)
 
 ROOT_URL = config["root_url"]
 JANUS_URL = config["janus_url"]
-WORMHOLE_URL = config["wormhole_url"]
-ARENA_URL = config["arena_url"]
-QUADRANT_URL = config["quadrant_url"]
-MARBLE_URL = config["marble_url"]
-PILLS_URL = config["pills_url"]
-TRACKER_URL = config["tracker_url"]
-NEWTON_URL = config["newton_url"]
-HUBBLE_URL = config["hubble_url"] """
 
 # *************************************************************************************************************************************
 # SETTINGS

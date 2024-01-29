@@ -117,298 +117,34 @@ async def home():
 
 
 # *************************************************************************************************************************************
-# SECCION: CEDULAS
+# SECCION: Torneos
 # *************************************************************************************************************************************
 
-@app.post(
-    "/cedula/",
-    status_code=_fastapi.status.HTTP_200_OK,
-    tags=["Cedulas"],
-)
-def verificar_cedula(
-    background_tasks: _fastapi.BackgroundTasks,
-    cedula: _schemas.Cedula,
-    db: _orm.Session = _fastapi.Depends(_services.get_db),
-    token: str = _fastapi.Depends(_auth.token_bearer()),
-    
-):
-    db_cedula = _services.verifica_cedula(db=db, token=token,cedula=cedula,background_tasks=background_tasks)
-
-    return db_cedula
-
-# *************************************************************************************************************************************
-# SECCION: CONSTANCIA FISCAL
-# *************************************************************************************************************************************
-
-@app.post(
-    "/constancia/",
-    response_model=_schemas.ConstanciaFiscalData,
-    status_code=_fastapi.status.HTTP_200_OK,
-    tags=["Constancia Fiscal"],
-)
-def verificar_constancia(
-    constancia: str,
-    rfc:str,
-    db: _orm.Session = _fastapi.Depends(_services.get_db),
-    token: str = _fastapi.Depends(_auth.token_bearer()),
-):
-    db_constancia = _services.verifica_constancia(db=db,token=token,id_constancia=constancia,rfc=rfc)
-
-    return db_constancia
-
-
-# *************************************************************************************************************************************
-# SECCION: PNN
-# *************************************************************************************************************************************
 @app.get(
-    "/pnn_telefono/",
+    "/torneos/",
+    response_model=List[_schemas.Torneos],
     status_code=_fastapi.status.HTTP_200_OK,
-    tags=["PLAN NACIONAL DE NUMERACION"],
+    tags=["Tornos"],
 )
-async def get_telefono(
-    telefono: str ,
+async def read_torneos(
+    skip: Optional[int] = None,
+    limit: Optional[int] = None,
     db: _orm.Session = _fastapi.Depends(_services.get_db),
     token: str = _fastapi.Depends(_auth.token_bearer()),
-    
 ):
-    db_pnn = _services.format_telefono(
-        db=db, token=token, telefono=telefono
+    db_torneos = _services.get_torneos(
+        db=db,
+          token=token, 
+          skip=skip, limit=limit
     )
-    
-    return db_pnn
+    if len(db_torneos) == 0:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+    return db_torneos
 
 
-# *************************************************************************************************************************************
-# SECCION: REGISTRO SANITARIO
-# *************************************************************************************************************************************
 
-@app.post(
-    "/registro/",
-    response_model=_schemas.RegistroSanitario,
-    status_code=_fastapi.status.HTTP_200_OK,
-    tags=["Registro Sanitario"],
-)
-def get_reg_sanitario(
-    registro: str,
-    db: _orm.Session = _fastapi.Depends(_services.get_db),
-    token: str = _fastapi.Depends(_auth.token_bearer()),
-):
-    db_registro = _services.verifica_reg_sanitario(db=db,token=token,registro=registro)
-
-    return db_registro
-
-# *************************************************************************************************************************************
-# SECCION: PDF GENERATOR
-# *************************************************************************************************************************************
-
-@app.post(
-    "/pdf_generator/",
-    #response_model=_schemas.RegistroSanitario,
-    status_code=_fastapi.status.HTTP_200_OK,
-    tags=["PDF GENERATOR"],
-)
-def get_pdf(
-    constancia: str,
-    db: _orm.Session = _fastapi.Depends(_services.get_db),
-    token: str = _fastapi.Depends(_auth.token_bearer()),
-):
-    db_registro = _services.generate_pdf(db=db,token=token,constancia=constancia)
-
-    return db_registro
-
-# *************************************************************************************************************************************
-# SECCION: WEB SITES CHECK
-# *************************************************************************************************************************************
-
-@app.get(
-    "/web_sites_url/",
-    #response_model=_schemas.RegistroSanitario,
-    status_code=_fastapi.status.HTTP_200_OK,
-    tags=["WEB SITES CHECK"],
-)
-def websites_check_url(
-    url: str,
-    db: _orm.Session = _fastapi.Depends(_services.get_db),
-    token: str = _fastapi.Depends(_auth.token_bearer()),
-):
-    db_url = _services.websites_url_check(url=url)
-
-    return db_url 
-
-# *************************************************************************************************************************************
-
-@app.get(
-    "/web_sites_status/",
-    response_model=List[_schemas.WebSitesCheck],
-    status_code=_fastapi.status.HTTP_200_OK,
-    tags=["WEB SITES CHECK"],
-)
-def websites_check_status(
-    db: _orm.Session = _fastapi.Depends(_services.get_db),
-    token: str = _fastapi.Depends(_auth.token_bearer()),
-):
-    db_url = _services.websites_status_check(db=db,token=token)
-
-    return db_url 
-
-# *************************************************************************************************************************************
-
-@app.get(
-    "/web_sites_warning/",
-    response_model=_schemas.WebSitesWarning,
-    status_code=_fastapi.status.HTTP_200_OK,
-    tags=["WEB SITES CHECK"],
-)
-def websites_check_warning(
-    db: _orm.Session = _fastapi.Depends(_services.get_db),
-    token: str = _fastapi.Depends(_auth.token_bearer()),
-):
-    db_url = _services.websites_warning_check(db=db,token=token)
-
-    return db_url 
-
-# *************************************************************************************************************************************
-
-@app.post(
-    "/web_sites_update/",
-    status_code=_fastapi.status.HTTP_200_OK,
-    tags=["WEB SITES CHECK"],
-)
-def websites_check_update(
-    background_tasks: _fastapi.BackgroundTasks,
-    db: _orm.Session = _fastapi.Depends(_services.get_db),
-    token: str = _fastapi.Depends(_auth.token_bearer()),
-):
-
-    background_tasks.add_task( _services.websites_update_check,db, token)
-
-    return {"message": "Los registros están siendo actualizados..."}
-
-# *************************************************************************************************************************************
-
-@app.get(
-    "/sig_dia_habil/",
-    #response_model=_schemas.WebSitesWarning,
-    status_code=_fastapi.status.HTTP_200_OK,
-    tags=["DIAS HABILES"],
-)
-def get_sig_dia(
-    db: _orm.Session = _fastapi.Depends(_services.get_db),
-    token: str = _fastapi.Depends(_auth.token_bearer()),
-    fecha: _dt.date = _dt.date.today()
-):
-    db_url = _services.get_dia_habil(db=db,token=token,fecha=fecha)
-
-    return db_url
-
-
-# *************************************************************************************************************************************
-
-@app.post(
-    "/create_dia_descanso/",
-    response_model=_schemas.DiaDescanso,
-    status_code=_fastapi.status.HTTP_200_OK,
-    tags=["DIAS HABILES"],
-)
-def create_dia_descanso(
-    dia: _schemas.DiaDescansoCreate,
-    db: _orm.Session = _fastapi.Depends(_services.get_db),
-    token: str = _fastapi.Depends(_auth.token_bearer()),
-    
-):
-    db_url = _services.create_dia_descanso(db=db,token=token,dia=dia)
-
-    return db_url
-
-# *************************************************************************************************************************************
-# SECCION: BINES
-# *************************************************************************************************************************************
-
-@app.get(
-    "/bines/",
-    response_model=_schemas.Bines,
-    status_code=_fastapi.status.HTTP_200_OK,
-    tags=["Bines"],
-)
-def get_bin(
-    bin: str,
-    db: _orm.Session = _fastapi.Depends(_services.get_db),
-    token: str = _fastapi.Depends(_auth.token_bearer()),
-):
-    db_bin = _services.get_bin(db=db,token=token,bin=bin)
-
-    return db_bin
-
-# *************************************************************************************************************************************
-# SECCION: REFERENCIAS
-# *************************************************************************************************************************************
-
-@app.get(
-    "/calcula_numero/",
-    #response_model=_schemas.Bines,
-    status_code=_fastapi.status.HTTP_200_OK,
-    tags=["Referencias"],
-)
-def get_numero(
-    numero: str,
-    db: _orm.Session = _fastapi.Depends(_services.get_db),
-    token: str = _fastapi.Depends(_auth.token_bearer()),
-):
-    db_ref = _services.calcula_numero(numero=numero)
-
-    return db_ref
-
-# *************************************************************************************************************************************
-@app.get(
-    "/referencias/",
-    #response_model=_schemas.Bines,
-    status_code=_fastapi.status.HTTP_200_OK,
-    tags=["Referencias"],
-)
-def get_referencia(
-    origen: str,
-    db: _orm.Session = _fastapi.Depends(_services.get_db),
-    token: str = _fastapi.Depends(_auth.token_bearer()),
-):
-    db_ref = _services.genera_referencia(db=db,token=token,origen=origen)
-
-    return db_ref
-
-# *************************************************************************************************************************************
-
-@app.get(
-    "/referencias/folia_documento",
-    #response_model=_schemas.Bines,
-    status_code=_fastapi.status.HTTP_200_OK,
-    tags=["Referencias"],
-)
-def get_folio_documento(
-    origen: str,
-    db: _orm.Session = _fastapi.Depends(_services.get_db),
-    token: str = _fastapi.Depends(_auth.token_bearer()),
-):
-    db_ref = _services.folia_documentos(db=db,token=token,origen=origen)
-
-    return db_ref
-
-# *************************************************************************************************************************************
-# SECCION: TARJETAS LOCALES
-# *************************************************************************************************************************************
-
-@app.post(
-    "/genera_tarjeta/",
-    #response_model=_schemas.Bines,
-    status_code=_fastapi.status.HTTP_200_OK,
-    tags=["Tarjetas"],
-)
-def get_tarjeta(
-    card:_schemas.TarjetaLocal,
-    db: _orm.Session = _fastapi.Depends(_services.get_db),
-    token: str = _fastapi.Depends(_auth.token_bearer()),
-):
-    db_card = _services.generate_card_number(card=card)
-
-    return db_card
 
 # *************************************************************************************************************************************
 # SECCION: ADMIN
