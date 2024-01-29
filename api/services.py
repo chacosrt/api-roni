@@ -104,3 +104,9 @@ def get_torneos(
 
     return results
 
+# *************************************************************************************************************************************
+
+
+def get_torneos_por_id(db: _orm.Session, token: str, id: int):
+    actividad = db.query(_models.Torneos).filter(_models.Torneos.id == id).first()
+    return actividad

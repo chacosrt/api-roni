@@ -124,7 +124,7 @@ async def home():
     "/torneos/",
     response_model=List[_schemas.Torneos],
     status_code=_fastapi.status.HTTP_200_OK,
-    tags=["Tornos"],
+    tags=["Torneos"],
 )
 async def read_torneos(
     skip: Optional[int] = None,
@@ -143,7 +143,29 @@ async def read_torneos(
         )
     return db_torneos
 
+# *************************************************************************************************************************************
+@app.get(
+    "/torneos/{id}/id",
+    response_model=_schemas.Torneos,
+    status_code=_fastapi.status.HTTP_200_OK,
+    tags=["Torneos"],
+)
+async def read_torneos_por_id(
+    id: str,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_torneos = _services.get_torneos_por_id(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    if db_torneos is None:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
 
+    return db_torneos
 
 
 # *************************************************************************************************************************************

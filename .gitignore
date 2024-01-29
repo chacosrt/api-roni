@@ -4,8 +4,8 @@
 
 ### Project files
 .db
-#.settings.yaml
-#.backend.yaml
+.settings.yaml
+.backend.yaml
 test.*
 
 ### vscode
