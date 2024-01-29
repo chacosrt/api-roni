@@ -1,0 +1,43 @@
+app_title: "Roni"
+app_root_path: "/"
+app_docs_url: "/api"
+app_redoc_url:
+
+developer_mode: False
+
+passkey_id: "WV2mIKhmpR26zZVb0kaj7JqRmQCchjtK"
+
+secret: "d8826576f2a4b4233f7d5ce2ffd62cc1f39326690e0c2c14ffc8a2b64497e8e6"
+algorithm: "HS256"
+audience: "roni.dinossolutions.com"
+# authorization_url: "https://api.gdar.mx/janus/badge"
+authorization_ttl: 30
+
+# Base de Datos MS-SQL, SQLITE3, PSQL
+database_engine: "MYSQL"
+
+# Valores de conexión a la base de datos en caso de utilizar SQLServer
+sqlserver_driver: "ODBC Driver 17 for SQL Server"
+sqlserver_username: "sa"
+sqlserver_password: "NAgLrr(n62K-u7UX"
+sqlserver_servername: "192.168.123.249"
+# #INSTANCENAME = "\SQLEXPRESS" --> no se utiliza
+sqlserver_databasename: "arena"
+# #TABLE = "perftest" --> no se utiliza
+
+postgresql_username: "postgres"
+postgresql_password: "aiqcg8QXMj3lU1dr9Lq1"
+postgresql_servername: "192.168.123.202"
+postgresql_databasename: "arena"
+
+
+mysql_username: "u127483889_dinos_root"
+mysql_password: "Dinos123*"
+mysql_servername: "srv1144.hstgr.io"
+mysql_databasename: "u127483889_liga_metro"
+
+sqlite_filename: "../data/phoenix_roni_api.db"
+
+log_filename: "../.dev/roni.log"
+
+origins_url: "http://localhost:8020"

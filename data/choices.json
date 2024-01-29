@@ -1,0 +1,188 @@
+[
+    {
+        "id": "1",
+        "grupo": "apis",
+        "clave": "https://api.gdar.mx",
+        "descripcion": "URL ROOT APIS"
+    },
+    {
+        "id": "2",
+        "grupo": "apis",
+        "clave": "https://api.gdar.mx/wormhole",
+        "descripcion": "API WORMHOLE"
+    },
+    {
+        "id": "3",
+        "grupo": "apis",
+        "clave": "https://api.gdar.mx/arena",
+        "descripcion": "API ARENA"
+    },
+    {
+        "id": "4",
+        "grupo": "apis",
+        "clave": "https://api.gdar.mx/quadrant",
+        "descripcion": "API QUADRANT"
+    },
+    {
+        "id": "5",
+        "grupo": "apis",
+        "clave": "https://api.gdar.mx/marble",
+        "descripcion": "API MARBLE"
+    },
+    {
+        "id": "6",
+        "grupo": "apis",
+        "clave": "https://api.gdar.mx/pills",
+        "descripcion": "API PILLS"
+    },
+    {
+        "id": "7",
+        "grupo": "apis",
+        "clave": "https://api.gdar.mx/tracker",
+        "descripcion": "API TRACKER"
+    },
+    {
+        "id": "8",
+        "grupo": "apis",
+        "clave": "https://api.gdar.mx/newton",
+        "descripcion": "API NEWTON"
+    },
+    {
+        "id": "9",
+        "grupo": "apis",
+        "clave": "https://api.gdar.mx/hubble",
+        "descripcion": "API HUBBLE"
+    },
+    {
+        "id": "10",
+        "grupo": "apis",
+        "clave": "https://api.gdar.mx/janus",
+        "descripcion": "API JANUS"
+    },
+    {
+        "id": "11",
+        "grupo": "apis",
+        "clave": "https://api.gdar.mx/origis",
+        "descripcion": "API ORIGIS"
+    },
+    {
+        "id": "12",
+        "grupo": "apis",
+        "clave": "https://api.gdar.mx/lolita",
+        "descripcion": "API LOLITA"
+    },
+    {
+        "id": "13",
+        "grupo": "servicios_externos",
+        "clave": "https://cedulaprofesional.sep.gob.mx/cedula/buscaCedulaJson.action",
+        "descripcion": "CEDULAS PROFESIONALES SEP"
+    },
+    {
+        "id": "14",
+        "grupo": "servicios_externos",
+        "clave": "https://www.buholegal.com/consultasep/",
+        "descripcion": "CEDULAS PROFESIONALES BUHO LEGAL"
+    },
+    {
+        "id": "15",
+        "grupo": "servicios_externos",
+        "clave": "https://siat.sat.gob.mx/app/qr/faces/pages/mobile/validadorqr.jsf?D1=10&D2=1&D3=",
+        "descripcion": "CONSTANCIA FISCAL"
+    },
+    {
+        "id": "16",
+        "grupo": "servicios_externos",
+        "clave": "https://tramiteselectronicos02.cofepris.gob.mx/BuscadorPublicoRegistrosSanitarios/BusquedaRegistroSanitario.aspx",
+        "descripcion": "REGISTRO SANITARIO"
+    },
+    {
+        "id": "17",
+        "grupo": "servicios_externos",
+        "clave": "https://orbisws00.orbisfarma.com.mx/transaccion.asmx",
+        "descripcion": "SERVICIO ORIGIS"
+    },
+    {
+        "id": "18",
+        "grupo": "servicios_externos",
+        "clave": "https://www.pasavolando.com.mx/sfe",
+        "descripcion": "SERVICIO DATA LOGIC"
+    },
+    {
+        "id": "19",
+        "grupo": "servicios_externos",
+        "clave": "https://www.pasavolando.com.mx/PXPosologia",
+        "descripcion": "SERVICIO DATA LOGIC POSOLOGIA"
+    },
+    {
+        "id": "20",
+        "grupo": "servicios_externos",
+        "clave": "https://cert.api.firstdata.com/gateway/v2/",
+        "descripcion": "LIGAS DE PAGO FIRST DATA"
+    },
+    {
+        "id": "21",
+        "grupo": "servicios_externos",
+        "clave": "https://bc.mitec.com.mx/p/gen",
+        "descripcion": "LIGAS DE PAGO MIT"
+    },
+    {
+        "id": "22",
+        "grupo": "servicios_externos",
+        "clave": "https://api3.thepayplace.com/epay/epaywebservice.asmx",
+        "descripcion": "PAGOS PAYPOINT"
+    },
+    {
+        "id": "23",
+        "grupo": "websites_gdar",
+        "clave": "https://outpost.gdar.mx",
+        "descripcion": "PROXY GRUPO DAR"
+    },
+    {
+        "id": "24",
+        "grupo": "websites_gdar",
+        "clave": "https://box.gdar.mx",
+        "descripcion": "MAIL GRUPO DAR"
+    },
+    {
+        "id": "25",
+        "grupo": "websites_gdar",
+        "clave": "https://sfe.com.mx",
+        "descripcion": "PAGINA SFE"
+    },
+    {
+        "id": "26",
+        "grupo": "websites_gdar",
+        "clave": "https://pacificpharma.com.mx",
+        "descripcion": "PAGINA PACIFIC PHARMA"
+    },
+    {
+        "id": "27",
+        "grupo": "websites_gdar",
+        "clave": "https://dermalia.com.mx",
+        "descripcion": "PAGINA DERMALIA"
+    },
+    {
+        "id": "28",
+        "grupo": "websites_gdar",
+        "clave": "https://elsa.gdar.com.mx",
+        "descripcion": "SISTEMA ELSA"
+    },
+    {
+        "id": "29",
+        "grupo": "websites_gdar",
+        "clave": "https://elsa2.gdar.com.mx",
+        "descripcion": "SISTEMA ELSA(2)"
+    },
+    {
+        "id": "30",
+        "grupo": "websites_gdar",
+        "clave": "https://tienda.accu-chek.com.mx",
+        "descripcion": "TIENDA ROCHE ACCU-CHEK"
+    },
+    {
+        "id": "31",
+        "grupo": "apis",
+        "clave": "https://api.gdar.mx/jerry",
+        "descripcion": "API JERRY"
+    }
+]

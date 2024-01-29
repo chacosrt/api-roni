@@ -1,0 +1,9 @@
+[
+    {
+        "id": 1,
+        "grupo": "Tags",
+        "clave": "TAG",
+        "descripcion": "Tag Generico",
+        "activo": true
+    }
+]

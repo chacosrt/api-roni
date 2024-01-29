@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+async-exit-stack
+async-generator
+passlib[bcrypt]
+python-jose[cryptography]
+python-multipart
+python-dotenv
+pyjwt
+pyodbc
+psycopg2
+pandas
+lxml
+IPython
