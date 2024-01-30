@@ -48,6 +48,8 @@ app = _fastapi.FastAPI(
 
 _origins = [
     _settings.ORIGINS_URL,
+    "http://localhost",
+    "https://liga-metro.dinossolutions.com"
 ]
 app.add_middleware(
     _cors.CORSMiddleware,
