@@ -25,6 +25,7 @@ class Torneos(_database.Base):
     fecha_inicio = _sql.Column(_sql.Date, default=_dt.date.today(), index=True)
     fecha_fin = _sql.Column(_sql.Date, default=_dt.date.today(), index=True)
     categoria = _sql.Column(_sql.String(100), default="")
+    img = _sql.Column(_sql.Text, default="")
 
     creado_por = _sql.Column(_sql.String(50), default="", index=True)
     creado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)
