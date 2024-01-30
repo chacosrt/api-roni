@@ -110,3 +110,93 @@ def get_torneos(
 def get_torneos_por_id(db: _orm.Session, token: str, id: int):
     actividad = db.query(_models.Torneos).filter(_models.Torneos.id == id).first()
     return actividad
+
+# *************************************************************************************************************************************
+
+
+def create_torneo(
+    db: _orm.Session,
+    torneo: _schemas.TorneosCreate,
+    token: str,
+):
+
+    sub = _auth.token_claim(token, "sub")
+
+    db_torneos = _models.Torneos(
+        nombre_torneo=_fn.format_nombre_propio(torneo.nombre_torneo),
+        lugar=_fn.clean_string(torneo.lugar),
+        temporada=_fn.clean_string(torneo.temporada),
+        modalidad=_fn.clean_string(torneo.modalidad),
+        horarios=_fn.clean_string(torneo.dias),
+        fecha_inicio=_fn.format_date(torneo.fecha_inicio),
+        fecha_fin=_fn.format_date(torneo.fecha_fin),
+        categoria=_fn.clean_string(torneo.categoria),
+        img=_fn.clean_string(torneo.img),  
+    )
+
+    db_torneos.estatus = 1
+
+    db_torneos.creado_por = _fn.clean_string(sub)
+    db_torneos.creado_el = _dt.datetime.now()
+    db_torneos.modificado_por = _fn.clean_string(sub)
+    db_torneos.modificado_el = _dt.datetime.now()
+
+    db.add(db_torneos)
+    db.commit()
+    db.refresh(db_torneos)
+
+    return db_torneos
+
+# *************************************************************************************************************************************
+
+
+def update_torneo(
+    db: _orm.Session,
+    token: str,
+    db_torneos: _models.Torneos,
+    torneo: _schemas.TorneosCreate,
+):
+    sub = _auth.token_claim(token, "sub")
+
+    """ unidades =float(actividad.unidades)
+    subtotal = float(actividad.subtotal)
+    descuento = float(actividad.descuento)
+    subtotal_neto = "{:.2f}".format(float(actividad.subtotal)-float(actividad.descuento))
+    otros_conceptos = _fn.is_null(actividad.otros_conceptos, 0)
+    total_previo_impuesto =  "{:.2f}".format(float(subtotal_neto)+float(otros_conceptos))
+
+
+    impuesto =  "{:.2f}".format(float(actividad.impuesto))
+
+
+    total =  "{:.2f}".format(float(total_previo_impuesto)+float(impuesto)) """
+
+    # db_actividades.clave = _fn.clean_string(actividad.clave).upper()
+    db_torneos.nombre_torneo=_fn.format_nombre_propio(torneo.nombre_torneo)
+    db_torneos.lugar=_fn.clean_string(torneo.lugar)
+    db_torneos.temporada=_fn.clean_string(torneo.temporada)
+    db_torneos.modalidad=_fn.clean_string(torneo.modalidad)
+    db_torneos.horarios=_fn.clean_string(torneo.dias)
+    db_torneos.fecha_inicio=_fn.format_date(torneo.fecha_inicio)
+    db_torneos.fecha_fin=_fn.format_date(torneo.fecha_fin)
+    db_torneos.categoria=_fn.clean_string(torneo.categoria)
+    db_torneos.img=_fn.clean_string(torneo.img)
+   
+    db_torneos.modificado_por = _fn.clean_string(sub)
+    db_torneos.modificado_el = _dt.datetime.now()
+
+    db.commit()
+    db.refresh(db_torneos)
+
+    return db_torneos
+
+# *************************************************************************************************************************************
+
+
+def delete_torneo(db: _orm.Session, token: str, id: int):
+
+    torneo = get_torneos_por_id(db=db, token=token, id=id)
+    
+    db.query(_models.Torneos).filter(_models.Torneos.id == id).delete()
+    db.commit()
+

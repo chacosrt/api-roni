@@ -169,6 +169,86 @@ async def read_torneos_por_id(
 
     return db_torneos
 
+# *************************************************************************************************************************************
+
+
+@app.post(
+    "/torneos/",
+    response_model=_schemas.Torneos,
+    status_code=_fastapi.status.HTTP_201_CREATED,
+    tags=["Torneos"],
+)
+def create_torneo(
+    torneo: _schemas.TorneosCreate,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    # return _services.create_actividad(db=db, actividad=actividad)
+    return _services.create_torneo(db=db, token=token, torneo=torneo)
+
+
+# *************************************************************************************************************************************
+
+
+@app.post(
+    "/torneos/{id}",
+    response_model=_schemas.Torneos,
+    status_code=_fastapi.status.HTTP_201_CREATED,
+    tags=["Torneos"],
+)
+async def update_torneo(
+    id: str,
+    torneo: _schemas.TorneosCreate,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_torneos = _services.get_torneos_por_id(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    if db_torneos is None:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+
+    return _services.update_torneo(
+        db=db,
+        token=token,
+        db_actividades=db_torneos,
+        torneo=torneo,
+    )
+
+
+# *************************************************************************************************************************************
+
+
+@app.post(
+    "/torneos/{id}/delete",
+    status_code=_fastapi.status.HTTP_202_ACCEPTED,
+    tags=["Torneos"],
+)
+async def delete_torneo(
+    id: str,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_torneos = _services.get_torneos_por_id(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    if db_torneos is None:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+    _services.delete_torneo(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    return {"message": f"El registro: {id} ha sido eliminado"}
+
 
 # *************************************************************************************************************************************
 # SECCION: ADMIN

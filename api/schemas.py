@@ -29,6 +29,7 @@ class _TorneosBase(_pydantic.BaseModel):
     fecha_fin: _typing.Optional[_dt.date]  = None
     categoria: _typing.Optional[str] = ""
     img: _typing.Optional[str] = ""
+    img: _typing.Optional[int] = 0
 # *************************************************************************************************************************************
 
 # La clase Create hace referencia a la clase _Base
