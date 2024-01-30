@@ -22,6 +22,7 @@ class _TorneosBase(_pydantic.BaseModel):
     nombre_torneo:  _typing.Optional[str] = ""
     temporada: _typing.Optional[str] = ""
     modalidad:  _typing.Optional[str] = ""
+    lugar:  _typing.Optional[str] = ""
     dias:  _typing.Optional[str] = ""
     horarios:  _typing.Optional[str] = ""
     fecha_inicio: _typing.Optional[_dt.date]  = None
