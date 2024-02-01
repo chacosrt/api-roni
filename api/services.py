@@ -132,7 +132,7 @@ def create_torneo(
         fecha_inicio=_fn.format_date(torneo.fecha_inicio),
         fecha_fin=_fn.format_date(torneo.fecha_fin),
         categoria=_fn.clean_string(torneo.categoria),
-        img=_fn.clean_string(torneo.img),  
+        img=torneo.img,  
     )
 
     db_torneos.estatus = 1
