@@ -215,7 +215,7 @@ async def update_torneo(
     return _services.update_torneo(
         db=db,
         token=token,
-        db_actividades=db_torneos,
+        db_torneos=db_torneos,
         torneo=torneo,
     )
 
