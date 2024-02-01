@@ -123,7 +123,7 @@ async def home():
 # *************************************************************************************************************************************
 
 @app.get(
-    "/torneos/",
+    "/torneos_list/",
     response_model=List[_schemas.Torneos],
     status_code=_fastapi.status.HTTP_200_OK,
     tags=["Torneos"],
