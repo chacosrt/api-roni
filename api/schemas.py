@@ -58,8 +58,8 @@ class Torneos(_TorneosBase):
         dias = values["dias"].strip()
         horarios = values["horarios"].strip()
 
-        values["dias_select"].split(",")
-        values["horarios_select"].strip(",")
+        values["dias_select"] = dias.split(",")
+        values["horarios_select"] = horarios.split(",")
         return values
 
     class Config:
