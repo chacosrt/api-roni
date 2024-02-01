@@ -52,6 +52,15 @@ class Torneos(_TorneosBase):
 
         values["fecha_inicio"] = fecha
         return values
+    
+    @_pydantic.root_validator
+    def values_dias_horarios(cls, values) -> _typing.Dict:
+        dias = values["dias"].strip()
+        horarios = values["horarios"].strip()
+
+        values["dias_select"].split(",")
+        values["horarios_select"].strip(",")
+        return values
 
     class Config:
         orm_mode = True
