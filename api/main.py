@@ -249,6 +249,138 @@ async def delete_torneo(
     )
     return {"message": f"El registro: {id} ha sido eliminado"}
 
+# *************************************************************************************************************************************
+# SECCION: EQUIPOS
+# *************************************************************************************************************************************
+
+@app.get(
+    "/equipos_list/",
+    response_model=List[_schemas.Equipos],
+    status_code=_fastapi.status.HTTP_200_OK,
+    tags=["Equipos"],
+)
+async def read_equipos(
+    skip: Optional[int] = None,
+    limit: Optional[int] = None,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_equipos = _services.get_equipos(
+        db=db,
+          token=token, 
+          skip=skip, limit=limit
+    )
+    if len(db_equipos) == 0:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+    return db_equipos
+
+
+# *************************************************************************************************************************************
+@app.get(
+    "/equipos/{id}/id",
+    response_model=_schemas.Equipos,
+    status_code=_fastapi.status.HTTP_200_OK,
+    tags=["Equipos"],
+)
+async def read_equipos_por_id(
+    id: str,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_equipos = _services.get_equipos_por_id(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    if db_equipos is None:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+
+    return db_equipos
+
+# *************************************************************************************************************************************
+
+
+@app.post(
+    "/equipos/",
+    response_model=_schemas.Equipos,
+    status_code=_fastapi.status.HTTP_201_CREATED,
+    tags=["Equipos"],
+)
+def create_equipo(
+    equipo: _schemas.EquiposCreate,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    # return _services.create_actividad(db=db, actividad=actividad)
+    return _services.create_equipo(db=db, token=token, equipo=equipo)
+
+
+# *************************************************************************************************************************************
+
+
+@app.post(
+    "/equipos/{id}",
+    response_model=_schemas.Torneos,
+    status_code=_fastapi.status.HTTP_201_CREATED,
+    tags=["Equipos"],
+)
+async def update_equipo(
+    id: str,
+    torneo: _schemas.EquiposCreate,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_equipos = _services.get_equipos_por_id(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    if db_equipos is None:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+
+    return _services.update_equipo(
+        db=db,
+        token=token,
+        db_equipos=db_equipos,
+        torneo=torneo,
+    )
+
+
+# *************************************************************************************************************************************
+
+
+@app.post(
+    "/equipos/{id}/delete",
+    status_code=_fastapi.status.HTTP_202_ACCEPTED,
+    tags=["Equipos"],
+)
+async def delete_equipo(
+    id: str,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_equipos = _services.get_equipos_por_id(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    if db_equipos is None:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+    _services.delete_equipo(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    return {"message": f"El registro: {id} ha sido eliminado"}
+
 
 # *************************************************************************************************************************************
 # SECCION: ADMIN

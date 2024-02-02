@@ -5,6 +5,7 @@ import math as _math
 import random as _random
 import string as _string
 import unicodedata as _unicodedata
+import database as _database
 
 import requests as _requests
 import settings as _settings
@@ -569,5 +570,52 @@ def parameter_id(value):
             return_value = -1
         else:
             return_value = return_value - _ALPHA_SPREAD
+
+    return return_value
+#*********************************************************************************************************
+
+def get_field_value(
+    table_name: str,
+    search_field: str,
+    search_value: str,
+    search_type: str,
+    return_field: str,
+    filter_optional: str,
+    sort_optional: str,
+):
+    # ADVERTENCIA DE SEGURIDAD - RIESGO DE SQLinjection
+    # Esta función está diseñada para ejecutarse internamente dentro de la aplicacion
+    # en un ambiente controlado.
+    # NUNCA enviar parámetros a esta función desde una ruta expuesta sobre la que
+    # no se tenga control de la misma
+
+    is_mysql = True if _settings.DATABASE_ENGINE == "MYSQL" else False
+    is_sqlite = True if _settings.DATABASE_ENGINE == "SQLITE3" else False
+    is_psql = True if _settings.DATABASE_ENGINE == "PSQL" else False
+
+    if search_type == "str":
+        search_value = "'" + is_null(search_value, "") + "'"
+    else:
+        search_value = is_null(search_value, 0)
+
+    # ADVERTENCIA DE SEGURIDAD - RIESGO DE SQLinjection ------------------------------------------------------------------------------------
+    sql = f"SELECT {return_field} as return_value FROM {table_name} WHERE {search_field} = {search_value} {filter_optional} {sort_optional}"
+    # --------------------------------------------------------------------------------------------------------------------------------------
+
+    if is_mysql:
+        conn = _database.engine.raw_connection()
+
+    cursor = conn.cursor()
+    cursor.execute(sql)
+
+    rows = cursor.fetchmany(1)
+
+    return_value = ""
+
+    for row in rows:
+        return_value = row["return_value"]
+
+    cursor.close()
+    conn.close()
 
     return return_value

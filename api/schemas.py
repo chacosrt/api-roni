@@ -65,3 +65,56 @@ class Torneos(_TorneosBase):
     class Config:
         orm_mode = True
 
+
+# *************************************************************************************************************************************
+# SECCION: Equipos
+# *************************************************************************************************************************************
+
+class _EquiposBase(_pydantic.BaseModel):
+
+    nombre:  _typing.Optional[str] = ""
+    liga: _typing.Optional[int] = 0
+    delegado:  _typing.Optional[str] = ""
+    img_equipo: _typing.Optional[str] = ""
+    estatus: _typing.Optional[int] = 0
+# *************************************************************************************************************************************
+
+# La clase Create hace referencia a la clase _Base
+# y hereda los campos de la misma
+class EquiposCreate(_EquiposBase):
+    pass
+
+
+# *************************************************************************************************************************************
+
+
+class Equipos(_EquiposBase):
+
+    id: int = 0
+    liga_equipo:Torneos
+
+    """ @_pydantic.root_validator
+    def value_nombre_liga(cls, values) -> _typing.Dict:
+        try:
+            nombre_torneo = _fn.get_field_value(
+                    table_name="torneos",
+                    search_field="id",
+                    search_type="str",
+                    search_value=values["liga"],
+                    return_field="nombre_torneo",
+                    filter_optional="",
+                    sort_optional="",
+                )
+
+            values["nombre_torneo"] = nombre_torneo
+           
+        except Exception as e:
+            #_logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
+
+            values["nombre_torneo"] = ""   
+
+        return values
+ """
+    class Config:
+        orm_mode = True
+

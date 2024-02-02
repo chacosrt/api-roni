@@ -8,7 +8,7 @@ import database as _database
 
 
 # *************************************************************************************************************************************
-# CEDULAS
+# Torneos
 # *************************************************************************************************************************************
 
 class Torneos(_database.Base):
@@ -33,20 +33,23 @@ class Torneos(_database.Base):
     modificado_por = _sql.Column(_sql.String(50), default="", index=True)
     modificado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)
 
+    torneo_equipos = _orm.relationship(
+        "Equipos", foreign_keys="Equipos.liga", backref="liga_equipo"
+    )
+
 
 # *************************************************************************************************************************************
 
-class CedulaBuho(_database.Base):
+class Equipos(_database.Base):
     # nombre de la tabla
-    __tablename__ = "cedulas_buho"
+    __tablename__ = "equipos"
     # campos
     id = _sql.Column(_sql.Integer, primary_key=True, autoincrement=True, index=True)
-    cedula = _sql.Column(_sql.Integer, default=None, index=True)
-    nombre_completo = _sql.Column(_sql.String(250), default="")
-    carrera = _sql.Column(_sql.String(250), default="")
-    universidad = _sql.Column(_sql.String(100), default="")
-    estado = _sql.Column(_sql.String(100), default="")
-    anio = _sql.Column(_sql.Integer, default=None)
+    liga = _sql.Column(_sql.Integer, _sql.ForeignKey("torneos.id"))
+    nombre = _sql.Column(_sql.String(150), default="", index=True)
+    delegado = _sql.Column(_sql.String(250), default="")
+    img_equipo = _sql.Column(_sql.Text, default="")
+    estatus = _sql.Column(_sql.Integer, default=None,)
 
     creado_por = _sql.Column(_sql.String(50), default="", index=True)
     creado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)

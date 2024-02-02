@@ -202,3 +202,105 @@ def delete_torneo(db: _orm.Session, token: str, id: int):
     db.query(_models.Torneos).filter(_models.Torneos.id == id).delete()
     db.commit()
 
+# *************************************************************************************************************************************
+# SECCION: EQUIPOS
+# *************************************************************************************************************************************
+
+def get_equipos(
+    db: _orm.Session,
+    token: str,
+    skip: int = 0,
+    limit: int = RETURN_DEFAULT_ROWS,
+):
+    skip = _fn.is_null(skip, 0)
+    limit = _fn.is_null(limit, RETURN_DEFAULT_ROWS)
+
+    if (limit > RETURN_MAX_ROWS) and (
+        _auth.token_decode(token)["roles"].upper() != "ADMINISTRATOR"
+    ):
+        _logger.warning(f"Solicitud maxima de registros excedida [{limit}]")
+        limit = RETURN_DEFAULT_ROWS
+
+    results = (
+        db.query(_models.Equipos)
+        .order_by(_models.Equipos.id)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+
+    return results
+
+# *************************************************************************************************************************************
+
+
+def get_equipos_por_id(db: _orm.Session, token: str, id: int):
+    equipo = db.query(_models.Equipos).filter(_models.Equipos.id == id).first()
+    return equipo
+
+# *************************************************************************************************************************************
+
+
+def create_equipo(
+    db: _orm.Session,
+    equipo: _schemas.EquiposCreate,
+    token: str,
+):
+
+    sub = _auth.token_claim(token, "sub")
+
+    db_equipos = _models.Equipos(
+        nombre=_fn.format_nombre_propio(equipo.nombre),
+        liga=_fn.is_null(equipo.liga,0),
+        delegado=_fn.clean_string(equipo.delegado),
+        img_equipo=_fn.clean_string(equipo.img_equipo),  
+    )
+
+    db_equipos.estatus = 1
+
+    db_equipos.creado_por = _fn.clean_string(sub)
+    db_equipos.creado_el = _dt.datetime.now()
+    db_equipos.modificado_por = _fn.clean_string(sub)
+    db_equipos.modificado_el = _dt.datetime.now()
+
+    db.add(db_equipos)
+    db.commit()
+    db.refresh(db_equipos)
+
+    return db_equipos
+
+# *************************************************************************************************************************************
+
+
+def update_torneo(
+    db: _orm.Session,
+    token: str,
+    db_equipos: _models.Equipos,
+    equipo: _schemas.EquiposCreate,
+):
+    sub = _auth.token_claim(token, "sub")
+
+    # db_actividades.clave = _fn.clean_string(actividad.clave).upper()
+    db_equipos.nombre=_fn.format_nombre_propio(equipo.nombre)
+    db_equipos.liga=_fn.is_null(equipo.liga,0)
+    db_equipos.delegado=_fn.clean_string(equipo.delegado)
+    db_equipos.img_equipo=_fn.clean_string(equipo.img_equipo)
+
+   
+    db_equipos.modificado_por = _fn.clean_string(sub)
+    db_equipos.modificado_el = _dt.datetime.now()
+
+    db.commit()
+    db.refresh(db_equipos)
+
+    return db_equipos
+
+# *************************************************************************************************************************************
+
+
+def delete_equipo(db: _orm.Session, token: str, id: int):
+
+    torneo = get_equipos_por_id(db=db, token=token, id=id)
+    
+    db.query(_models.Equipos).filter(_models.Equipos.id == id).delete()
+    db.commit()
