@@ -330,7 +330,7 @@ def create_equipo(
 )
 async def update_equipo(
     id: str,
-    torneo: _schemas.EquiposCreate,
+    equipo: _schemas.EquiposCreate,
     db: _orm.Session = _fastapi.Depends(_services.get_db),
     token: str = _fastapi.Depends(_auth.token_bearer()),
 ):
@@ -348,7 +348,7 @@ async def update_equipo(
         db=db,
         token=token,
         db_equipos=db_equipos,
-        torneo=torneo,
+        equipo=equipo,
     )
 
 
