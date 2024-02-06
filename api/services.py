@@ -272,7 +272,7 @@ def create_equipo(
 # *************************************************************************************************************************************
 
 
-def update_torneo(
+def update_equipo(
     db: _orm.Session,
     token: str,
     db_equipos: _models.Equipos,
