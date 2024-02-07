@@ -183,6 +183,8 @@ def update_torneo(
     db_torneos.fecha_fin=_fn.format_date(torneo.fecha_fin)
     db_torneos.categoria=_fn.clean_string(torneo.categoria)
     db_torneos.img=_fn.clean_string(torneo.img)
+    db_torneos.estatus  =  _fn.is_null(torneo.estatus,0)
+    
    
     db_torneos.modificado_por = _fn.clean_string(sub)
     db_torneos.modificado_el = _dt.datetime.now()
@@ -272,7 +274,7 @@ def create_equipo(
 # *************************************************************************************************************************************
 
 
-def update_torneo(
+def update_equipo(
     db: _orm.Session,
     token: str,
     db_equipos: _models.Equipos,
@@ -285,7 +287,7 @@ def update_torneo(
     db_equipos.liga=_fn.is_null(equipo.liga,0)
     db_equipos.delegado=_fn.clean_string(equipo.delegado)
     db_equipos.img_equipo=_fn.clean_string(equipo.img_equipo)
-
+    db_equipos.estatus  =  _fn.is_null(equipo.estatus,0)
    
     db_equipos.modificado_por = _fn.clean_string(sub)
     db_equipos.modificado_el = _dt.datetime.now()
@@ -303,4 +305,124 @@ def delete_equipo(db: _orm.Session, token: str, id: int):
     torneo = get_equipos_por_id(db=db, token=token, id=id)
     
     db.query(_models.Equipos).filter(_models.Equipos.id == id).delete()
+    db.commit()
+
+# *************************************************************************************************************************************
+# SECCION: JUGADORES
+# *************************************************************************************************************************************
+
+def get_jugadores(
+    db: _orm.Session,
+    token: str,
+    skip: int = 0,
+    limit: int = RETURN_DEFAULT_ROWS,
+):
+    skip = _fn.is_null(skip, 0)
+    limit = _fn.is_null(limit, RETURN_DEFAULT_ROWS)
+
+    if (limit > RETURN_MAX_ROWS) and (
+        _auth.token_decode(token)["roles"].upper() != "ADMINISTRATOR"
+    ):
+        _logger.warning(f"Solicitud maxima de registros excedida [{limit}]")
+        limit = RETURN_DEFAULT_ROWS
+
+    results = (
+        db.query(_models.Jugadores)
+        .order_by(_models.Jugadores.id)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+
+    return results
+
+# *************************************************************************************************************************************
+
+
+def get_jugadores_por_id(db: _orm.Session, token: str, id: int):
+    jugador = db.query(_models.Jugadores).filter(_models.Jugadores.id == id).first()
+    return jugador
+
+# *************************************************************************************************************************************
+
+
+def create_jugador(
+    db: _orm.Session,
+    jugador: _schemas.JugadoresCreate,
+    token: str,
+):
+
+    sub = _auth.token_claim(token, "sub")
+
+    db_jugador = _models.Jugadores(
+        nombre = _fn.format_nombre_propio(jugador.nombre),
+        ap_paterno = _fn.format_nombre_propio(jugador.ap_paterno),
+        ap_materno = _fn.format_nombre_propio(jugador.ap_materno),
+        edad  =  _fn.is_null(jugador.edad,0),
+        liga  =  _fn.is_null(jugador.liga,0),
+        dorsal  =   _fn.is_null(jugador.edad,0),
+        expediente = _fn.clean_string(jugador.expediente),
+        seccional = _fn.clean_string(jugador.seccional),
+        direccion = _fn.clean_string(jugador.direccion),
+        telefono = _fn.clean_string(jugador.telefono),
+        img = _fn.clean_string(jugador.img),
+        delegado = _fn.is_null(jugador.delegado,False),
+        
+    )
+
+    db_jugador.estatus = 1
+
+    db_jugador.creado_por = _fn.clean_string(sub)
+    db_jugador.creado_el = _dt.datetime.now()
+    db_jugador.modificado_por = _fn.clean_string(sub)
+    db_jugador.modificado_el = _dt.datetime.now()
+
+    db.add(db_jugador)
+    db.commit()
+    db.refresh(db_jugador)
+
+    return db_jugador
+
+# *************************************************************************************************************************************
+
+
+def update_jugador(
+    db: _orm.Session,
+    token: str,
+    db_jugador: _models.Jugadores,
+    jugador: _schemas.JugadoresCreate,
+):
+    sub = _auth.token_claim(token, "sub")
+
+    # db_actividades.clave = _fn.clean_string(actividad.clave).upper()
+    db_jugador.nombre = _fn.format_nombre_propio(jugador.nombre)
+    db_jugador.ap_paterno = _fn.format_nombre_propio(jugador.ap_paterno)
+    db_jugador.ap_materno = _fn.format_nombre_propio(jugador.ap_materno)
+    db_jugador.edad  =  _fn.is_null(jugador.edad,0)
+    db_jugador.liga  =  _fn.is_null(jugador.liga,0)
+    db_jugador.dorsal  =   _fn.is_null(jugador.edad,0)
+    db_jugador.expediente = _fn.clean_string(jugador.expediente)
+    db_jugador.seccional = _fn.clean_string(jugador.seccional)
+    db_jugador.direccion = _fn.clean_string(jugador.direccion)
+    db_jugador.telefono = _fn.clean_string(jugador.telefono)
+    db_jugador.img = _fn.clean_string(jugador.img)
+    db_jugador.delegado = _fn.is_null(jugador.delegado,False)
+    db_jugador.estatus  =  _fn.is_null(jugador.estatus,0)
+   
+    db_jugador.modificado_por = _fn.clean_string(sub)
+    db_jugador.modificado_el = _dt.datetime.now()
+
+    db.commit()
+    db.refresh(db_jugador)
+
+    return db_jugador
+
+# *************************************************************************************************************************************
+
+
+def delete_jugador(db: _orm.Session, token: str, id: int):
+
+    torneo = get_jugadores_por_id(db=db, token=token, id=id)
+    
+    db.query(_models.Jugadores).filter(_models.Jugadores.id == id).delete()
     db.commit()

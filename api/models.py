@@ -61,14 +61,24 @@ class Equipos(_database.Base):
 # REGIMENES FISCALES
 # *************************************************************************************************************************************		
 
-class Regimenes(_database.Base):
+class Jugadores(_database.Base):
     # nombre de la tabla
-    __tablename__ = "regimenes_fiscales"
+    __tablename__ = "jugadores"
     # campos
     id = _sql.Column(_sql.Integer, primary_key=True, autoincrement=True, index=True)
-    id_constancia =  _sql.Column(_sql.String(100), default="", index=True)
-    regimen = _sql.Column(_sql.Text, default="")
-    fecha_alta = _sql.Column(_sql.DateTime, default=None, index=True)
+    nombre = _sql.Column(_sql.String(150), default="", index=True)
+    ap_paterno = _sql.Column(_sql.String(150), default="", index=True)
+    ap_materno = _sql.Column(_sql.String(150), default="", index=True)
+    edad  =  _sql.Column(_sql.Integer, default=0, index=True)
+    liga  =  _sql.Column(_sql.Integer, default=0, index=True)
+    dorsal  =  _sql.Column(_sql.Integer, default=0, index=True)    
+    expediente = _sql.Column(_sql.String(30), default="", index=True)
+    seccional = _sql.Column(_sql.String(30), default="", index=True)
+    direccion = _sql.Column(_sql.Text, default="")
+    telefono = _sql.Column(_sql.String(30), default="", index=True)
+    img = _sql.Column(_sql.Text, default="")
+    delegado = _sql.Column(_sql.Boolean, default=False)    
+    estatus = _sql.Column(_sql.Integer, default=None)
 
     creado_por = _sql.Column(_sql.String(50), default="", index=True)
     creado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)

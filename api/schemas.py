@@ -118,3 +118,64 @@ class Equipos(_EquiposBase):
     class Config:
         orm_mode = True
 
+# *************************************************************************************************************************************
+# SECCION: JUGADORES
+# *************************************************************************************************************************************
+
+class _JugadoressBase(_pydantic.BaseModel):
+
+    nombre:  _typing.Optional[str] = ""
+    ap_paterno:  _typing.Optional[str] = ""
+    ap_materno:  _typing.Optional[str] = ""
+    edad: _typing.Optional[int] = 0
+    liga: _typing.Optional[int] = 0
+    dorsal: _typing.Optional[int] = 0
+    expediente:  _typing.Optional[str] = ""
+    seccional:  _typing.Optional[str] = ""
+    direccion:  _typing.Optional[str] = ""
+    telefono:  _typing.Optional[str] = ""
+    img:  _typing.Optional[str] = ""
+    delegado: _typing.Optional[bool] = False
+    estatus: _typing.Optional[int] = 0
+
+# *************************************************************************************************************************************
+
+# La clase Create hace referencia a la clase _Base
+# y hereda los campos de la misma
+class JugadoresCreate(_JugadoressBase):
+    pass
+
+
+# *************************************************************************************************************************************
+
+
+class Jugadores(_JugadoressBase):
+
+    id: int = 0
+    liga_jugador:Torneos
+    equipo_jugador: Equipos
+    """ @_pydantic.root_validator
+    def value_nombre_liga(cls, values) -> _typing.Dict:
+        try:
+            nombre_torneo = _fn.get_field_value(
+                    table_name="torneos",
+                    search_field="id",
+                    search_type="str",
+                    search_value=values["liga"],
+                    return_field="nombre_torneo",
+                    filter_optional="",
+                    sort_optional="",
+                )
+
+            values["nombre_torneo"] = nombre_torneo
+           
+        except Exception as e:
+            #_logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
+
+            values["nombre_torneo"] = ""   
+
+        return values
+ """
+    class Config:
+        orm_mode = True
+
