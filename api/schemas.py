@@ -125,8 +125,8 @@ class Equipos(_EquiposBase):
 class _JugadoressBase(_pydantic.BaseModel):
 
     nombre:  _typing.Optional[str] = ""
-    ap_paterno:  _typing.Optional[str] = ""
-    ap_materno:  _typing.Optional[str] = ""
+    ap_p:  _typing.Optional[str] = ""
+    ap_m:  _typing.Optional[str] = ""
     edad: _typing.Optional[int] = 0
     liga: _typing.Optional[int] = 0
     dorsal: _typing.Optional[int] = 0
