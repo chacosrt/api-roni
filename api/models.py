@@ -67,8 +67,8 @@ class Jugadores(_database.Base):
     # campos
     id = _sql.Column(_sql.Integer, primary_key=True, autoincrement=True, index=True)
     nombre = _sql.Column(_sql.String(150), default="", index=True)
-    ap_paterno = _sql.Column(_sql.String(150), default="", index=True)
-    ap_materno = _sql.Column(_sql.String(150), default="", index=True)
+    ap_p = _sql.Column(_sql.String(150), default="", index=True)
+    ap_m = _sql.Column(_sql.String(150), default="", index=True)
     edad  =  _sql.Column(_sql.Integer, default=0, index=True)
     liga  =  _sql.Column(_sql.Integer, default=0, index=True)
     dorsal  =  _sql.Column(_sql.Integer, default=0, index=True)    
