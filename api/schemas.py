@@ -129,6 +129,7 @@ class _JugadoressBase(_pydantic.BaseModel):
     ap_m:  _typing.Optional[str] = ""
     edad: _typing.Optional[int] = 0
     liga: _typing.Optional[int] = 0
+    equipo: _typing.Optional[int] = 0
     dorsal: _typing.Optional[int] = 0
     expediente:  _typing.Optional[str] = ""
     seccional:  _typing.Optional[str] = ""

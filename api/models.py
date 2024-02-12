@@ -56,6 +56,10 @@ class Equipos(_database.Base):
     modificado_por = _sql.Column(_sql.String(50), default="", index=True)
     modificado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)
 
+    equipo_jugador = _orm.relationship(
+        "Jugadores", foreign_keys="Jugadores.equipo", backref="jugador_equipo"
+    )
+
 
 # *************************************************************************************************************************************
 # REGIMENES FISCALES
@@ -71,6 +75,7 @@ class Jugadores(_database.Base):
     ap_m = _sql.Column(_sql.String(150), default="", index=True)
     edad  =  _sql.Column(_sql.Integer, default=0, index=True)
     liga  =  _sql.Column(_sql.Integer, default=0, index=True)
+    equipo = _sql.Column(_sql.Integer, _sql.ForeignKey("equipos.id"))
     dorsal  =  _sql.Column(_sql.Integer, default=0, index=True)    
     expediente = _sql.Column(_sql.String(30), default="", index=True)
     seccional = _sql.Column(_sql.String(30), default="", index=True)
