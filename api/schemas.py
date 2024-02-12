@@ -154,28 +154,20 @@ class Jugadores(_JugadoressBase):
     id: int = 0
     liga_jugador:Torneos
     equipo_jugador: Equipos
-    """ @_pydantic.root_validator
-    def value_nombre_liga(cls, values) -> _typing.Dict:
-        try:
-            nombre_torneo = _fn.get_field_value(
-                    table_name="torneos",
-                    search_field="id",
-                    search_type="str",
-                    search_value=values["liga"],
-                    return_field="nombre_torneo",
-                    filter_optional="",
-                    sort_optional="",
-                )
 
-            values["nombre_torneo"] = nombre_torneo
+    @_pydantic.root_validator
+    def value_nombre_completo(cls, values) -> _typing.Dict:
+        try:
+            nombre_completo = f"{values["nombre_torneo"]} {values["ap_p"]} {values["ap_m"]}"
+            values["nombre_completo"] = nombre_completo
            
         except Exception as e:
             #_logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
 
-            values["nombre_torneo"] = ""   
+            values["nombre_completo"] = ""   
 
         return values
- """
+ 
     class Config:
         orm_mode = True
 
