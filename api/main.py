@@ -304,7 +304,7 @@ async def read_equipos_por_id(
 # *************************************************************************************************************************************
 @app.get(
     "/equipos/{id}/id_torneo",
-    response_model=_schemas.Equipos,
+    response_model=List[_schemas.Equipos],
     status_code=_fastapi.status.HTTP_200_OK,
     tags=["Equipos"],
 )
