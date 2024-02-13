@@ -302,6 +302,30 @@ async def read_equipos_por_id(
     return db_equipos
 
 # *************************************************************************************************************************************
+@app.get(
+    "/equipos/{id}/id_torneo",
+    response_model=_schemas.Equipos,
+    status_code=_fastapi.status.HTTP_200_OK,
+    tags=["Equipos"],
+)
+async def read_equipos_por_id_torneo(
+    id: str,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_equipos = _services.get_equipos_por_id_torneo(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    if db_equipos is None:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+
+    return db_equipos
+
+# *************************************************************************************************************************************
 
 
 @app.post(

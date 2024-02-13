@@ -243,6 +243,13 @@ def get_equipos_por_id(db: _orm.Session, token: str, id: int):
 # *************************************************************************************************************************************
 
 
+def get_equipos_por_id_torneo(db: _orm.Session, token: str, id: int):
+    equipo = db.query(_models.Equipos).filter(_models.Equipos.liga == id).first()
+    return equipo
+
+# *************************************************************************************************************************************
+
+
 def create_equipo(
     db: _orm.Session,
     equipo: _schemas.EquiposCreate,
