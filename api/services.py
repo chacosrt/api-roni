@@ -367,6 +367,7 @@ def create_jugador(
         ap_m = _fn.format_nombre_propio(jugador.ap_m),
         edad  =  _fn.is_null(jugador.edad,0),
         liga  =  _fn.is_null(jugador.liga,0),
+        equipo  =  _fn.is_null(jugador.equipo,0),
         dorsal  =   _fn.is_null(jugador.edad,0),
         expediente = _fn.clean_string(jugador.expediente),
         seccional = _fn.clean_string(jugador.seccional),
@@ -407,6 +408,7 @@ def update_jugador(
     db_jugador.ap_m = _fn.format_nombre_propio(jugador.ap_m)
     db_jugador.edad  =  _fn.is_null(jugador.edad,0)
     db_jugador.liga  =  _fn.is_null(jugador.liga,0)
+    db_jugador.equipo  =  _fn.is_null(jugador.equipo,0)
     db_jugador.dorsal  =   _fn.is_null(jugador.edad,0)
     db_jugador.expediente = _fn.clean_string(jugador.expediente)
     db_jugador.seccional = _fn.clean_string(jugador.seccional)
