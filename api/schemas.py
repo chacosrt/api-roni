@@ -153,7 +153,7 @@ class JugadoresCreate(_JugadoressBase):
 class Jugadores(_JugadoressBase):
 
     id: int = 0
-    jugador_equipo: Equipos
+    equipo_jugador: Equipos
 
     @_pydantic.root_validator
     def value_nombre_completo(cls, values) -> _typing.Dict:

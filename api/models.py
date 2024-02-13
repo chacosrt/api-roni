@@ -57,7 +57,7 @@ class Equipos(_database.Base):
     modificado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)
 
     equipo_jugador = _orm.relationship(
-        "Jugadores", foreign_keys="Jugadores.equipo", backref="jugador_equipo"
+        "Jugadores", foreign_keys="Jugadores.equipo", backref="equipo_jugador"
     )
 
 
