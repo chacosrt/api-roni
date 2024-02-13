@@ -153,14 +153,13 @@ class JugadoresCreate(_JugadoressBase):
 class Jugadores(_JugadoressBase):
 
     id: int = 0
-    liga_jugador:Torneos
-    equipo_jugador: Equipos
+    jugador_equipo: Equipos
 
     @_pydantic.root_validator
     def value_nombre_completo(cls, values) -> _typing.Dict:
         try:
             
-            nombre_completo = values["nombre_torneo"] + " " +values["ap_p"] + " " +values["ap_m"]
+            nombre_completo = values["nombre"] + " " +values["ap_p"] + " " +values["ap_m"]
             values["nombre_completo"] = nombre_completo
            
         except Exception as e:
