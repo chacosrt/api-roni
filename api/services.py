@@ -363,8 +363,8 @@ def create_jugador(
 
     db_jugador = _models.Jugadores(
         nombre = _fn.format_nombre_propio(jugador.nombre),
-        ap_paterno = _fn.format_nombre_propio(jugador.ap_paterno),
-        ap_materno = _fn.format_nombre_propio(jugador.ap_materno),
+        ap_p = _fn.format_nombre_propio(jugador.ap_paterno),
+        ap_m = _fn.format_nombre_propio(jugador.ap_materno),
         edad  =  _fn.is_null(jugador.edad,0),
         liga  =  _fn.is_null(jugador.liga,0),
         dorsal  =   _fn.is_null(jugador.edad,0),
@@ -403,8 +403,8 @@ def update_jugador(
 
     # db_actividades.clave = _fn.clean_string(actividad.clave).upper()
     db_jugador.nombre = _fn.format_nombre_propio(jugador.nombre)
-    db_jugador.ap_paterno = _fn.format_nombre_propio(jugador.ap_paterno)
-    db_jugador.ap_materno = _fn.format_nombre_propio(jugador.ap_materno)
+    db_jugador.ap_p = _fn.format_nombre_propio(jugador.ap_paterno)
+    db_jugador.ap_m = _fn.format_nombre_propio(jugador.ap_materno)
     db_jugador.edad  =  _fn.is_null(jugador.edad,0)
     db_jugador.liga  =  _fn.is_null(jugador.liga,0)
     db_jugador.dorsal  =   _fn.is_null(jugador.edad,0)
