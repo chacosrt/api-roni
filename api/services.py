@@ -363,8 +363,8 @@ def create_jugador(
 
     db_jugador = _models.Jugadores(
         nombre = _fn.format_nombre_propio(jugador.nombre),
-        ap_p = _fn.format_nombre_propio(jugador.ap_paterno),
-        ap_m = _fn.format_nombre_propio(jugador.ap_materno),
+        ap_p = _fn.format_nombre_propio(jugador.ap_p),
+        ap_m = _fn.format_nombre_propio(jugador.ap_m),
         edad  =  _fn.is_null(jugador.edad,0),
         liga  =  _fn.is_null(jugador.liga,0),
         dorsal  =   _fn.is_null(jugador.edad,0),
