@@ -172,3 +172,50 @@ class Jugadores(_JugadoressBase):
     class Config:
         orm_mode = True
 
+# *************************************************************************************************************************************
+# SECCION: Partidos
+# *************************************************************************************************************************************
+
+class _PartidosBase(_pydantic.BaseModel):
+
+    fecha: _typing.Optional[_dt.date]  = None
+    etapa:  _typing.Optional[str] = ""
+    jornada:  _typing.Optional[str] = ""
+    campo: _typing.Optional[int] = 0
+    liga: _typing.Optional[int] = 0
+    local: _typing.Optional[int] = 0
+    visitante: _typing.Optional[int] = 0
+    goles_local: _typing.Optional[int] = 0
+    goles_visitante: _typing.Optional[int] = 0
+    ganador: _typing.Optional[int] = 0
+    estatus: _typing.Optional[int] = 0
+    observaciones:  _typing.Optional[str] = ""
+
+
+# *************************************************************************************************************************************
+
+# La clase Create hace referencia a la clase _Base
+# y hereda los campos de la misma
+class PartidosCreate(_PartidosBase):
+    pass
+
+
+# *************************************************************************************************************************************
+
+
+class Partidos(_PartidosBase):
+
+    id: int = 0
+    equipo_jugador: Equipos
+
+    @_pydantic.root_validator
+    def values_fechas(cls, values) -> _typing.Dict:
+        fecha = str(_fn.format_date(values["fecha"]))
+        values.pop("fecha")        
+
+        values["fecha"] = fecha
+        return values
+    
+ 
+    class Config:
+        orm_mode = True

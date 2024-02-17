@@ -96,5 +96,32 @@ class Jugadores(_database.Base):
         primaryjoin=("foreign(Regimenes.id_constancia) == remote(ConstanciaFiscal.id_constancia)"),backref="regimenes_fiscales"
     ) """
 
+# *************************************************************************************************************************************
+# Partidos
+# *************************************************************************************************************************************		
+
+class Partidos(_database.Base):
+    # nombre de la tabla
+    __tablename__ = "partidos"
+    # campos
+    id = _sql.Column(_sql.Integer, primary_key=True, autoincrement=True, index=True)
+    fecha = _sql.Column(_sql.Date, default=_dt.date.today(), index=True)
+    etapa = _sql.Column(_sql.String(150), default="", index=True)
+    jornada = _sql.Column(_sql.String(150), default="", index=True)
+    campo = _sql.Column(_sql.Integer, default=0, index=True)
+    liga  =  _sql.Column(_sql.Integer, default=0, index=True)
+    local  = _sql.Column(_sql.Integer, _sql.ForeignKey("equipos.id"))
+    visitante = _sql.Column(_sql.Integer, _sql.ForeignKey("equipos.id"))
+    goles_local  =  _sql.Column(_sql.Integer, default=0, index=True)
+    goles_visitante  =  _sql.Column(_sql.Integer, default=0, index=True)
+    ganador = _sql.Column(_sql.Integer, default=0, index=True)
+    estatus = _sql.Column(_sql.Integer, default=0, index=True)
+    observaciones = _sql.Column(_sql.Text, default="")
+
+    creado_por = _sql.Column(_sql.String(50), default="", index=True)
+    creado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)
+    modificado_por = _sql.Column(_sql.String(50), default="", index=True)
+    modificado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)	
+
 
 
