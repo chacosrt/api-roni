@@ -540,6 +540,189 @@ async def delete_jugador(
 
 
 # *************************************************************************************************************************************
+# SECCION: PARTIDOS
+# *************************************************************************************************************************************
+
+@app.get(
+    "/partidos_list/",
+    response_model=List[_schemas.Partidos],
+    status_code=_fastapi.status.HTTP_200_OK,
+    tags=["Partidos"],
+)
+async def read_partidos(
+    skip: Optional[int] = None,
+    limit: Optional[int] = None,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_partidos = _services.get_partidos(
+        db=db,
+          token=token, 
+          skip=skip, limit=limit
+    )
+    if len(db_partidos) == 0:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+    return db_partidos
+
+
+# *************************************************************************************************************************************
+@app.get(
+    "/partidos/{id}/id",
+    response_model=_schemas.Partidos,
+    status_code=_fastapi.status.HTTP_200_OK,
+    tags=["Partidos"],
+)
+async def read_partidos_por_id(
+    id: str,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_partidos = _services.get_partidos_por_id(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    if db_partidos is None:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+
+    return db_partidos
+
+# *************************************************************************************************************************************
+
+@app.get(
+    "/partidos/{id}/id_equipo",
+    response_model=List[_schemas.Partidos],
+    status_code=_fastapi.status.HTTP_200_OK,
+    tags=["Partidos"],
+)
+async def read_partidos_equipo_id(
+    skip: Optional[int] = None,
+    limit: Optional[int] = None,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_partidos = _services.get_partidos_por_equipo_id(
+        db=db,
+          token=token, 
+          skip=skip, limit=limit
+    )
+    if len(db_partidos) == 0:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+    return db_partidos
+
+# *************************************************************************************************************************************
+
+@app.get(
+    "/partidos/{id}/id_torneo",
+    response_model=List[_schemas.Partidos],
+    status_code=_fastapi.status.HTTP_200_OK,
+    tags=["Partidos"],
+)
+async def read_partidos_torneo_id(
+    skip: Optional[int] = None,
+    limit: Optional[int] = None,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_partidos = _services.get_equipos_por_id_torneo(
+        db=db,
+          token=token, 
+          skip=skip, limit=limit
+    )
+    if len(db_partidos) == 0:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+    return db_partidos
+
+# *************************************************************************************************************************************
+
+
+@app.post(
+    "/partidos/",
+    response_model=_schemas.Partidos,
+    status_code=_fastapi.status.HTTP_201_CREATED,
+    tags=["Partidos"],
+)
+def create_partido(
+    partido: _schemas.PartidosCreate,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    # return _services.create_actividad(db=db, actividad=actividad)
+    return _services.create_partido(db=db, token=token, partido=partido)
+
+
+# *************************************************************************************************************************************
+
+
+@app.post(
+    "/partidos/{id}",
+    response_model=_schemas.PartidosCreate,
+    status_code=_fastapi.status.HTTP_201_CREATED,
+    tags=["Partidos"],
+)
+async def update_partido(
+    id: str,
+    partido: _schemas.PartidosCreate,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_partidos = _services.get_partidos_por_id(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    if db_partidos is None:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+
+    return _services.update_partido(
+        db=db,
+        token=token,
+        db_partido=db_partidos,
+        partido=partido,
+    )
+
+
+# *************************************************************************************************************************************
+
+
+@app.post(
+    "/partidos/{id}/delete",
+    status_code=_fastapi.status.HTTP_202_ACCEPTED,
+    tags=["Partidos"],
+)
+async def delete_partido(
+    id: str,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_partido = _services.get_partidos_por_id(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    if db_partido is None:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+    _services.delete_partido(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    return {"message": f"El registro: {id} ha sido eliminado"}
+
+
+# *************************************************************************************************************************************
 # SECCION: ADMIN
 # *************************************************************************************************************************************
 

@@ -435,3 +435,174 @@ def delete_jugador(db: _orm.Session, token: str, id: int):
     
     db.query(_models.Jugadores).filter(_models.Jugadores.id == id).delete()
     db.commit()
+
+
+# *************************************************************************************************************************************
+# SECCION: PARTIDOS
+# *************************************************************************************************************************************
+
+def get_partidos(
+    db: _orm.Session,
+    token: str,
+    skip: int = 0,
+    limit: int = RETURN_DEFAULT_ROWS,
+):
+    skip = _fn.is_null(skip, 0)
+    limit = _fn.is_null(limit, RETURN_DEFAULT_ROWS)
+
+    if (limit > RETURN_MAX_ROWS) and (
+        _auth.token_decode(token)["roles"].upper() != "ADMINISTRATOR"
+    ):
+        _logger.warning(f"Solicitud maxima de registros excedida [{limit}]")
+        limit = RETURN_DEFAULT_ROWS
+
+    results = (
+        db.query(_models.Partidos)
+        .order_by(_models.Partidos.id)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+
+    return results
+
+# *************************************************************************************************************************************
+
+
+def get_partidos_por_id(db: _orm.Session, token: str, id: int):
+    partido = db.query(_models.Partidos).filter(_models.Partidos.id == id).first()
+    return partido
+
+# *************************************************************************************************************************************
+
+
+def get_partidos_por_equipo_id(db: _orm.Session,
+    token: str, 
+    id: int,
+    skip: int = 0,    
+    limit: int = RETURN_DEFAULT_ROWS
+):
+
+    skip = _fn.is_null(skip, 0)
+    limit = _fn.is_null(limit, RETURN_DEFAULT_ROWS)
+
+    if (limit > RETURN_MAX_ROWS) and (
+        _auth.token_decode(token)["roles"].upper() != "ADMINISTRATOR"
+    ):
+        _logger.warning(f"Solicitud maxima de registros excedida [{limit}]")
+        limit = RETURN_DEFAULT_ROWS
+
+    partido = db.query(_models.Partidos).filter((_models.Partidos.local == id) | (_models.Partidos.visitante == id)).order_by(_models.Partidos.id).all()
+    return partido
+
+# *************************************************************************************************************************************
+
+def get_partidos_por_torneo(
+    db: _orm.Session,
+    token: str,
+    id: int,
+    skip: int = 0,    
+    limit: int = RETURN_DEFAULT_ROWS,
+    
+):
+    skip = _fn.is_null(skip, 0)
+    limit = _fn.is_null(limit, RETURN_DEFAULT_ROWS)
+
+    if (limit > RETURN_MAX_ROWS) and (
+        _auth.token_decode(token)["roles"].upper() != "ADMINISTRATOR"
+    ):
+        _logger.warning(f"Solicitud maxima de registros excedida [{limit}]")
+        limit = RETURN_DEFAULT_ROWS
+
+    results = (
+        db.query(_models.Partidos)
+        .filter(_models.Partidos.liga == id)
+        .order_by(_models.Partidos.id)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+
+    return results
+
+# *************************************************************************************************************************************
+
+
+def create_partido(
+    db: _orm.Session,
+    partido: _schemas.PartidosCreate,
+    token: str,
+):
+
+    sub = _auth.token_claim(token, "sub")
+
+    db_partido = _models.Jugadores(
+        fecha =_fn.format_date(partido.fecha),
+        etapa = _fn.clean_string(partido.etapa),
+        jornada = _fn.clean_string(partido.etapa),
+        temporada = _fn.clean_string(partido.etapa),
+        campo =  _fn.is_null(partido.campo,0),
+        liga  =  _fn.is_null(partido.liga,0),
+        local  =  _fn.is_null(partido.local,0),
+        visitante =  _fn.is_null(partido.visitante,0),
+        goles_local  =  _fn.is_null(partido.goles_local,0),
+        goles_visitante  =  _fn.is_null(partido.goles_visitante,0),
+        ganador =  _fn.is_null(partido.ganador,0),        
+        observaciones = _fn.clean_string(partido.etapa),
+        
+    )
+
+    db_partido.estatus = 1
+
+    db_partido.creado_por = _fn.clean_string(sub)
+    db_partido.creado_el = _dt.datetime.now()
+    db_partido.modificado_por = _fn.clean_string(sub)
+    db_partido.modificado_el = _dt.datetime.now()
+
+    db.add(db_partido)
+    db.commit()
+    db.refresh(db_partido)
+
+    return db_partido 
+
+# *************************************************************************************************************************************
+
+
+def update_partido(
+    db: _orm.Session,
+    token: str,
+    db_partido: _models.Partidos,
+    partido: _schemas.PartidosCreate,
+):
+    sub = _auth.token_claim(token, "sub")
+
+    # db_actividades.clave = _fn.clean_string(actividad.clave).upper()
+    db_partido.fecha =_fn.format_date(partido.fecha)
+    db_partido.etapa = _fn.clean_string(partido.etapa)
+    db_partido.jornada = _fn.clean_string(partido.etapa)
+    db_partido.temporada = _fn.clean_string(partido.etapa)
+    db_partido.campo =  _fn.is_null(partido.campo,0)
+    db_partido.liga  =  _fn.is_null(partido.liga,0)
+    db_partido.local  =  _fn.is_null(partido.local,0)
+    db_partido.visitante =  _fn.is_null(partido.visitante,0)
+    db_partido.goles_local  =  _fn.is_null(partido.goles_local,0)
+    db_partido.goles_visitante  =  _fn.is_null(partido.goles_visitante,0)
+    db_partido.ganador =  _fn.is_null(partido.ganador,0)     
+    db_partido.observaciones = _fn.clean_string(partido.etapa)
+    db_partido.estatus = _fn.is_null(partido.estatus,0)
+   
+    db_partido.modificado_por = _fn.clean_string(sub)
+    db_partido.modificado_el = _dt.datetime.now()
+
+    db.commit()
+    db.refresh(db_partido)
+
+    return db_partido
+
+# *************************************************************************************************************************************
+
+
+def delete_partido(db: _orm.Session, token: str, id: int):
+    
+    db.query(_models.Partidos).filter(_models.Partidos.id == id).delete()
+    db.commit()

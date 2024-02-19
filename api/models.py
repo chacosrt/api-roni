@@ -108,6 +108,7 @@ class Partidos(_database.Base):
     fecha = _sql.Column(_sql.Date, default=_dt.date.today(), index=True)
     etapa = _sql.Column(_sql.String(150), default="", index=True)
     jornada = _sql.Column(_sql.String(150), default="", index=True)
+    temporada = _sql.Column(_sql.String(150), default="", index=True)
     campo = _sql.Column(_sql.Integer, default=0, index=True)
     liga  =  _sql.Column(_sql.Integer, default=0, index=True)
     local  = _sql.Column(_sql.Integer, _sql.ForeignKey("equipos.id"))
