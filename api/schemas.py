@@ -218,6 +218,51 @@ class Partidos(_PartidosBase):
         values["fecha"] = fecha
         return values
     
+    @_pydantic.root_validator
+    def value_nombre_equipos(cls, values) -> _typing.Dict:
+        try:
+           
+            return_value = _fn.get_field_value(
+                    table_name="equipos",
+                    search_field="id",
+                    search_type="",
+                    search_value=values["local"],
+                    return_field="nombre",
+                    filter_optional="",
+                    sort_optional="",
+                )
+            if return_value != "":
+                values["nombre_local"] = return_value
+            else:
+                 values["nombre_local"] = ""
+        except Exception as e:
+            _logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
+
+            values["nombre_local"] = ""
+
+        try:
+           
+            return_value = _fn.get_field_value(
+                    table_name="equipos",
+                    search_field="id",
+                    search_type="",
+                    search_value=values["visitante"],
+                    return_field="nombre",
+                    filter_optional="",
+                    sort_optional="",
+                )
+            if return_value != "":
+                values["nombre_visitante"] = return_value
+            else:
+                 values["nombre_visitante"] = ""
+        except Exception as e:
+            _logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
+
+            values["nombre_visitante"] = ""
+
+
+        return values
+    
  
     class Config:
         orm_mode = True
