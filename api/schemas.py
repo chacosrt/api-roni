@@ -189,7 +189,7 @@ class _PartidosBase(_pydantic.BaseModel):
     visitante: _typing.Optional[int] = 0
     goles_local: _typing.Optional[int] = 0
     goles_visitante: _typing.Optional[int] = 0
-    ganador: _typing.Optional[int] = 0
+    ganador: _typing.Optional[str] = 0
     estatus: _typing.Optional[int] = 0
     observaciones:  _typing.Optional[str] = ""
 

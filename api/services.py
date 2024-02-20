@@ -535,24 +535,37 @@ def create_partido(
 ):
 
     sub = _auth.token_claim(token, "sub")
+    ganador_partido = 0
 
-    db_partido = _models.Jugadores(
+    db_partido = _models.Partidos(
         fecha =_fn.format_date(partido.fecha),
         etapa = _fn.clean_string(partido.etapa),
         jornada = _fn.clean_string(partido.etapa),
-        temporada = _fn.clean_string(partido.etapa),
+        #temporada = _fn.clean_string(partido.etapa),
         campo =  _fn.is_null(partido.campo,0),
         liga  =  _fn.is_null(partido.liga,0),
         local  =  _fn.is_null(partido.local,0),
         visitante =  _fn.is_null(partido.visitante,0),
         goles_local  =  _fn.is_null(partido.goles_local,0),
         goles_visitante  =  _fn.is_null(partido.goles_visitante,0),
-        ganador =  _fn.is_null(partido.ganador,0),        
+        #ganador =  _fn.is_null(partido.ganador,0),        
         observaciones = _fn.clean_string(partido.etapa),
         
     )
 
+    get_temporada = db.query(_models.Torneos).filter(_models.Torneos.id == partido.liga).first()
+
+    if partido.ganador == 1:
+
+        ganador_partido = partido.local
+
+    if partido.ganador == 2:
+
+        ganador_partido = partido.visitante
+
     db_partido.estatus = 1
+    db_partido.ganador = ganador_partido
+    db_partido.temporada = get_temporada.temporada
 
     db_partido.creado_por = _fn.clean_string(sub)
     db_partido.creado_el = _dt.datetime.now()
@@ -575,21 +588,35 @@ def update_partido(
     partido: _schemas.PartidosCreate,
 ):
     sub = _auth.token_claim(token, "sub")
-
+    ganador_partido = 0
     # db_actividades.clave = _fn.clean_string(actividad.clave).upper()
     db_partido.fecha =_fn.format_date(partido.fecha)
     db_partido.etapa = _fn.clean_string(partido.etapa)
     db_partido.jornada = _fn.clean_string(partido.etapa)
-    db_partido.temporada = _fn.clean_string(partido.etapa)
+    #db_partido.temporada = _fn.clean_string(partido.etapa)
     db_partido.campo =  _fn.is_null(partido.campo,0)
     db_partido.liga  =  _fn.is_null(partido.liga,0)
     db_partido.local  =  _fn.is_null(partido.local,0)
     db_partido.visitante =  _fn.is_null(partido.visitante,0)
     db_partido.goles_local  =  _fn.is_null(partido.goles_local,0)
     db_partido.goles_visitante  =  _fn.is_null(partido.goles_visitante,0)
-    db_partido.ganador =  _fn.is_null(partido.ganador,0)     
+    #db_partido.ganador =  _fn.is_null(partido.ganador,0)     
     db_partido.observaciones = _fn.clean_string(partido.etapa)
     db_partido.estatus = _fn.is_null(partido.estatus,0)
+
+    get_temporada = db.query(_models.Torneos).filter(_models.Torneos.id == partido.liga).first()
+
+    if partido.ganador == 1:
+
+        ganador_partido = partido.local
+
+    if partido.ganador == 2:
+
+        ganador_partido = partido.visitante
+
+    
+    db_partido.ganador = ganador_partido
+    db_partido.temporada = get_temporada.temporada
    
     db_partido.modificado_por = _fn.clean_string(sub)
     db_partido.modificado_el = _dt.datetime.now()
