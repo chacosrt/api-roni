@@ -106,6 +106,7 @@ class Partidos(_database.Base):
     # campos
     id = _sql.Column(_sql.Integer, primary_key=True, autoincrement=True, index=True)
     fecha = _sql.Column(_sql.Date, default=_dt.date.today(), index=True)
+    horario = _sql.Column(_sql.String(50), default="", index=True)
     etapa = _sql.Column(_sql.String(150), default="", index=True)
     jornada = _sql.Column(_sql.String(150), default="", index=True)
     temporada = _sql.Column(_sql.String(150), default="", index=True)
