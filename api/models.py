@@ -115,7 +115,7 @@ class Partidos(_database.Base):
     jornada = _sql.Column(_sql.String(150), default="", index=True)
     temporada = _sql.Column(_sql.String(150), default="", index=True)
     campo = _sql.Column(_sql.Integer, default=0, index=True)
-    liga  =  _sql.Column(_sql.Integer, default=0, index=True)
+    liga = _sql.Column(_sql.Integer, _sql.ForeignKey("torneos.id"))
     local  = _sql.Column(_sql.Integer, _sql.ForeignKey("equipos.id"))
     visitante = _sql.Column(_sql.Integer, _sql.ForeignKey("equipos.id"))
     goles_local  =  _sql.Column(_sql.Integer, default=0, index=True)
