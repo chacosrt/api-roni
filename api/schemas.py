@@ -208,7 +208,7 @@ class PartidosCreate(_PartidosBase):
 class Partidos(_PartidosBase):
 
     id: int = 0
-    
+    liga_partido: Torneos
 
     @_pydantic.root_validator
     def values_fechas(cls, values) -> _typing.Dict:

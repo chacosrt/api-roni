@@ -37,6 +37,10 @@ class Torneos(_database.Base):
         "Equipos", foreign_keys="Equipos.liga", backref="liga_equipo"
     )
 
+    torneo_partidos = _orm.relationship(
+        "Partidos", foreign_keys="Partidos.liga", backref="liga_partido"
+    )
+
 
 # *************************************************************************************************************************************
 
