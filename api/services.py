@@ -540,7 +540,7 @@ def create_partido(
     db_partido = _models.Partidos(
         fecha =_fn.format_date(partido.fecha),
         etapa = _fn.clean_string(partido.etapa),
-        jornada = _fn.clean_string(partido.etapa),
+        jornada = _fn.clean_string(partido.jornada),
         #temporada = _fn.clean_string(partido.etapa),
         campo =  _fn.is_null(partido.campo,0),
         liga  =  _fn.is_null(partido.liga,0),
@@ -592,7 +592,7 @@ def update_partido(
     # db_actividades.clave = _fn.clean_string(actividad.clave).upper()
     db_partido.fecha =_fn.format_date(partido.fecha)
     db_partido.etapa = _fn.clean_string(partido.etapa)
-    db_partido.jornada = _fn.clean_string(partido.etapa)
+    db_partido.jornada = _fn.clean_string(partido.jornada)
     #db_partido.temporada = _fn.clean_string(partido.etapa)
     db_partido.campo =  _fn.is_null(partido.campo,0)
     db_partido.liga  =  _fn.is_null(partido.liga,0)
