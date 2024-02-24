@@ -550,7 +550,7 @@ def create_partido(
         goles_local  =  _fn.is_null(partido.goles_local,0),
         goles_visitante  =  _fn.is_null(partido.goles_visitante,0),
         #ganador =  _fn.is_null(partido.ganador,0),        
-        observaciones = _fn.clean_string(partido.etapa),
+        observaciones = _fn.clean_string(partido.observaciones),
         
     )
 
@@ -603,7 +603,7 @@ def update_partido(
     db_partido.goles_local  =  _fn.is_null(partido.goles_local,0)
     db_partido.goles_visitante  =  _fn.is_null(partido.goles_visitante,0)
     #db_partido.ganador =  _fn.is_null(partido.ganador,0)     
-    db_partido.observaciones = _fn.clean_string(partido.etapa)
+    db_partido.observaciones = _fn.clean_string(partido.observaciones)
     db_partido.estatus = _fn.is_null(partido.estatus,0)
 
     get_temporada = db.query(_models.Torneos).filter(_models.Torneos.id == partido.liga).first()
