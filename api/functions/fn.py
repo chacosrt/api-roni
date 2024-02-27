@@ -613,7 +613,7 @@ def get_field_value(
     return_value = ""
 
     for row in rows:
-        return_value = row["return_value"]
+        return_value = row[0]
 
     cursor.close()
     conn.close()

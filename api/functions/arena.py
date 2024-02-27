@@ -21,7 +21,7 @@ class bearer_auth_header(_requests.auth.AuthBase):
         return r
 
 
-def persona_extra(persona_id: int):
+""" def persona_extra(persona_id: int):
 
     start_time = _time.time()
     # persona_id=_fn.parameter_id(persona_id)
@@ -70,4 +70,4 @@ def persona_extra(persona_id: int):
         _logger.info("Error:" + str(e))
         return_value = _schemas.Persona().dict()
 
-    return return_value
+    return return_value """

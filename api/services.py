@@ -539,7 +539,7 @@ def create_partido(
 
     db_partido = _models.Partidos(
         fecha =_fn.format_date(partido.fecha),
-        horario =_fn.clean_string(partido.horaio),
+        horario =_fn.clean_string(partido.horario),
         etapa = _fn.clean_string(partido.etapa),
         jornada = _fn.clean_string(partido.jornada),
         #temporada = _fn.clean_string(partido.etapa),

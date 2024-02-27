@@ -179,7 +179,7 @@ class Jugadores(_JugadoressBase):
 class _PartidosBase(_pydantic.BaseModel):
 
     fecha: _typing.Optional[_dt.date]  = None
-    horaio: _typing.Optional[str] = ""
+    horario: _typing.Optional[str] = ""
     etapa:  _typing.Optional[str] = ""
     jornada:  _typing.Optional[str] = ""
     temporada:  _typing.Optional[str] = ""
