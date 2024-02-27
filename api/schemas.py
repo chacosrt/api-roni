@@ -272,7 +272,7 @@ class Partidos(_PartidosBase):
                     search_field="id",
                     search_type="",
                     search_value=values["local"],
-                    return_field="img",
+                    return_field="img_equipo",
                     filter_optional="",
                     sort_optional="",
                 )
@@ -292,7 +292,7 @@ class Partidos(_PartidosBase):
                     search_field="id",
                     search_type="",
                     search_value=values["visitante"],
-                    return_field="img",
+                    return_field="img_equipo",
                     filter_optional="",
                     sort_optional="",
                 )
