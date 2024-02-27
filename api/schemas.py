@@ -263,6 +263,51 @@ class Partidos(_PartidosBase):
 
         return values
     
+    @_pydantic.root_validator
+    def value_img_equipos(cls, values) -> _typing.Dict:
+        try:
+           
+            return_value = _fn.get_field_value(
+                    table_name="equipos",
+                    search_field="id",
+                    search_type="",
+                    search_value=values["local"],
+                    return_field="img",
+                    filter_optional="",
+                    sort_optional="",
+                )
+            if return_value != "":
+                values["img_local"] = return_value
+            else:
+                 values["img_local"] = ""
+        except Exception as e:
+            _logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
+
+            values["img_local"] = ""
+
+        try:
+           
+            return_value = _fn.get_field_value(
+                    table_name="equipos",
+                    search_field="id",
+                    search_type="",
+                    search_value=values["visitante"],
+                    return_field="img",
+                    filter_optional="",
+                    sort_optional="",
+                )
+            if return_value != "":
+                values["img_visitante"] = return_value
+            else:
+                 values["img_visitante"] = ""
+        except Exception as e:
+            _logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
+
+            values["img_visitante"] = ""
+
+
+        return values
+    
  
     class Config:
         orm_mode = True
