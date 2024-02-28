@@ -664,7 +664,7 @@ def create_partido(
 
 @app.post(
     "/partidos/{id}",
-    response_model=_schemas.PartidosCreate,
+    response_model=_schemas.Partidos,
     status_code=_fastapi.status.HTTP_201_CREATED,
     tags=["Partidos"],
 )
