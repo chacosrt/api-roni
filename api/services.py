@@ -592,7 +592,7 @@ def update_partido(
     ganador_partido = 0
     # db_actividades.clave = _fn.clean_string(actividad.clave).upper()
     db_partido.fecha =_fn.format_date(partido.fecha)
-    db_partido.horario = _fn.clean_string(partido.horaio)
+    db_partido.horario = _fn.clean_string(partido.horario)
     db_partido.etapa = _fn.clean_string(partido.etapa)
     db_partido.jornada = _fn.clean_string(partido.jornada)
     #db_partido.temporada = _fn.clean_string(partido.etapa)
