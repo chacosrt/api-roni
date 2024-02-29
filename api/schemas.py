@@ -181,7 +181,7 @@ class _PartidosBase(_pydantic.BaseModel):
     fecha: _typing.Optional[_dt.date]  = None
     horario: _typing.Optional[str] = ""
     etapa:  _typing.Optional[str] = ""
-    jornada:  _typing.Optional[str] = ""
+    jornada:  _typing.Optional[int] = 0
     temporada:  _typing.Optional[str] = ""
     campo: _typing.Optional[int] = 0
     liga: _typing.Optional[int] = 0
