@@ -311,3 +311,15 @@ class Partidos(_PartidosBase):
  
     class Config:
         orm_mode = True
+
+
+# *************************************************************************************************************************************
+# SECCION: Jornadas
+# *************************************************************************************************************************************
+
+class Jornadas(_pydantic.BaseModel):
+
+    jornada:  _typing.Optional[int] = 0
+    temporada:  _typing.Optional[str] = ""
+    liga: _typing.Optional[int] = 0
+    

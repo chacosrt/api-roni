@@ -645,7 +645,7 @@ async def read_partidos_torneo_id(
 
 @app.get(
     "/partidos/{id_torneo}/jornadas",
-    response_model=List[_schemas.Partidos],
+    response_model=List[_schemas.Jornadas],
     status_code=_fastapi.status.HTTP_200_OK,
     tags=["Partidos"],
 )
