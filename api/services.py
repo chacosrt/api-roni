@@ -458,7 +458,7 @@ def get_partidos(
 
     results = (
         db.query(_models.Partidos)
-        .order_by(_models.Partidos.id)
+        .order_by(_models.Partidos.jornada.desc())
         .offset(skip)
         .limit(limit)
         .all()
