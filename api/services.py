@@ -527,6 +527,38 @@ def get_partidos_por_torneo(
 
 # *************************************************************************************************************************************
 
+def get_partidos_por_jornada(
+    db: _orm.Session,
+    token: str,
+    id: int,
+    skip: int = 0,    
+    limit: int = RETURN_DEFAULT_ROWS,
+    
+):
+    skip = _fn.is_null(skip, 0)
+    limit = _fn.is_null(limit, RETURN_DEFAULT_ROWS)
+
+    if (limit > RETURN_MAX_ROWS) and (
+        _auth.token_decode(token)["roles"].upper() != "ADMINISTRATOR"
+    ):
+        _logger.warning(f"Solicitud maxima de registros excedida [{limit}]")
+        limit = RETURN_DEFAULT_ROWS
+
+    results = (
+        db.query(_models.Partidos)
+        .distinct(_models.Partidos.jornada)
+        .filter(_models.Partidos.liga == id)
+        .order_by(_models.Partidos.jornada.desc())
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+
+    return results
+
+
+# *************************************************************************************************************************************
+
 
 def create_partido(
     db: _orm.Session,

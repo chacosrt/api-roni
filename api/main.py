@@ -643,6 +643,34 @@ async def read_partidos_torneo_id(
 
 # *************************************************************************************************************************************
 
+@app.get(
+    "/partidos/{id_torneo}/jornadas",
+    response_model=List[_schemas.Partidos],
+    status_code=_fastapi.status.HTTP_200_OK,
+    tags=["Partidos"],
+)
+async def read_partidos_jornada(
+    id_torneo: str,
+    skip: Optional[int] = None,
+    limit: Optional[int] = None,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_partidos = _services.get_partidos_por_jornada(
+        db=db,
+          token=token, 
+          skip=skip, limit=limit,
+          id=_fn.parameter_id(id_torneo)
+    )
+    if len(db_partidos) == 0:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+    return db_partidos
+
+
+# *************************************************************************************************************************************
+
 
 @app.post(
     "/partidos/",
