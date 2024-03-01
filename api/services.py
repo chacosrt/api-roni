@@ -544,10 +544,14 @@ def get_partidos_por_jornada(
         _logger.warning(f"Solicitud maxima de registros excedida [{limit}]")
         limit = RETURN_DEFAULT_ROWS
 
+    torneo = db.query(_models.Torneos).filter(_models.Torneos.id == id).first()
+    temporada = torneo.temporada
+
     results = (
         db.query(_models.Partidos)
         .distinct(_models.Partidos.jornada)
         .filter(_models.Partidos.liga == id)
+        .filter(_models.Partidos.temporada == temporada)
         .order_by(_models.Partidos.jornada.desc())
         .offset(skip)
         .limit(limit)

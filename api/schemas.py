@@ -317,7 +317,7 @@ class Partidos(_PartidosBase):
 # SECCION: Jornadas
 # *************************************************************************************************************************************
 
-class Jornadas(_pydantic.BaseModel):
+class Jornadas(Partidos):
 
     jornada:  _typing.Optional[int] = 0
     temporada:  _typing.Optional[str] = ""
