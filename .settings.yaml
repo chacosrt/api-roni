@@ -40,4 +40,4 @@ sqlite_filename: "../data/phoenix_roni_api.db"
 
 log_filename: "../.dev/roni.log"
 
-origins_url: "http://localhost:8030"
+origins_url: "http://localhost:8020"
