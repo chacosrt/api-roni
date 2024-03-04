@@ -1,5 +1,5 @@
 app_title: "Roni"
-app_root_path: "api-janus"
+app_root_path: "api-roni"
 app_docs_url: "/api"
 app_redoc_url:
 
