@@ -41,6 +41,10 @@ class Torneos(_database.Base):
         "Partidos", foreign_keys="Partidos.liga", backref="liga_partido"
     )
 
+    torneo_posiciones = _orm.relationship(
+        "Posiciones", foreign_keys="Posiciones.liga", backref="liga_tabla"
+    )
+
 
 # *************************************************************************************************************************************
 
@@ -62,6 +66,10 @@ class Equipos(_database.Base):
 
     equipo_jugador = _orm.relationship(
         "Jugadores", foreign_keys="Jugadores.equipo", backref="equipo_jugador"
+    )
+
+    torneo_posicion = _orm.relationship(
+        "Posiciones", foreign_keys="Posiciones.equipo", backref="equipo_tabla"
     )
 
 
@@ -124,6 +132,33 @@ class Partidos(_database.Base):
     estatus = _sql.Column(_sql.Integer, default=0, index=True)
     observaciones = _sql.Column(_sql.Text, default="")
 
+    creado_por = _sql.Column(_sql.String(50), default="", index=True)
+    creado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)
+    modificado_por = _sql.Column(_sql.String(50), default="", index=True)
+    modificado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)	
+
+# *************************************************************************************************************************************
+# Tabla de posiciones
+# *************************************************************************************************************************************		
+
+class Posiciones(_database.Base):
+    # nombre de la tabla
+    __tablename__ = "posiciones"
+    # campos
+    id = _sql.Column(_sql.Integer, primary_key=True, autoincrement=True, index=True)
+    temporada = _sql.Column(_sql.String(150), default="", index=True)
+    liga = _sql.Column(_sql.Integer, _sql.ForeignKey("torneos.id"))
+    equipo  = _sql.Column(_sql.Integer, _sql.ForeignKey("equipos.id"))
+    juegos_jugados  =  _sql.Column(_sql.Integer, default=0, index=True)
+    juegos_ganados  =  _sql.Column(_sql.Integer, default=0, index=True)
+    juegos_empatados = _sql.Column(_sql.Integer, default=0, index=True)
+    juegos_perdidos = _sql.Column(_sql.Integer, default=0, index=True)
+    goles_favor = _sql.Column(_sql.Integer, default=0, index=True)
+    goles_contra = _sql.Column(_sql.Integer, default=0, index=True)
+    diferencia_goles = _sql.Column(_sql.Integer, default=0, index=True)
+    puntos = _sql.Column(_sql.Integer, default=0, index=True)
+    estatus = _sql.Column(_sql.Integer, default=0, index=True)
+    
     creado_por = _sql.Column(_sql.String(50), default="", index=True)
     creado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)
     modificado_por = _sql.Column(_sql.String(50), default="", index=True)

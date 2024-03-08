@@ -193,6 +193,19 @@ class _PartidosBase(_pydantic.BaseModel):
     estatus: _typing.Optional[int] = 0
     observaciones:  _typing.Optional[str] = ""
 
+    temporada: _typing.Optional[str] = ""
+    liga:  _typing.Optional[int] = 0
+    equipo:  _typing.Optional[int] = 0
+    juegos_jugados:  _typing.Optional[int] = 0
+    juegos_ganados:  _typing.Optional[int] = 0
+    juegos_empatados:  _typing.Optional[int] = 0
+    juegos_perdidos:  _typing.Optional[int] = 0
+    goles_favor:  _typing.Optional[int] = 0
+    goles_contra:  _typing.Optional[int] = 0
+    diferencia_goles:  _typing.Optional[int] = 0
+    puntos:  _typing.Optional[int] = 0
+    estatus:  _typing.Optional[int] = 0
+
 
 # *************************************************************************************************************************************
 
@@ -322,4 +335,42 @@ class Jornadas(Partidos):
     jornada:  _typing.Optional[int] = 0
     temporada:  _typing.Optional[str] = ""
     liga: _typing.Optional[int] = 0
+
+
+# *************************************************************************************************************************************
+# SECCION: Partidos
+# *************************************************************************************************************************************
+
+class _PosicionesBase(_pydantic.BaseModel):
+
+    temporada: _typing.Optional[str] = ""
+    liga:  _typing.Optional[int] = 0
+    equipo:  _typing.Optional[int] = 0
+    juegos_jugados:  _typing.Optional[int] = 0
+    juegos_ganados:  _typing.Optional[int] = 0
+    juegos_empatados:  _typing.Optional[int] = 0
+    juegos_perdidos:  _typing.Optional[int] = 0
+    goles_favor:  _typing.Optional[int] = 0
+    goles_contra:  _typing.Optional[int] = 0
+    diferencia_goles:  _typing.Optional[int] = 0
+    puntos:  _typing.Optional[int] = 0
+    estatus:  _typing.Optional[int] = 0
+
+
+# *************************************************************************************************************************************
+
+# La clase Create hace referencia a la clase _Base
+# y hereda los campos de la misma
+class PosicionesCreate(_PosicionesBase):
+    pass
+
+
+# *************************************************************************************************************************************
+
+
+class Posiciones(_PosicionesBase):
+
+    id: int = 0
+    liga_tabla: Torneos
+    equipo_tabla:Equipos
     

@@ -751,6 +751,37 @@ async def delete_partido(
 
 
 # *************************************************************************************************************************************
+# SECCION: ESTADISTICAS
+# *************************************************************************************************************************************
+
+@app.get(
+    "/posiciones/{id_torneo}/list",
+    response_model=List[_schemas.Posiciones],
+    status_code=_fastapi.status.HTTP_200_OK,
+    tags=["Estadisticas"],
+)
+async def read_tabla(
+    id_torneo:str,
+    skip: Optional[int] = None,
+    limit: Optional[int] = None,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_torneos = _services.get_tabla_posiciones(
+        db=db,
+          token=token, 
+          skip=skip, limit=limit,
+          id_torneo=id_torneo
+
+    )
+    if len(db_torneos) == 0:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+    return db_torneos
+
+
+# *************************************************************************************************************************************
 # SECCION: ADMIN
 # *************************************************************************************************************************************
 
@@ -826,6 +857,9 @@ async def update_item_update_fields(
     background_tasks.add_task(_services.admin_update_all_items, token)
 
     return {"message": "Los registros están siendo actualizados..."}
+
+
+
 
 
 # *************************************************************************************************************************************
