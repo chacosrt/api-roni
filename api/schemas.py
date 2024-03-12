@@ -193,19 +193,6 @@ class _PartidosBase(_pydantic.BaseModel):
     estatus: _typing.Optional[int] = 0
     observaciones:  _typing.Optional[str] = ""
 
-    temporada: _typing.Optional[str] = ""
-    liga:  _typing.Optional[int] = 0
-    equipo:  _typing.Optional[int] = 0
-    juegos_jugados:  _typing.Optional[int] = 0
-    juegos_ganados:  _typing.Optional[int] = 0
-    juegos_empatados:  _typing.Optional[int] = 0
-    juegos_perdidos:  _typing.Optional[int] = 0
-    goles_favor:  _typing.Optional[int] = 0
-    goles_contra:  _typing.Optional[int] = 0
-    diferencia_goles:  _typing.Optional[int] = 0
-    puntos:  _typing.Optional[int] = 0
-    estatus:  _typing.Optional[int] = 0
-
 
 # *************************************************************************************************************************************
 

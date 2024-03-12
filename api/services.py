@@ -678,7 +678,7 @@ def update_partido(
 
         pos_visitante = db.query(_models.Posiciones).filter(_models.Posiciones.liga==partido.liga).filter(_models.Posiciones.equipo==partido.visitante).filter(_models.Posiciones.temporada==get_temporada.temporada).first()
 
-        db_posicion = _models.Posiciones()
+        
         
         if pos_local is None:   
 
@@ -706,6 +706,8 @@ def update_partido(
 
                 puntos = 1
 
+            db_posicion = _models.Posiciones()
+
             db_posicion.temporada = partido.temporada
             db_posicion.liga = _fn.is_null(partido.liga,0)
             db_posicion.equipo  = _fn.is_null(partido.local,0)
@@ -718,6 +720,11 @@ def update_partido(
             db_posicion.diferencia_goles = partido.goles_local - partido.goles_visitante
             db_posicion.puntos = puntos
             db_posicion.estatus = 1
+
+            db_posicion.creado_por = _fn.clean_string(sub)
+            db_posicion.creado_el = _dt.datetime.now()
+            db_posicion.modificado_por = _fn.clean_string(sub)
+            db_posicion.modificado_el = _dt.datetime.now()
 
             db.add(db_posicion)
             db.commit()
@@ -763,6 +770,9 @@ def update_partido(
             pos_local.goles_contra = pos_local.goles_contra + partido.goles_visitante
             pos_local.diferencia_goles = pos_local.goles_favor - pos_local.goles_contra
 
+            pos_local.modificado_por = _fn.clean_string(sub)
+            pos_local.modificado_el = _dt.datetime.now()
+
             db.commit()
             db.refresh(db_posicion)
 
@@ -794,18 +804,25 @@ def update_partido(
 
                 puntos = 1
 
+            db_posicion = _models.Posiciones()
+
             db_posicion.temporada = partido.temporada
             db_posicion.liga = _fn.is_null(partido.liga,0)
-            db_posicion.equipo  = _fn.is_null(partido.local,0)
+            db_posicion.equipo  = _fn.is_null(partido.visitante,0)
             db_posicion.juegos_jugados  =  1
             db_posicion.juegos_ganados  =  ganado
             db_posicion.juegos_empatados = empatado
             db_posicion.juegos_perdidos = perdido
-            db_posicion.goles_favor = partido.goles_local
-            db_posicion.goles_contra = partido.goles_visitante
-            db_posicion.diferencia_goles = partido.goles_local - partido.goles_visitante
+            db_posicion.goles_favor = partido.goles_visitante
+            db_posicion.goles_contra = partido.goles_local
+            db_posicion.diferencia_goles = partido.goles_visitante - partido.goles_local
             db_posicion.puntos = puntos
             db_posicion.estatus = 1
+
+            db_posicion.creado_por = _fn.clean_string(sub)
+            db_posicion.creado_el = _dt.datetime.now()
+            db_posicion.modificado_por = _fn.clean_string(sub)
+            db_posicion.modificado_el = _dt.datetime.now()
 
             db.add(db_posicion)
             db.commit()
@@ -839,9 +856,12 @@ def update_partido(
             pos_visitante.juegos_ganados  =  ganado
             pos_visitante.juegos_empatados = empatado
             pos_visitante.juegos_perdidos = perdido
-            pos_visitante.goles_favor = pos_visitante.goles_favor + partido.goles_local
-            pos_visitante.goles_contra = pos_visitante.goles_contra + partido.goles_visitante
+            pos_visitante.goles_favor = pos_visitante.goles_favor + partido.goles_visitante
+            pos_visitante.goles_contra = pos_visitante.goles_contra + partido.goles_local
             pos_visitante.diferencia_goles = pos_visitante.goles_favor - pos_visitante.goles_contra
+
+            pos_visitante.modificado_por = _fn.clean_string(sub)
+            pos_visitante.modificado_el = _dt.datetime.now()
 
             db.commit()
             db.refresh(db_posicion)
