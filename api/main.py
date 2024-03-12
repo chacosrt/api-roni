@@ -762,16 +762,13 @@ async def delete_partido(
 )
 async def read_tabla(
     id_torneo:str,
-    skip: Optional[int] = None,
-    limit: Optional[int] = None,
     db: _orm.Session = _fastapi.Depends(_services.get_db),
     token: str = _fastapi.Depends(_auth.token_bearer()),
 ):
     db_torneos = _services.get_tabla_posiciones(
         db=db,
           token=token, 
-          skip=skip, limit=limit,
-          id_torneo=id_torneo
+          id_torneo=_fn.parameter_id(id_torneo)
 
     )
     if len(db_torneos) == 0:

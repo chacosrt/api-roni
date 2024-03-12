@@ -361,3 +361,6 @@ class Posiciones(_PosicionesBase):
     liga_tabla: Torneos
     equipo_tabla:Equipos
     
+
+    class Config:
+        orm_mode = True
