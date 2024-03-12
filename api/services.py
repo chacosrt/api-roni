@@ -708,7 +708,7 @@ def update_partido(
 
             db_posicion = _models.Posiciones()
 
-            db_posicion.temporada = partido.temporada
+            db_posicion.temporada = get_temporada.temporada
             db_posicion.liga = _fn.is_null(partido.liga,0)
             db_posicion.equipo  = _fn.is_null(partido.local,0)
             db_posicion.juegos_jugados  =  1
@@ -806,7 +806,7 @@ def update_partido(
 
             db_posicion = _models.Posiciones()
 
-            db_posicion.temporada = partido.temporada
+            db_posicion.temporada = get_temporada.temporada
             db_posicion.liga = _fn.is_null(partido.liga,0)
             db_posicion.equipo  = _fn.is_null(partido.visitante,0)
             db_posicion.juegos_jugados  =  1
