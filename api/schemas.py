@@ -340,19 +340,19 @@ class Partidos(_PartidosBase):
 
         #****** Etapa************
 
-        if etapa == 1:
+        if etapa == "1":
 
             values["etapa_descripcion"] = "Programado"
 
-        if etapa == 2:
+        if etapa == "2":
 
             values["etapa_descripcion"] = "Jugado"
 
-        if etapa == 3:
+        if etapa == "3":
 
             values["etapa_descripcion"] = "Pendianete"
 
-        if etapa == 4:
+        if etapa == "4":
 
             values["etapa_descripcion"] = "Suspendido"
 
