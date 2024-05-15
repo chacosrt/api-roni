@@ -308,6 +308,59 @@ class Partidos(_PartidosBase):
 
         return values
     
+
+    @_pydantic.root_validator
+    def values_partido(cls, values) -> _typing.Dict:
+        etapa = values["etapa"] 
+        ganador = values["ganador"]
+        estatus = values["estatus"]  
+        goles_local = values["goles_local"]
+        goles_visitante = ["goles_visitante"]
+
+        if estatus == 2 and goles_local > goles_visitante:
+
+            values["ganador_descripcion"] = values["nombre_local"]
+
+        if estatus == 2 and goles_local < goles_visitante:
+
+            values["ganador_descripcion"] = values["nombre_visitante"]
+
+        if estatus == 2 and goles_local == goles_visitante:
+
+            values["ganador_descripcion"] = "Empate"
+
+        if estatus == 1 or estatus == 3:
+
+            values["ganador_descripcion"] = "Por Definirse"
+
+        if estatus == 4:
+
+            values["ganador_descripcion"] = "Sin Ganador"
+
+
+        #****** Etapa************
+
+        if etapa == 1:
+
+            values["etapa_descripcion"] = "Programado"
+
+        if etapa == 2:
+
+            values["etapa_descripcion"] = "Jugado"
+
+        if etapa == 3:
+
+            values["etapa_descripcion"] = "Pendianete"
+
+        if etapa == 4:
+
+            values["etapa_descripcion"] = "Suspendido"
+
+
+        
+        return values
+    
+    
  
     class Config:
         orm_mode = True
