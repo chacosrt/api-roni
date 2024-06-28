@@ -315,7 +315,7 @@ class Partidos(_PartidosBase):
         ganador = values["ganador"]
         estatus = values["estatus"]  
         goles_local = values["goles_local"]
-        goles_visitante = ["goles_visitante"]
+        goles_visitante = values["goles_visitante"]
 
         if estatus == 2 and goles_local > goles_visitante:
 
