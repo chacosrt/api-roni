@@ -344,15 +344,15 @@ class Partidos(_PartidosBase):
 
             values["estatus_descripcion"] = "Programado"
 
-        if estatus == "2":
+        if estatus == 2:
 
             values["estatus_descripcion"] = "Jugado"
 
-        if estatus == "3":
+        if estatus == 3:
 
             values["estatus_descripcion"] = "Pendianete"
 
-        if estatus == "4":
+        if estatus == 4:
 
             values["estatus_descripcion"] = "Suspendido"
 
