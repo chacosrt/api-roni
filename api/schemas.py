@@ -359,7 +359,7 @@ class Partidos(_PartidosBase):
     
     #****** Etapa************
 
-        if estatus == "1":
+        if etapa == "1":
 
             values["etapa_descripcion"] = "Práctica"
 
