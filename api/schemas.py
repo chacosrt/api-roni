@@ -338,24 +338,38 @@ class Partidos(_PartidosBase):
             values["ganador_descripcion"] = "Sin Ganador"
 
 
-        #****** Etapa************
+        #****** Estatus************
 
-        if etapa == "1":
+        if estatus == 1:
 
-            values["etapa_descripcion"] = "Programado"
+            values["estatus_descripcion"] = "Programado"
+
+        if estatus == "2":
+
+            values["estatus_descripcion"] = "Jugado"
+
+        if estatus == "3":
+
+            values["estatus_descripcion"] = "Pendianete"
+
+        if estatus == "4":
+
+            values["estatus_descripcion"] = "Suspendido"
+
+    
+    #****** Etapa************
+
+        if estatus == "1":
+
+            values["etapa_descripcion"] = "Práctica"
 
         if etapa == "2":
 
-            values["etapa_descripcion"] = "Jugado"
+            values["etapa_descripcion"] = "Regular"
 
         if etapa == "3":
 
-            values["etapa_descripcion"] = "Pendianete"
-
-        if etapa == "4":
-
-            values["etapa_descripcion"] = "Suspendido"
-
+            values["etapa_descripcion"] = "Liguilla"
 
         
         return values
