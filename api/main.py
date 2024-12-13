@@ -174,6 +174,7 @@ async def read_torneos_por_id(
 
 @app.post(
     "/torneos_activa/",
+    id = str,
     response_model=_schemas.Torneos,
     status_code=_fastapi.status.HTTP_201_CREATED,
     tags=["Torneos"],
