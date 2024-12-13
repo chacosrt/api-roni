@@ -185,7 +185,7 @@ def active_torneo(
     token: str = _fastapi.Depends(_auth.token_bearer()),
 ):
     # return _services.create_actividad(db=db, actividad=actividad)
-    return _services.active_torneo(db=db, token=token, id=id)
+    return _services.activa_torneo(db=db, token=token, id=id)
 
 
 # *************************************************************************************************************************************
