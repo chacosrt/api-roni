@@ -180,7 +180,7 @@ async def read_torneos_por_id(
     tags=["Torneos"],
 )
 def active_torneo(
-    id=_fn.parameter_id(id),
+    id:_fn.parameter_id(id),
     db: _orm.Session = _fastapi.Depends(_services.get_db),
     token: str = _fastapi.Depends(_auth.token_bearer()),
 ):
