@@ -114,6 +114,38 @@ def get_torneos_por_id(db: _orm.Session, token: str, id: int):
 # *************************************************************************************************************************************
 
 
+def activa_torneo(
+    db: _orm.Session,
+    id: int,
+    token: str,
+):
+
+    sub = _auth.token_claim(token, "sub")
+
+    torneo = db.query(_models.Torneos).filter(_models.Torneos.id == id).first()
+
+    if (torneo.estatus == 1):
+
+        torneo.estatus = 0
+
+    else:
+
+        torneo.estatus = 1
+
+    torneo.creado_por = _fn.clean_string(sub)
+    torneo.creado_el = _dt.datetime.now()
+    torneo.modificado_por = _fn.clean_string(sub)
+    torneo.modificado_el = _dt.datetime.now()
+
+    
+    db.commit()
+    db.refresh(torneo)
+
+    return torneo
+
+# *************************************************************************************************************************************
+
+
 def create_torneo(
     db: _orm.Session,
     torneo: _schemas.TorneosCreate,
@@ -183,7 +215,7 @@ def update_torneo(
     db_torneos.fecha_fin=_fn.format_date(torneo.fecha_fin)
     db_torneos.categoria=_fn.clean_string(torneo.categoria)
     db_torneos.img=_fn.clean_string(torneo.img)
-    db_torneos.estatus  =  _fn.is_null(torneo.estatus,0)
+    #db_torneos.estatus  =  _fn.is_null(torneo.estatus,0)
     
    
     db_torneos.modificado_por = _fn.clean_string(sub)
