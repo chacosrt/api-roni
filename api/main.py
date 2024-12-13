@@ -173,19 +173,18 @@ async def read_torneos_por_id(
 
 
 @app.post(
-    "/torneos_activa/",
-    id = str,
+    "/torneos_activa/",    
     response_model=_schemas.Torneos,
     status_code=_fastapi.status.HTTP_201_CREATED,
     tags=["Torneos"],
 )
 def active_torneo(
-    id:_fn.parameter_id(id),
+    id: str,
     db: _orm.Session = _fastapi.Depends(_services.get_db),
     token: str = _fastapi.Depends(_auth.token_bearer()),
 ):
     # return _services.create_actividad(db=db, actividad=actividad)
-    return _services.activa_torneo(db=db, token=token, id=id)
+    return _services.activa_torneo(db=db, token=token, id=_fn.parameter_id(id))
 
 
 # *************************************************************************************************************************************
