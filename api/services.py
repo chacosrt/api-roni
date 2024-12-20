@@ -132,8 +132,7 @@ def activa_torneo(
 
         torneo.estatus = 1
 
-    torneo.creado_por = _fn.clean_string(sub)
-    torneo.creado_el = _dt.datetime.now()
+    
     torneo.modificado_por = _fn.clean_string(sub)
     torneo.modificado_el = _dt.datetime.now()
 
