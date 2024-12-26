@@ -93,28 +93,22 @@ class Equipos(_EquiposBase):
     id: int = 0
     liga_equipo:Torneos
 
-    """ @_pydantic.root_validator
-    def value_nombre_liga(cls, values) -> _typing.Dict:
+    @_pydantic.root_validator
+    def value_img(cls, values) -> _typing.Dict:
         try:
-            nombre_torneo = _fn.get_field_value(
-                    table_name="torneos",
-                    search_field="id",
-                    search_type="str",
-                    search_value=values["liga"],
-                    return_field="nombre_torneo",
-                    filter_optional="",
-                    sort_optional="",
-                )
+            img = values["img_equipo"]
 
-            values["nombre_torneo"] = nombre_torneo
+            truncated = f"{img[:80]}..."
+
+            values["img_equipo"] = truncated
            
         except Exception as e:
-            #_logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
+            _logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
 
-            values["nombre_torneo"] = ""   
+            values["img_equipo"] = ""   
 
         return values
- """
+ 
     class Config:
         orm_mode = True
 
