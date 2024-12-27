@@ -68,7 +68,9 @@ class Torneos(_TorneosBase):
     @_pydantic.root_validator
     def value_img(cls, values) -> _typing.Dict:
         try:
-            imgn = values["img"].split(',')          
+            imgn = values["img"].split(',')     
+            form = imgn[0].split('/')[1]
+            formato = form.split(';')[0]     
              # Decodificar la cadena base64 a bytes
             image_data = base64.b64decode(imgn[1])
             
@@ -82,7 +84,7 @@ class Torneos(_TorneosBase):
                     img = img.convert("RGB")
                 # Guardar la imagen redimensionada en un nuevo buffer
                 output_buffer = BytesIO()
-                img.save(output_buffer, format="jpeg", quality=85)  # Ajusta el formato y la calidad
+                img.save(output_buffer, format=formato, quality=85)  # Ajusta el formato y la calidad
                 output_buffer.seek(0)
                 
                 # Convertir la imagen nuevamente a base64
@@ -140,12 +142,14 @@ class Equipos(_EquiposBase):
             with Image.open(buffer) as img:
                 # Redimensionar la imagen
                 img = img.resize((100, 100), Image.Resampling.LANCZOS)
+                form = imgn[0].split('/')[1]
+                formato = form.split(';')[0]   
                  # Convertir a RGB si la imagen está en RGBA o cualquier otro modo no compatible
                 if img.mode != "RGB":
                     img = img.convert("RGB")
                 # Guardar la imagen redimensionada en un nuevo buffer
                 output_buffer = BytesIO()
-                img.save(output_buffer, format="jpeg", quality=85)  # Ajusta el formato y la calidad
+                img.save(output_buffer, format=formato, quality=85)  # Ajusta el formato y la calidad
                 output_buffer.seek(0)
                 
                 # Convertir la imagen nuevamente a base64
