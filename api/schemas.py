@@ -90,7 +90,7 @@ class Torneos(_TorneosBase):
                 # Convertir la imagen nuevamente a base64
                 reduced_base64 = base64.b64encode(output_buffer.read()).decode('utf-8')
 
-            values["img"] = f"{imgn[0]},{reduced_base64}"
+            values["img"] = f"{imgn[0].replace(formato,'jpeg')},{reduced_base64}"
            
         except Exception as e:
             _logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
@@ -155,7 +155,7 @@ class Equipos(_EquiposBase):
                 # Convertir la imagen nuevamente a base64
                 reduced_base64 = base64.b64encode(output_buffer.read()).decode('utf-8')
 
-            values["img_equipo"] = f"{imgn[0]},{reduced_base64}"
+            values["img_equipo"] = f"{imgn[0].replace(formato,'jpeg')},{reduced_base64}"
            
         except Exception as e:
             _logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
