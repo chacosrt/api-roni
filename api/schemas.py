@@ -84,7 +84,7 @@ class Torneos(_TorneosBase):
                     img = img.convert("RGB")
                 # Guardar la imagen redimensionada en un nuevo buffer
                 output_buffer = BytesIO()
-                img.save(output_buffer, format=formato, quality=85)  # Ajusta el formato y la calidad
+                img.save(output_buffer, format='jpeg', quality=85)  # Ajusta el formato y la calidad
                 output_buffer.seek(0)
                 
                 # Convertir la imagen nuevamente a base64
@@ -149,7 +149,7 @@ class Equipos(_EquiposBase):
                     img = img.convert("RGB")
                 # Guardar la imagen redimensionada en un nuevo buffer
                 output_buffer = BytesIO()
-                img.save(output_buffer, format=formato, quality=85)  # Ajusta el formato y la calidad
+                img.save(output_buffer, format='jpeg', quality=85)  # Ajusta el formato y la calidad
                 output_buffer.seek(0)
                 
                 # Convertir la imagen nuevamente a base64
