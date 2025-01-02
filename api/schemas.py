@@ -217,7 +217,42 @@ class Jugadores(_JugadoressBase):
             values["nombre_completo"] = ""   
 
         return values
+
+    @_pydantic.root_validator
+    def value_img(cls, values) -> _typing.Dict:
+        try:
+            imgn = values["img"].split(',')          
+             # Decodificar la cadena base64 a bytes
+            image_data = base64.b64decode(imgn[1])
+            
+            # Leer la imagen desde los bytes
+            buffer = BytesIO(image_data)
+            with Image.open(buffer) as img:
+                # Redimensionar la imagen
+                img = img.resize((100, 100), Image.Resampling.LANCZOS)
+                form = imgn[0].split('/')[1]
+                formato = form.split(';')[0]   
+                 # Convertir a RGB si la imagen está en RGBA o cualquier otro modo no compatible
+                if img.mode != "RGB":
+                    img = img.convert("RGB")
+                # Guardar la imagen redimensionada en un nuevo buffer
+                output_buffer = BytesIO()
+                img.save(output_buffer, format='jpeg', quality=85)  # Ajusta el formato y la calidad
+                output_buffer.seek(0)
+                
+                # Convertir la imagen nuevamente a base64
+                reduced_base64 = base64.b64encode(output_buffer.read()).decode('utf-8')
+
+            values["img"] = f"{imgn[0].replace(formato,'jpeg')},{reduced_base64}"
+           
+        except Exception as e:
+            _logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
+
+            values["img"] = ""   
+
+        return values
  
+     
     class Config:
         orm_mode = True
 
