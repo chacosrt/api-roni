@@ -346,6 +346,33 @@ def delete_equipo(db: _orm.Session, token: str, id: int):
     db.commit()
 
 # *************************************************************************************************************************************
+
+
+def nuevo_equipo(
+    db: _orm.Session,
+    equipo_jugador: _schemas.EquipoJugador,
+    token: str,
+):
+
+    sub = _auth.token_claim(token, "sub")
+
+    jugador = db.query(_models.Jugadores).filter(_models.Jugadores.id == equipo_jugador.id_jugador).first()
+
+    jugador.liga = equipo_jugador.liga
+    jugador.equipo = equipo_jugador.equipo
+    jugador.creado_por = _fn.clean_string(sub)
+    jugador.creado_el = _dt.datetime.now()
+    jugador.modificado_por = _fn.clean_string(sub)
+    jugador.modificado_el = _dt.datetime.now()
+
+
+    db.add(jugador)
+    db.commit()
+    db.refresh(jugador)
+
+    return jugador
+
+# *************************************************************************************************************************************
 # SECCION: JUGADORES
 # *************************************************************************************************************************************
 

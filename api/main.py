@@ -425,6 +425,24 @@ async def delete_equipo(
 
 
 # *************************************************************************************************************************************
+
+
+@app.post(
+    "/equipos/new_equipo",
+    response_model=_schemas.Jugadores,
+    status_code=_fastapi.status.HTTP_201_CREATED,
+    tags=["Equipos"],
+)
+def new_equipo_jugador(
+    equipo_jugador: _schemas.EquipoJugador,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    # return _services.create_actividad(db=db, actividad=actividad)
+    return _services.nuevo_equipo(db=db, token=token, equipo_jugador=equipo_jugador)
+
+
+# *************************************************************************************************************************************
 # SECCION: JUGADORES
 # *************************************************************************************************************************************
 
