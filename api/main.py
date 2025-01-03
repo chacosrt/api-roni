@@ -429,7 +429,7 @@ async def delete_equipo(
 
 @app.post(
     "/equipos/new_equipo",
-    response_model=_schemas.Jugadores,
+    #response_model=_schemas.Jugadores,
     status_code=_fastapi.status.HTTP_201_CREATED,
     tags=["Equipos"],
 )
@@ -438,8 +438,13 @@ def new_equipo_jugador(
     db: _orm.Session = _fastapi.Depends(_services.get_db),
     token: str = _fastapi.Depends(_auth.token_bearer()),
 ):
+    jugador = _services.nuevo_equipo(db=db, token=token, equipo_jugador=equipo_jugador)
+    if jugador.id == 0:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="El jugador ya esta registrado en esta liga"
+        )
     # return _services.create_actividad(db=db, actividad=actividad)
-    return _services.nuevo_equipo(db=db, token=token, equipo_jugador=equipo_jugador)
+    return {"message": f"El jugador:  ha sido registrado"}
 
 
 # *************************************************************************************************************************************
