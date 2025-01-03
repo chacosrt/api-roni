@@ -366,9 +366,15 @@ def nuevo_equipo(
     jugador.modificado_el = _dt.datetime.now()
 
 
-    db.add(jugador)
-    db.commit()
-    db.refresh(jugador)
+    if(equipo_jugador.liga == jugador.liga):
+
+        jugador.id = 0
+
+    else:
+        jugador.pop(jugador.id)
+        db.add(jugador)
+        db.commit()
+        db.refresh(jugador)    
 
     return jugador
 
