@@ -440,9 +440,9 @@ def new_equipo_jugador(
 ):
     jugador = _services.nuevo_equipo(db=db, token=token, equipo_jugador=equipo_jugador)
     if jugador.id == 0:
-        raise _fastapi.HTTPException(
-            status_code=404, detail="El jugador ya esta registrado en esta liga"
-        )
+
+        return {"message": f"El jugador ya esta registrado en esta liga"}
+       
     # return _services.create_actividad(db=db, actividad=actividad)
     return {"message": f"El jugador:  ha sido registrado"}
 
