@@ -441,7 +441,9 @@ async def nuevo_equipo(
     jugador = _services.nuevo_equipo(db=db, token=token, equipo_jugador=equipo_jugador)
     if jugador.id == 0:
 
-        return {"message": f"El jugador ya esta registrado en esta liga"}
+        raise _fastapi.HTTPException(
+            status_code=404, detail="El jugador ya esta registrado en esta liga."
+        )
        
     # return _services.create_actividad(db=db, actividad=actividad)
     return {"message": f"El jugador:  ha sido registrado"}
