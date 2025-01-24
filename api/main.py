@@ -428,12 +428,12 @@ async def delete_equipo(
 
 
 @app.post(
-    "/equipos/new_equipo",
+    "/equipos/new_equipo/",
     #response_model=_schemas.Jugadores,
     status_code=_fastapi.status.HTTP_201_CREATED,
     tags=["Equipos"],
 )
-def new_equipo_jugador(
+async def nuevo_equipo(
     equipo_jugador: _schemas.EquipoJugador,
     db: _orm.Session = _fastapi.Depends(_services.get_db),
     token: str = _fastapi.Depends(_auth.token_bearer()),
