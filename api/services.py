@@ -356,14 +356,7 @@ def nuevo_equipo(
 
     sub = _auth.token_claim(token, "sub")
 
-    jugador = db.query(_models.Jugadores).filter(_models.Jugadores.id == equipo_jugador.id_jugador).first()
-
-    jugador.liga = equipo_jugador.liga
-    jugador.equipo = equipo_jugador.equipo
-    jugador.creado_por = _fn.clean_string(sub)
-    jugador.creado_el = _dt.datetime.now()
-    jugador.modificado_por = _fn.clean_string(sub)
-    jugador.modificado_el = _dt.datetime.now()
+    jugador = db.query(_models.Jugadores).filter(_models.Jugadores.id == equipo_jugador.id_jugador).first()   
 
 
     if(equipo_jugador.liga == jugador.liga):
@@ -371,6 +364,12 @@ def nuevo_equipo(
         jugador.id = 0
 
     else:
+        jugador.liga = equipo_jugador.liga
+        jugador.equipo = equipo_jugador.equipo
+        jugador.creado_por = _fn.clean_string(sub)
+        jugador.creado_el = _dt.datetime.now()
+        jugador.modificado_por = _fn.clean_string(sub)
+        jugador.modificado_el = _dt.datetime.now()
         jugador.pop(jugador.id)
         db.add(jugador)
         db.commit()
