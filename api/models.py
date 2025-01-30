@@ -174,9 +174,9 @@ class Jugadores_Equipos(_database.Base):
     # campos
     id = _sql.Column(_sql.Integer, primary_key=True, autoincrement=True, index=True)
     
-    id_liga = _sql.Column(_sql.Integer, _sql.ForeignKey("torneos.id"))
-    id_equipo  = _sql.Column(_sql.Integer, _sql.ForeignKey("equipos.id"))
-    id_jugador  = _sql.Column(_sql.Integer, _sql.ForeignKey("jugadores.id"))
+    id_liga = _sql.Column(_sql.Integer, default=0, index=True)
+    id_equipo  = _sql.Column(_sql.Integer, default=0, index=True)
+    id_jugador  = _sql.Column(_sql.Integer, default=0, index=True)
         
     creado_por = _sql.Column(_sql.String(50), default="", index=True)
     creado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)
