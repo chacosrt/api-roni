@@ -356,12 +356,13 @@ def nuevo_equipo(
 
     sub = _auth.token_claim(token, "sub")
 
-    jugador = db.query(_models.Jugadores).filter(_models.Jugadores.id == equipo_jugador.id_jugador).filter(_models.Jugadores.liga == equipo_jugador.liga).first()   
+    jugador_exist = db.query(_models.Jugadores).filter(_models.Jugadores.id == equipo_jugador.id_jugador).filter(_models.Jugadores.liga == equipo_jugador.liga).first()   
     
+    jugador = db.query(_models.Jugadores).filter(_models.Jugadores.id == equipo_jugador.id_jugador).first()
     new_jugador = False
     
         
-    if(jugador == None ):
+    if(jugador_exist == None ):
 
         new_jugador = True
         db_jugador = _models.Jugadores(
