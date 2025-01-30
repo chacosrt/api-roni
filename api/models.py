@@ -164,5 +164,23 @@ class Posiciones(_database.Base):
     modificado_por = _sql.Column(_sql.String(50), default="", index=True)
     modificado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)	
 
+# *************************************************************************************************************************************
+# Equipos de Jugadores
+# *************************************************************************************************************************************		
+
+class Jugadores_Equipos(_database.Base):
+    # nombre de la tabla
+    __tablename__ = "jugadores_equips"
+    # campos
+    id = _sql.Column(_sql.Integer, primary_key=True, autoincrement=True, index=True)
+    
+    id_liga = _sql.Column(_sql.Integer, _sql.ForeignKey("torneos.id"))
+    id_equipo  = _sql.Column(_sql.Integer, _sql.ForeignKey("equipos.id"))
+    id_jugador  = _sql.Column(_sql.Integer, _sql.ForeignKey("jugadores.id"))
+        
+    creado_por = _sql.Column(_sql.String(50), default="", index=True)
+    creado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)
+    modificado_por = _sql.Column(_sql.String(50), default="", index=True)
+    modificado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)
 
 
