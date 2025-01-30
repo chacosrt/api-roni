@@ -358,7 +358,7 @@ def nuevo_equipo(
 
     jugador = db.query(_models.Jugadores).filter(_models.Jugadores.id == equipo_jugador.id_jugador).first()
 
-    jugador_exist = db.query(_models.Jugadores_Equipos).filter(_models.Jugadores_Equipos.id_jugador == equipo_jugador.id_jugador).filter(_models.Jugadores_Equipos.id_liga == equipo_jugador.liga).first()   
+    jugador_exist = db.query(_models.Jugadores_Equipos).filter(_models.Jugadores_Equipos.id_jugador == equipo_jugador.id_jugador).first()   
     
     
     new_jugador = False
@@ -401,39 +401,25 @@ def nuevo_equipo(
     db_jugador_equipo.modificado_por = _fn.clean_string(sub)
     db_jugador_equipo.modificado_el = _dt.datetime.now()
         
-    if(jugador_exist == None):
+    
 
-        new_jugador = True
+    if(jugador_exist.id_padre != 0):
 
+        jugador_existe = db.query(_models.Jugadores_Equipos).filter(_models.Jugadores_Equipos.id_jugador == jugador_exist.id_padre).filter(_models.Jugadores_Equipos.id_liga == equipo_jugador.liga).first()
 
-        db.add(db_jugador)
-        db.commit()
-        db.refresh(db_jugador)         
+        if(jugador_existe == None):
 
-
-        db.add(db_jugador_equipo)
-        db.commit()
-        db.refresh(db_jugador_equipo)
-
-    else:
-
-        if(jugador_exist.id_padre != 0):
-
-            jugador_existe = db.query(_models.Jugadores_Equipos).filter(_models.Jugadores_Equipos.id_jugador == jugador_exist.id_padre).filter(_models.Jugadores_Equipos.id_liga == equipo_jugador.liga).first()
-
-            if(jugador_existe == None):
-
-                new_jugador = True
+            new_jugador = True
 
 
-                db.add(db_jugador)
-                db.commit()
-                db.refresh(db_jugador)         
+            db.add(db_jugador)
+            db.commit()
+            db.refresh(db_jugador)         
 
 
-                db.add(db_jugador_equipo)
-                db.commit()
-                db.refresh(db_jugador_equipo)
+            db.add(db_jugador_equipo)
+            db.commit()
+            db.refresh(db_jugador_equipo)
 
     return new_jugador
 
