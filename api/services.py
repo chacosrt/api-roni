@@ -395,7 +395,23 @@ def nuevo_equipo(
         db.commit()
         db.refresh(db_jugador)  
 
-          
+        db_jugador_equipo = _models.Jugadores_Equipos(
+            
+            id_liga  =  _fn.is_null(db_jugador.liga,0),
+            id_equipo  =  _fn.is_null(db_jugador.equipo,0),
+            id_jugador = db_jugador.id
+            
+        )
+
+        db_jugador_equipo.creado_por = _fn.clean_string(sub)
+        db_jugador_equipo.creado_el = _dt.datetime.now()
+        db_jugador_equipo.modificado_por = _fn.clean_string(sub)
+        db_jugador_equipo.modificado_el = _dt.datetime.now()
+
+
+        db.add(db_jugador_equipo)
+        db.commit()
+        db.refresh(db_jugador_equipo)
 
     return new_jugador
 
