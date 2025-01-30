@@ -363,55 +363,77 @@ def nuevo_equipo(
     
     new_jugador = False
     
+    
+    db_jugador = _models.Jugadores(
+        nombre = _fn.format_nombre_propio(jugador.nombre),
+        ap_p = _fn.format_nombre_propio(jugador.ap_p),
+        ap_m = _fn.format_nombre_propio(jugador.ap_m),
+        edad  =  _fn.is_null(jugador.edad,0),
+        liga  =  _fn.is_null(equipo_jugador.liga,0),
+        equipo  =  _fn.is_null(equipo_jugador.equipo,0),
+        dorsal  =   _fn.is_null(jugador.dorsal,0),
+        expediente = _fn.clean_string(jugador.expediente),
+        seccional = _fn.clean_string(jugador.seccional),
+        direccion = _fn.clean_string(jugador.direccion),
+        telefono = _fn.clean_string(jugador.telefono),
+        img = _fn.clean_string(jugador.img),
+        estatus = 1
+        #delegado = _fn.is_null(jugador.delegado,False),
+    
+    )
+
+    db_jugador.creado_por = _fn.clean_string(sub)
+    db_jugador.creado_el = _dt.datetime.now()
+    db_jugador.modificado_por = _fn.clean_string(sub)
+    db_jugador.modificado_el = _dt.datetime.now()
+
+    db_jugador_equipo = _models.Jugadores_Equipos(
+            
+        id_liga  =  _fn.is_null(db_jugador.liga,0),
+        id_equipo  =  _fn.is_null(db_jugador.equipo,0),
+        id_jugador = db_jugador.id,
+        id_padre = equipo_jugador.id_jugador
         
-    if(jugador_exist == None ):
+    )
+
+    db_jugador_equipo.creado_por = _fn.clean_string(sub)
+    db_jugador_equipo.creado_el = _dt.datetime.now()
+    db_jugador_equipo.modificado_por = _fn.clean_string(sub)
+    db_jugador_equipo.modificado_el = _dt.datetime.now()
+        
+    if(jugador_exist == None):
 
         new_jugador = True
-        db_jugador = _models.Jugadores(
-            nombre = _fn.format_nombre_propio(jugador.nombre),
-            ap_p = _fn.format_nombre_propio(jugador.ap_p),
-            ap_m = _fn.format_nombre_propio(jugador.ap_m),
-            edad  =  _fn.is_null(jugador.edad,0),
-            liga  =  _fn.is_null(equipo_jugador.liga,0),
-            equipo  =  _fn.is_null(equipo_jugador.equipo,0),
-            dorsal  =   _fn.is_null(jugador.dorsal,0),
-            expediente = _fn.clean_string(jugador.expediente),
-            seccional = _fn.clean_string(jugador.seccional),
-            direccion = _fn.clean_string(jugador.direccion),
-            telefono = _fn.clean_string(jugador.telefono),
-            img = _fn.clean_string(jugador.img),
-            estatus = 1
-            #delegado = _fn.is_null(jugador.delegado,False),
-        
-        )
-
-        db_jugador.creado_por = _fn.clean_string(sub)
-        db_jugador.creado_el = _dt.datetime.now()
-        db_jugador.modificado_por = _fn.clean_string(sub)
-        db_jugador.modificado_el = _dt.datetime.now()
 
 
         db.add(db_jugador)
         db.commit()
-        db.refresh(db_jugador)  
-
-        db_jugador_equipo = _models.Jugadores_Equipos(
-            
-            id_liga  =  _fn.is_null(db_jugador.liga,0),
-            id_equipo  =  _fn.is_null(db_jugador.equipo,0),
-            id_jugador = db_jugador.id
-            
-        )
-
-        db_jugador_equipo.creado_por = _fn.clean_string(sub)
-        db_jugador_equipo.creado_el = _dt.datetime.now()
-        db_jugador_equipo.modificado_por = _fn.clean_string(sub)
-        db_jugador_equipo.modificado_el = _dt.datetime.now()
+        db.refresh(db_jugador)         
 
 
         db.add(db_jugador_equipo)
         db.commit()
         db.refresh(db_jugador_equipo)
+
+    else:
+
+        if(jugador_exist.id_padre != 0):
+
+            jugador_existe = db.query(_models.Jugadores_Equipos).filter(_models.Jugadores_Equipos.id_jugador == jugador_exist.id_padre).filter(_models.Jugadores_Equipos.id_liga == equipo_jugador.liga).first()
+
+            if(jugador_existe == None):
+
+                new_jugador = True
+
+
+                db.add(db_jugador)
+                db.commit()
+                db.refresh(db_jugador)         
+
+
+                db.add(db_jugador_equipo)
+                db.commit()
+                db.refresh(db_jugador_equipo)
 
     return new_jugador
 
