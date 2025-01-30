@@ -358,7 +358,7 @@ def nuevo_equipo(
 
     jugador = db.query(_models.Jugadores).filter(_models.Jugadores.id == equipo_jugador.id_jugador).first()
 
-    jugador_exist = db.query(_models.Jugadores).filter(_models.Jugadores.expediente == jugador.expediente).filter(_models.Jugadores.liga == equipo_jugador.liga).first()   
+    jugador_exist = db.query(_models.Jugadores_Equipos).filter(_models.Jugadores_Equipos.id_jugador == equipo_jugador.id_jugador).filter(_models.Jugadores_Equipos.id_liga == equipo_jugador.liga).first()   
     
     
     new_jugador = False
@@ -425,24 +425,6 @@ def get_jugadores(
         .limit(limit)
         .all()
     )
-    sub = _auth.token_claim(token, "sub")
-    db_jugador = _models.Jugadores_Equipos()
-    for jugador in results:
-
-        db_jugador.id_liga = jugador.liga
-        db_jugador.id_equipo = jugador.equipo
-        db_jugador.id_jugador = jugador.id
-
-        db_jugador.creado_por = _fn.clean_string(sub)
-        db_jugador.creado_el = _dt.datetime.now()
-        db_jugador.modificado_por = _fn.clean_string(sub)
-        db_jugador.modificado_el = _dt.datetime.now()
-
-        db.add(db_jugador)
-        db.commit()
-        db.refresh(db_jugador)
-
-    db.close()
 
     return results
 
@@ -492,6 +474,24 @@ def create_jugador(
     db.commit()
     db.refresh(db_jugador)
 
+    db_jugador_equipo = _models.Jugadores_Equipos(
+        
+        id_liga  =  _fn.is_null(jugador.liga,0),
+        id_equipo  =  _fn.is_null(jugador.equipo,0),
+        id_jugador = db_jugador.id
+        
+    )
+
+    db_jugador_equipo.creado_por = _fn.clean_string(sub)
+    db_jugador_equipo.creado_el = _dt.datetime.now()
+    db_jugador_equipo.modificado_por = _fn.clean_string(sub)
+    db_jugador_equipo.modificado_el = _dt.datetime.now()
+
+
+    db.add(db_jugador_equipo)
+    db.commit()
+    db.refresh(db_jugador_equipo)
+
     return db_jugador
 
 # *************************************************************************************************************************************
@@ -527,6 +527,13 @@ def update_jugador(
     db.commit()
     db.refresh(db_jugador)
 
+    db_jugador_equipo = db.query(_models.Jugadores_Equipos).filter(_models.Jugadores_Equipos.id_jugador == db_jugador.id).filter(_models.Jugadores_Equipos.id_liga == db_jugador.liga).first()
+    db_jugador_equipo.id_liga = jugador.liga
+    db_jugador_equipo.id_equipo = jugador.equipo
+
+    db.commit()
+    db.refresh(db_jugador_equipo)
+
     return db_jugador
 
 # *************************************************************************************************************************************
@@ -535,6 +542,9 @@ def update_jugador(
 def delete_jugador(db: _orm.Session, token: str, id: int):
 
     torneo = get_jugadores_por_id(db=db, token=token, id=id)
+
+    db.query(_models.Jugadores_Equipos).filter(_models.Jugadores_Equipos.id_jugador == id).delete()
+    db.commit()
     
     db.query(_models.Jugadores).filter(_models.Jugadores.id == id).delete()
     db.commit()
