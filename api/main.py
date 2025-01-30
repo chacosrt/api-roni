@@ -439,7 +439,7 @@ async def nuevo_equipo(
     token: str = _fastapi.Depends(_auth.token_bearer()),
 ):
     jugador = _services.nuevo_equipo(db=db, token=token, equipo_jugador=equipo_jugador)
-    if jugador.id == 0:
+    if jugador == False:
 
         raise _fastapi.HTTPException(
             status_code=404, detail="El jugador ya esta registrado en esta liga."

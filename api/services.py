@@ -358,24 +358,41 @@ def nuevo_equipo(
 
     jugador = db.query(_models.Jugadores).filter(_models.Jugadores.id == equipo_jugador.id_jugador).first()   
 
+    new_jugador = False
+    if(equipo_jugador.liga != jugador.liga):
 
-    if(equipo_jugador.liga == jugador.liga):
+        new_jugador = True
+        db_jugador = _models.Jugadores(
+            nombre = _fn.format_nombre_propio(jugador.nombre),
+            ap_p = _fn.format_nombre_propio(jugador.ap_p),
+            ap_m = _fn.format_nombre_propio(jugador.ap_m),
+            edad  =  _fn.is_null(jugador.edad,0),
+            liga  =  _fn.is_null(equipo_jugador.liga,0),
+            equipo  =  _fn.is_null(equipo_jugador.liga,0),
+            dorsal  =   _fn.is_null(jugador.dorsal,0),
+            expediente = _fn.clean_string(jugador.expediente),
+            seccional = _fn.clean_string(jugador.seccional),
+            direccion = _fn.clean_string(jugador.direccion),
+            telefono = _fn.clean_string(jugador.telefono),
+            img = _fn.clean_string(jugador.img),
+            estatus = 1
+            #delegado = _fn.is_null(jugador.delegado,False),
+        
+        )
 
-        jugador.id = 0
+        db_jugador.creado_por = _fn.clean_string(sub)
+        db_jugador.creado_el = _dt.datetime.now()
+        db_jugador.modificado_por = _fn.clean_string(sub)
+        db_jugador.modificado_el = _dt.datetime.now()
 
-    else:
-        jugador.liga = equipo_jugador.liga
-        jugador.equipo = equipo_jugador.equipo
-        jugador.creado_por = _fn.clean_string(sub)
-        jugador.creado_el = _dt.datetime.now()
-        jugador.modificado_por = _fn.clean_string(sub)
-        jugador.modificado_el = _dt.datetime.now()
-        jugador.pop(jugador.id)
-        db.add(jugador)
+
+        db.add(db_jugador)
         db.commit()
-        db.refresh(jugador)    
+        db.refresh(db_jugador)  
 
-    return jugador
+          
+
+    return new_jugador
 
 # *************************************************************************************************************************************
 # SECCION: JUGADORES
