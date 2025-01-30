@@ -426,14 +426,12 @@ def get_jugadores(
         .all()
     )
     sub = _auth.token_claim(token, "sub")
+    db_jugador = _models.Jugadores_Equipos()
     for jugador in results:
 
-        db_jugador = _models.Jugadores_Equipos(
-            id_liga = jugador.liga,
-            id_equipo = jugador.equipo,
-            id_jugador = jugador.id
-
-        )  
+        db_jugador.id_liga = jugador.liga
+        db_jugador.id_equipo = jugador.equipo
+        db_jugador.id_jugador = jugador.id
 
         db_jugador.creado_por = _fn.clean_string(sub)
         db_jugador.creado_el = _dt.datetime.now()
@@ -441,10 +439,10 @@ def get_jugadores(
         db_jugador.modificado_el = _dt.datetime.now()
 
         db.add(db_jugador)
-        db.commit()
-        db.refresh(db_jugador)
+    db.commit()
+    db.refresh(db_jugador)
 
-        db.close()
+    db.close()
 
     return results
 
