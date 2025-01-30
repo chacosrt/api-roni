@@ -170,7 +170,7 @@ class Posiciones(_database.Base):
 
 class Jugadores_Equipos(_database.Base):
     # nombre de la tabla
-    __tablename__ = "jugadores_equips"
+    __tablename__ = "jugadores_equipos"
     # campos
     id = _sql.Column(_sql.Integer, primary_key=True, autoincrement=True, index=True)
     
