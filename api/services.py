@@ -368,7 +368,7 @@ def nuevo_equipo(
             ap_m = _fn.format_nombre_propio(jugador.ap_m),
             edad  =  _fn.is_null(jugador.edad,0),
             liga  =  _fn.is_null(equipo_jugador.liga,0),
-            equipo  =  _fn.is_null(equipo_jugador.liga,0),
+            equipo  =  _fn.is_null(equipo_jugador.equipo,0),
             dorsal  =   _fn.is_null(jugador.dorsal,0),
             expediente = _fn.clean_string(jugador.expediente),
             seccional = _fn.clean_string(jugador.seccional),
