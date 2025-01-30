@@ -439,8 +439,8 @@ def get_jugadores(
         db_jugador.modificado_el = _dt.datetime.now()
 
         db.add(db_jugador)
-    db.commit()
-    db.refresh(db_jugador)
+        db.commit()
+        db.refresh(db_jugador)
 
     db.close()
 
