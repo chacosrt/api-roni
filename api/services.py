@@ -391,7 +391,7 @@ def nuevo_equipo(
             
         id_liga  =  _fn.is_null(db_jugador.liga,0),
         id_equipo  =  _fn.is_null(db_jugador.equipo,0),
-        id_jugador = db_jugador.id,
+        #id_jugador = db_jugador.id,
         
         
     )
@@ -421,6 +421,7 @@ def nuevo_equipo(
                 db.refresh(db_jugador)         
 
                 db_jugador_equipo.id_padre = jugador_exist.id_padre
+                db_jugador.id
                 db.add(db_jugador_equipo)
                 db.commit()
                 db.refresh(db_jugador_equipo)
@@ -438,7 +439,7 @@ def nuevo_equipo(
                 db.commit()
                 db.refresh(db_jugador)         
 
-                #db_jugador_equipo.id_jugador = db_jugador
+                db_jugador_equipo.id_jugador = db_jugador.id
                 db.add(db_jugador_equipo)
                 db.commit()
                 db.refresh(db_jugador_equipo)
