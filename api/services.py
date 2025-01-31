@@ -392,7 +392,7 @@ def nuevo_equipo(
         id_liga  =  _fn.is_null(db_jugador.liga,0),
         id_equipo  =  _fn.is_null(db_jugador.equipo,0),
         id_jugador = db_jugador.id,
-        id_padre = equipo_jugador.id_jugador
+        
         
     )
 
@@ -405,9 +405,10 @@ def nuevo_equipo(
 
     if(jugador_exist.id_padre != 0):
 
-        jugador_existe = db.query(_models.Jugadores_Equipos).filter(_models.Jugadores_Equipos.id_jugador == jugador_exist.id_padre).filter(_models.Jugadores_Equipos.id_liga == equipo_jugador.liga).first()
+        jugador_padre = db.query(_models.Jugadores_Equipos).filter(_models.Jugadores_Equipos.id_jugador == jugador_exist.id_padre).filter(_models.Jugadores_Equipos.id_liga == equipo_jugador.liga).first()
+        db_jugador_equipo = jugador_padre.id_jugador
 
-        if(jugador_existe == None):
+        if(jugador_padre == None):
 
             new_jugador = True
 
@@ -416,10 +417,29 @@ def nuevo_equipo(
             db.commit()
             db.refresh(db_jugador)         
 
-
+            #db_jugador_equipo.id_jugador = db_jugador
             db.add(db_jugador_equipo)
             db.commit()
             db.refresh(db_jugador_equipo)
+    else:
+            
+            jugador_padre = db.query(_models.Jugadores_Equipos).filter(_models.Jugadores_Equipos.id_jugador == equipo_jugador.id_jugador).filter(_models.Jugadores_Equipos.id_liga == equipo_jugador.liga).first()
+
+            db_jugador_equipo = equipo_jugador.id_jugador
+
+            if(jugador_padre == None):
+
+                new_jugador = True
+
+
+                db.add(db_jugador)
+                db.commit()
+                db.refresh(db_jugador)         
+
+                #db_jugador_equipo.id_jugador = db_jugador
+                db.add(db_jugador_equipo)
+                db.commit()
+                db.refresh(db_jugador_equipo)
 
     return new_jugador
 
