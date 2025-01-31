@@ -420,7 +420,7 @@ def nuevo_equipo(
                 db.commit()
                 db.refresh(db_jugador)         
 
-                db_jugador_equipo = jugador_exist.id_padre
+                db_jugador_equipo.id_padre = jugador_exist.id_padre
                 db.add(db_jugador_equipo)
                 db.commit()
                 db.refresh(db_jugador_equipo)
@@ -432,7 +432,7 @@ def nuevo_equipo(
             if(jugador_padre == None):
 
                 new_jugador = True
-                db_jugador_equipo = equipo_jugador.id_jugador
+                db_jugador_equipo.id_padre = equipo_jugador.id_jugador
 
                 db.add(db_jugador)
                 db.commit()
