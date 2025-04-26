@@ -11,6 +11,7 @@ import fastapi as _fastapi
 import json as _json
 import sqlalchemy.orm as _orm
 import sqlalchemy.sql.expression as _expression
+from sqlalchemy import or_
 
 
 import auth as _auth
@@ -619,8 +620,7 @@ def get_partidos(
     results = (
         db.query(_models.Partidos)
         .order_by(_models.Partidos.jornada.desc())
-        .offset(skip)
-        .limit(limit)
+        .offset(skip)        
         .all()
     )
 
@@ -673,13 +673,15 @@ def get_partidos_por_torneo(
     ):
         _logger.warning(f"Solicitud maxima de registros excedida [{limit}]")
         limit = RETURN_DEFAULT_ROWS
+    
+    torneo = db.query(_models.Torneos).filter(_models.Torneos.id == id).first()
 
     results = (
         db.query(_models.Partidos)
         .filter(_models.Partidos.liga == id)
+        .filter(_models.Partidos.temporada == torneo.temporada)
         .order_by(_models.Partidos.id)
-        .offset(skip)
-        .limit(limit)
+        .offset(skip)        
         .all()
     )
 
@@ -712,13 +714,19 @@ def get_partidos_por_jornada(
         .distinct(_models.Partidos.jornada)
         .filter(_models.Partidos.liga == id)
         .filter(_models.Partidos.temporada == temporada)
-        .order_by(_models.Partidos.jornada.desc())
-        .offset(skip)
-        .limit(limit)
+        .order_by(_models.Partidos.jornada.desc())   
         .all()
     )
 
-    return results
+    jornada_list = []
+
+    for res in results:
+
+        esq = res.__dict__
+
+        jornada_list.append(esq)
+
+    return jornada_list
 
 
 # *************************************************************************************************************************************
@@ -764,7 +772,7 @@ def create_partido(
 
         ganador_partido = 0
 
-    db_partido.estatus = 1
+    db_partido.estatus = partido.estatus
     db_partido.ganador = ganador_partido
     db_partido.temporada = get_temporada.temporada
 
@@ -774,59 +782,6 @@ def create_partido(
     db_partido.modificado_el = _dt.datetime.now()
 
     db.add(db_partido)
-    db.commit()
-    db.refresh(db_partido)
-
-    return db_partido 
-
-# *************************************************************************************************************************************
-
-
-def update_partido(
-    db: _orm.Session,
-    token: str,
-    db_partido: _models.Partidos,
-    partido: _schemas.PartidosCreate,
-):
-    sub = _auth.token_claim(token, "sub")
-    ganador_partido = 0
-    # db_actividades.clave = _fn.clean_string(actividad.clave).upper()
-    db_partido.fecha =_fn.format_date(partido.fecha)
-    db_partido.horario = _fn.clean_string(partido.horario)
-    db_partido.etapa = _fn.clean_string(partido.etapa)
-    db_partido.jornada = _fn.clean_string(partido.jornada)
-    #db_partido.temporada = _fn.clean_string(partido.etapa)
-    db_partido.campo =  _fn.is_null(partido.campo,0)
-    db_partido.liga  =  _fn.is_null(partido.liga,0)
-    db_partido.local  =  _fn.is_null(partido.local,0)
-    db_partido.visitante =  _fn.is_null(partido.visitante,0)
-    db_partido.goles_local  =  _fn.is_null(partido.goles_local,0)
-    db_partido.goles_visitante  =  _fn.is_null(partido.goles_visitante,0)
-    #db_partido.ganador =  _fn.is_null(partido.ganador,0)     
-    db_partido.observaciones = _fn.clean_string(partido.observaciones)
-    db_partido.estatus = _fn.is_null(partido.estatus,0)
-
-    get_temporada = db.query(_models.Torneos).filter(_models.Torneos.id == partido.liga).first()
-
-    if partido.estatus == 2 and partido.goles_local > partido.goles_visitante:
-
-        ganador_partido = partido.local
-
-    if partido.estatus == 2 and partido.goles_local < partido.goles_visitante:
-
-        ganador_partido = partido.visitante
-
-    if partido.estatus == 2 and partido.goles_local == partido.goles_visitante:
-
-        ganador_partido = 0
-
-    
-    db_partido.ganador = ganador_partido
-    db_partido.temporada = get_temporada.temporada
-   
-    db_partido.modificado_por = _fn.clean_string(sub)
-    db_partido.modificado_el = _dt.datetime.now()
-
     db.commit()
     db.refresh(db_partido)
 
@@ -1026,7 +981,359 @@ def update_partido(
             db.commit()
             db.refresh(db_posicion)
 
+        db_partido.registro_tabla == True
+        db.commit()
+        db.refresh(db_partido)
 
+    return db_partido 
+
+# *************************************************************************************************************************************
+
+
+def update_partido(
+    db: _orm.Session,
+    token: str,
+    db_partido: _models.Partidos,
+    partido: _schemas.PartidosCreate,
+):
+    sub = _auth.token_claim(token, "sub")
+    ganador_partido = 0
+    # db_actividades.clave = _fn.clean_string(actividad.clave).upper()
+    db_partido.fecha =_fn.format_date(partido.fecha)
+    db_partido.horario = _fn.clean_string(partido.horario)
+    db_partido.etapa = _fn.clean_string(partido.etapa)
+    db_partido.jornada = _fn.clean_string(partido.jornada)
+    #db_partido.temporada = _fn.clean_string(partido.etapa)
+    db_partido.campo =  _fn.is_null(partido.campo,0)
+    db_partido.liga  =  _fn.is_null(partido.liga,0)
+    db_partido.local  =  _fn.is_null(partido.local,0)
+    db_partido.visitante =  _fn.is_null(partido.visitante,0)
+    db_partido.goles_local  =  _fn.is_null(partido.goles_local,0)
+    db_partido.goles_visitante  =  _fn.is_null(partido.goles_visitante,0)
+    #db_partido.ganador =  _fn.is_null(partido.ganador,0)     
+    db_partido.observaciones = _fn.clean_string(partido.observaciones)
+    db_partido.estatus = _fn.is_null(partido.estatus,0)
+
+    get_temporada = db.query(_models.Torneos).filter(_models.Torneos.id == partido.liga).first()
+
+    if partido.estatus == 2 and partido.goles_local > partido.goles_visitante:
+
+        ganador_partido = partido.local
+
+    if partido.estatus == 2 and partido.goles_local < partido.goles_visitante:
+
+        ganador_partido = partido.visitante
+
+    if partido.estatus == 2 and partido.goles_local == partido.goles_visitante:
+
+        ganador_partido = 0
+
+    
+    db_partido.ganador = ganador_partido
+    db_partido.temporada = get_temporada.temporada
+   
+    db_partido.modificado_por = _fn.clean_string(sub)
+    db_partido.modificado_el = _dt.datetime.now()
+
+    db.commit()
+    db.refresh(db_partido)
+
+    #************ Seccion para insertar registro en tabla de posiciones ******************************************
+
+    if partido.estatus == 2:
+
+        
+        pos_local = db.query(_models.Posiciones).filter(_models.Posiciones.liga==partido.liga).filter(_models.Posiciones.equipo==partido.local).filter(_models.Posiciones.temporada==get_temporada.temporada).first()
+
+        pos_visitante = db.query(_models.Posiciones).filter(_models.Posiciones.liga==partido.liga).filter(_models.Posiciones.equipo==partido.visitante).filter(_models.Posiciones.temporada==get_temporada.temporada).first()
+
+        
+        
+        if pos_local is None:   
+
+            ganado = 0
+
+            perdido = 0
+
+            empatado = 0   
+
+            puntos = 0
+
+            if partido.goles_local > partido.goles_visitante:
+
+                ganado = 1
+
+                puntos = 3
+
+            if partido.goles_local < partido.goles_visitante:
+
+                perdido = 1
+
+            if partido.goles_local == partido.goles_visitante:
+
+                empatado = 1
+
+                puntos = 1
+
+            db_posicion = _models.Posiciones()
+
+            db_posicion.temporada = get_temporada.temporada
+            db_posicion.liga = _fn.is_null(partido.liga,0)
+            db_posicion.equipo  = _fn.is_null(partido.local,0)
+            db_posicion.juegos_jugados  =  1
+            db_posicion.juegos_ganados  =  ganado
+            db_posicion.juegos_empatados = empatado
+            db_posicion.juegos_perdidos = perdido
+            db_posicion.goles_favor = partido.goles_local
+            db_posicion.goles_contra = partido.goles_visitante
+            db_posicion.diferencia_goles = partido.goles_local - partido.goles_visitante
+            db_posicion.puntos = puntos
+            db_posicion.estatus = 1
+
+            db_posicion.creado_por = _fn.clean_string(sub)
+            db_posicion.creado_el = _dt.datetime.now()
+            db_posicion.modificado_por = _fn.clean_string(sub)
+            db_posicion.modificado_el = _dt.datetime.now()
+
+            db.add(db_posicion)
+            db.commit()
+            db.refresh(db_posicion)
+
+        else:
+
+            partidos_list = db.query(_models.Partidos).filter(or_(_models.Partidos.local == partido.local,_models.Partidos.visitante == partido.local)).filter(_models.Partidos.temporada == get_temporada.temporada).filter(_models.Partidos.estatus == 2).all()
+
+            jj =0
+            jg = 0
+            jp = 0
+            je = 0
+            gf = 0
+            gc = 0
+            pts = 0
+            
+
+            for partido_local in partidos_list:
+
+                ganado = 0
+
+                perdido = 0
+
+                empatado = 0   
+
+                puntos = 0
+
+                if partido_local.local == partido.local:
+
+                    if partido_local.goles_local > partido_local.goles_visitante:
+
+                        ganado = 1
+
+                        puntos = 3
+
+                    if partido_local.goles_local < partido_local.goles_visitante:
+
+                        perdido = 1
+
+                    if partido_local.goles_local == partido_local.goles_visitante:
+
+                        empatado = 1
+
+                        puntos = 1
+
+                    gf = gf + partido_local.goles_local
+                    gc = gc + partido_local.goles_visitante
+
+                if partido_local.visitante == partido.local:
+
+                    if partido_local.goles_local > partido_local.goles_visitante:
+
+                        perdido = 1
+
+
+                    if partido_local.goles_local < partido_local.goles_visitante:
+
+                        ganado = 1
+
+                        puntos = 3
+
+                    if partido_local.goles_local == partido_local.goles_visitante:
+
+                        empatado = 1
+
+                        puntos = 1
+
+                    gf = gf + partido_local.goles_visitante
+                    gc = gc + partido_local.goles_local
+
+                jj = jj +1
+                jg = jg + ganado
+                je = je + empatado
+                jp = jp + perdido                
+                pts = pts + puntos
+
+            pos_local.juegos_jugados  = jj
+            pos_local.juegos_ganados  = jg
+            pos_local.juegos_empatados = je
+            pos_local.juegos_perdidos = jp
+            pos_local.goles_favor = gf
+            pos_local.goles_contra = gc
+            pos_local.diferencia_goles = gf - gc      
+            pos_local.puntos = pts
+
+                
+
+            pos_local.modificado_por = _fn.clean_string(sub)
+            pos_local.modificado_el = _dt.datetime.now()
+
+            db.commit()
+            db.refresh(pos_local)
+
+        
+
+
+        if pos_visitante is None:   
+
+            ganado = 0
+
+            perdido = 0
+
+            empatado = 0   
+
+            puntos = 0
+
+            if partido.goles_local > partido.goles_visitante:
+
+                perdido = 1
+
+
+            if partido.goles_local < partido.goles_visitante:
+
+                ganado = 1
+
+                puntos = 3
+
+            if partido.goles_local == partido.goles_visitante:
+
+                empatado = 1
+
+                puntos = 1
+
+            db_posicion = _models.Posiciones()
+
+            db_posicion.temporada = get_temporada.temporada
+            db_posicion.liga = _fn.is_null(partido.liga,0)
+            db_posicion.equipo  = _fn.is_null(partido.visitante,0)
+            db_posicion.juegos_jugados  =  1
+            db_posicion.juegos_ganados  =  ganado
+            db_posicion.juegos_empatados = empatado
+            db_posicion.juegos_perdidos = perdido
+            db_posicion.goles_favor = partido.goles_visitante
+            db_posicion.goles_contra = partido.goles_local
+            db_posicion.diferencia_goles = partido.goles_visitante - partido.goles_local
+            db_posicion.puntos = puntos
+            db_posicion.estatus = 1
+
+            db_posicion.creado_por = _fn.clean_string(sub)
+            db_posicion.creado_el = _dt.datetime.now()
+            db_posicion.modificado_por = _fn.clean_string(sub)
+            db_posicion.modificado_el = _dt.datetime.now()
+
+            db.add(db_posicion)
+            db.commit()
+            db.refresh(db_posicion)
+
+        else:
+
+            partidos_list = db.query(_models.Partidos).filter(or_(_models.Partidos.local == partido.visitante,_models.Partidos.visitante == partido.visitante)).filter(_models.Partidos.temporada == get_temporada.temporada).filter(_models.Partidos.estatus == 2).all()
+
+            jj =0
+            jg = 0
+            jp = 0
+            je = 0
+            gf = 0
+            gc = 0
+            pts = 0
+            
+
+            for partido_visita in partidos_list:
+
+                ganado = 0
+
+                perdido = 0
+
+                empatado = 0   
+
+                puntos = 0
+
+                if partido_visita.local == partido.visitante:
+
+                    if partido_visita.goles_local > partido_visita.goles_visitante:
+
+                        ganado = 1
+
+                        puntos = 3
+
+                    if partido_visita.goles_local < partido_visita.goles_visitante:
+
+                        perdido = 1
+
+                    if partido_visita.goles_local == partido_visita.goles_visitante:
+
+                        empatado = 1
+
+                        puntos = 1
+
+                    gf = gf + partido_visita.goles_local
+                    gc = gc + partido_visita.goles_visitante
+
+                if partido_visita.visitante == partido.visitante:
+
+                    if partido_visita.goles_local > partido_visita.goles_visitante:
+
+                        perdido = 1
+
+
+                    if partido_visita.goles_local < partido_visita.goles_visitante:
+
+                        ganado = 1
+
+                        puntos = 3
+
+                    if partido_visita.goles_local == partido_visita.goles_visitante:
+
+                        empatado = 1
+
+                        puntos = 1
+
+                    gf = gf + partido_visita.goles_visitante
+                    gc = gc + partido_visita.goles_local
+
+                jj = jj +1
+                jg = jg + ganado
+                je = je + empatado
+                jp = jp + perdido                
+                pts = pts + puntos
+
+            pos_visitante.juegos_jugados  = jj
+            pos_visitante.juegos_ganados  = jg
+            pos_visitante.juegos_empatados = je
+            pos_visitante.juegos_perdidos = jp
+            pos_visitante.goles_favor = gf
+            pos_visitante.goles_contra = gc
+            pos_visitante.diferencia_goles = gf - gc      
+            pos_visitante.puntos = pts
+
+                
+
+            pos_visitante.modificado_por = _fn.clean_string(sub)
+            pos_visitante.modificado_el = _dt.datetime.now()
+
+            db.commit()
+            db.refresh(pos_visitante)
+
+            db_partido.registro_tabla = True
+            db.commit()
+            db.refresh(db_partido)
 
 
     
@@ -1042,12 +1349,30 @@ def delete_partido(db: _orm.Session, token: str, id: int):
 
 # *************************************************************************************************************************************
 
-def get_tabla_posiciones(db: _orm.Session, token: str, id_torneo:int):
+def get_tabla_posiciones(db: _orm.Session, token: str, id_torneo:int, temporada:str):
+
+    #torneo = db.query(_models.Torneos).filter(_models.Torneos.id == id_torneo).first()
 
     posiciones = (
         db.query(_models.Posiciones)
         .filter(_models.Posiciones.liga==id_torneo)
+        .filter(_models.Posiciones.temporada==temporada)
         .order_by(_models.Posiciones.puntos.desc(),_models.Posiciones.diferencia_goles.desc(),_models.Posiciones.goles_contra.asc(),_models.Posiciones.goles_favor.desc())
+        .all()
+    )
+
+    return posiciones
+
+# *************************************************************************************************************************************
+
+def get_tabla_temporadas(db: _orm.Session, token: str, id_torneo:int):
+
+    #torneo = db.query(_models.Torneos).filter(_models.Torneos.id == id_torneo).first()
+
+    posiciones = (
+        db.query(_models.Posiciones)
+        .filter(_models.Posiciones.liga==id_torneo)        
+        .order_by(_models.Posiciones.id.desc())
         .all()
     )
 

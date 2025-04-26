@@ -131,6 +131,7 @@ class Partidos(_database.Base):
     ganador = _sql.Column(_sql.Integer, default=0, index=True)
     estatus = _sql.Column(_sql.Integer, default=0, index=True)
     observaciones = _sql.Column(_sql.Text, default="")
+    registro_tabla =_sql.Column(_sql.Boolean, default=False) 
 
     creado_por = _sql.Column(_sql.String(50), default="", index=True)
     creado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)
@@ -178,6 +179,59 @@ class Jugadores_Equipos(_database.Base):
     id_equipo  = _sql.Column(_sql.Integer, default=0, index=True)
     id_jugador  = _sql.Column(_sql.Integer, default=0, index=True)
     id_padre = _sql.Column(_sql.Integer, default=0, index=True)
+        
+    creado_por = _sql.Column(_sql.String(50), default="", index=True)
+    creado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)
+    modificado_por = _sql.Column(_sql.String(50), default="", index=True)
+    modificado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)
+
+
+# *************************************************************************************************************************************
+# Equipos de Jugadores
+# *************************************************************************************************************************************		
+
+class Goleadores(_database.Base):
+    # nombre de la tabla
+    __tablename__ = "goleadores"
+    # campos
+    id = _sql.Column(_sql.Integer, primary_key=True, autoincrement=True, index=True)
+    
+    #id_liga = _sql.Column(_sql.Integer, default=0, index=True)
+    id_equipo  = _sql.Column(_sql.Integer, default=0, index=True)
+    id_jugador  = _sql.Column(_sql.Integer, default=0, index=True)
+    #id_padre = _sql.Column(_sql.Integer, default=0, index=True)
+    goles = _sql.Column(_sql.Integer, default=0)
+    jj = _sql.Column(_sql.Integer, default=0)
+    avg = _sql.Column(_sql.Float, default=0)
+    temporada =  _sql.Column(_sql.String(150), default="", index=True)
+        
+    creado_por = _sql.Column(_sql.String(50), default="", index=True)
+    creado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)
+    modificado_por = _sql.Column(_sql.String(50), default="", index=True)
+    modificado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)
+
+# *************************************************************************************************************************************
+# TARJETAS
+# *************************************************************************************************************************************		
+
+class Tarjetas(_database.Base):
+    # nombre de la tabla
+    __tablename__ = "tarjetas"
+    # campos
+    id = _sql.Column(_sql.Integer, primary_key=True, autoincrement=True, index=True)
+    
+    #id_liga = _sql.Column(_sql.Integer, default=0, index=True)
+    id_equipo  = _sql.Column(_sql.Integer, default=0, index=True)
+    id_jugador  = _sql.Column(_sql.Integer, default=0, index=True)
+    #id_padre = _sql.Column(_sql.Integer, default=0, index=True)
+    ta = _sql.Column(_sql.Integer, default=0)
+    tr = _sql.Column(_sql.Integer, default=0)
+    suspensiones = _sql.Column(_sql.Integer, default=0)
+    numero_juegos = _sql.Column(_sql.Integer, default=0)
+    jornada_regreso = _sql.Column(_sql.Integer, default=0)
+    temporada =  _sql.Column(_sql.String(150), default="", index=True)
+    descripcion = _sql.Column(_sql.Text, default="")
+    sanciones_vig = _sql.Column(_sql.Boolean, default=False)
         
     creado_por = _sql.Column(_sql.String(50), default="", index=True)
     creado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)

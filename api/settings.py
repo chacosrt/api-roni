@@ -60,7 +60,7 @@ SQLITE_FILENAME = config["sqlite_filename"]
 SQLALCHEMY_DATABASE_URL = "sqlite:///" + SQLITE_FILENAME
 # SQLALCHEMY_DATABASE_URL = f"mssql+pyodbc://{SQL_USERNAME}:{SQL_PSSWD}@{SQL_SERVERNAME}/{SQL_DB}?driver={SQL_DRIVER}"
 # Número máximo de registros (por default) que retornará la base de datos
-RETURN_DEFAULT_ROWS = 20
+RETURN_DEFAULT_ROWS = 30
 RETURN_MAX_ROWS = 100
 
 DEFAULT_PRECISSION = 4

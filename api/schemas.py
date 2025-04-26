@@ -276,6 +276,7 @@ class _PartidosBase(_pydantic.BaseModel):
     ganador: _typing.Optional[int] = 0
     estatus: _typing.Optional[int] = 0
     observaciones:  _typing.Optional[str] = ""
+    registro_tabla:  _typing.Optional[bool] = False
 
 
 # *************************************************************************************************************************************
@@ -468,7 +469,7 @@ class Partidos(_PartidosBase):
 # SECCION: Jornadas
 # *************************************************************************************************************************************
 
-class Jornadas(Partidos):
+class Jornadas(_pydantic.BaseModel):
 
     jornada:  _typing.Optional[int] = 0
     temporada:  _typing.Optional[str] = ""
@@ -504,6 +505,7 @@ class _PosicionesBase(_pydantic.BaseModel):
     diferencia_goles:  _typing.Optional[int] = 0
     puntos:  _typing.Optional[int] = 0
     estatus:  _typing.Optional[int] = 0
+    
 
 
 # *************************************************************************************************************************************
@@ -522,6 +524,81 @@ class Posiciones(_PosicionesBase):
     id: int = 0
     liga_tabla: Torneos
     equipo_tabla:Equipos
+    
+
+    class Config:
+        orm_mode = True
+
+
+
+# *************************************************************************************************************************************
+# SECCION: Goleo
+# *************************************************************************************************************************************
+
+class _GoleadoresBase(_pydantic.BaseModel):
+
+    id_equipo:_typing.Optional[int] = 0
+    id_jugador: _typing.Optional[int] = 0
+    goles: _typing.Optional[int] = 0
+    jj: _typing.Optional[int] = 0
+    avg: _typing.Optional[float] = 0
+    temporada: _typing.Optional[str] = ""
+    
+
+
+# *************************************************************************************************************************************
+
+# La clase Create hace referencia a la clase _Base
+# y hereda los campos de la misma
+class GoleadoresCreate(_GoleadoresBase):
+    pass
+
+
+# *************************************************************************************************************************************
+
+
+class Goleadores(_GoleadoresBase):
+
+    id: int = 0
+    
+
+    class Config:
+        orm_mode = True
+
+
+# *************************************************************************************************************************************
+# SECCION: TARJETAS
+# *************************************************************************************************************************************
+
+class _TarjetasBase(_pydantic.BaseModel):
+
+    id_equipo: _typing.Optional[int] = 0
+    id_jugador: _typing.Optional[int] = 0
+    ta: _typing.Optional[int] = 0
+    tr: _typing.Optional[int] = 0
+    suspensiones: _typing.Optional[int] = 0
+    numero_juegos: _typing.Optional[int] = 0
+    jornada_regreso: _typing.Optional[int] = 0
+    temporada: _typing.Optional[str] = ""
+    descripcion: _typing.Optional[str] = ""
+    
+    
+
+
+# *************************************************************************************************************************************
+
+# La clase Create hace referencia a la clase _Base
+# y hereda los campos de la misma
+class TarjetasCreate(_TarjetasBase):
+    pass
+
+
+# *************************************************************************************************************************************
+
+
+class Tarjetas(_TarjetasBase):
+
+    id: int = 0
     
 
     class Config:

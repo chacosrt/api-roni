@@ -28,7 +28,9 @@ import settings as _settings
 
 if _settings.DATABASE_ENGINE == "MYSQL":
     engine = _sql.create_engine(
-        f"mysql+mysqlconnector://{_settings.MYSQL_USERNAME}:{_settings.MYSQL_PSSWD}@{_settings.MYSQL_SERVERNAME}:3306/{_settings.MYSQL_DB}",pool_pre_ping=True
+        f"mysql+mysqlconnector://{_settings.MYSQL_USERNAME}:{_settings.MYSQL_PSSWD}@{_settings.MYSQL_SERVERNAME}:3306/{_settings.MYSQL_DB}",pool_pre_ping=True,pool_size=10,         # aumenta si es necesario
+        max_overflow=20,      # conexiones extra temporales
+        pool_timeout=30 
     )
     
 if _settings.DATABASE_ENGINE == "SQLITE3":
