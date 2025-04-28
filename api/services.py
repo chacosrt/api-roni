@@ -889,7 +889,7 @@ def create_partido(
             pos_local.modificado_el = _dt.datetime.now()
 
             db.commit()
-            db.refresh(db_posicion)
+            db.refresh(pos_local)
 
 
         if pos_visitante is None:   
@@ -979,7 +979,7 @@ def create_partido(
             pos_visitante.modificado_el = _dt.datetime.now()
 
             db.commit()
-            db.refresh(db_posicion)
+            db.refresh(pos_visitante)
 
         db_partido.registro_tabla == True
         db.commit()
