@@ -881,6 +881,7 @@ def create_partido(
             pos_local.juegos_ganados  = ganado
             pos_local.juegos_empatados = empatado
             pos_local.juegos_perdidos = perdido
+            pos_local.puntos = puntos
             pos_local.goles_favor = pos_local.goles_favor + partido.goles_local
             pos_local.goles_contra = pos_local.goles_contra + partido.goles_visitante
             pos_local.diferencia_goles = pos_local.goles_favor - pos_local.goles_contra
@@ -959,9 +960,17 @@ def create_partido(
 
                 ganado = pos_visitante.juegos_ganados + 1
 
+                perdido = pos_visitante.juegos_perdidos
+
+                empatado = pos_visitante.juegos_empatados
+
                 puntos = pos_visitante.puntos + 3
 
             if partido.goles_local == partido.goles_visitante:
+
+                ganado = pos_visitante.juegos_ganados
+
+                perdido = pos_visitante.juegos_perdidos
 
                 empatado = pos_visitante.juegos_empatados + 1
 
@@ -971,6 +980,7 @@ def create_partido(
             pos_visitante.juegos_ganados  =  ganado
             pos_visitante.juegos_empatados = empatado
             pos_visitante.juegos_perdidos = perdido
+            pos_visitante.puntos = puntos
             pos_visitante.goles_favor = pos_visitante.goles_favor + partido.goles_visitante
             pos_visitante.goles_contra = pos_visitante.goles_contra + partido.goles_local
             pos_visitante.diferencia_goles = pos_visitante.goles_favor - pos_visitante.goles_contra
