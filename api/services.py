@@ -847,50 +847,94 @@ def create_partido(
 
         else:
 
-            if partido.goles_local > partido.goles_visitante:
+            partidos_list = db.query(_models.Partidos).filter(or_(_models.Partidos.local == partido.local,_models.Partidos.visitante == partido.local)).filter(_models.Partidos.temporada == get_temporada.temporada).filter(_models.Partidos.estatus == 2).all()
 
-                ganado = pos_local.juegos_ganados + 1
+            jj =0
+            jg = 0
+            jp = 0
+            je = 0
+            gf = 0
+            gc = 0
+            pts = 0
+            
 
-                perdido = pos_local.juegos_perdidos
+            for partido_local in partidos_list:
 
-                empatado = pos_local.juegos_empatados
+                ganado = 0
 
-                puntos = pos_local.puntos + 3
+                perdido = 0
 
-            if partido.goles_local < partido.goles_visitante:
+                empatado = 0   
 
-                ganado = pos_local.juegos_ganados
+                puntos = 0
 
-                perdido = pos_local.juegos_perdidos + 1
+                if partido_local.local == partido.local:
 
-                empatado = pos_local.juegos_empatados
+                    if partido_local.goles_local > partido_local.goles_visitante:
 
-                puntos = pos_local.puntos 
+                        ganado = 1
 
-            if partido.goles_local == partido.goles_visitante:
+                        puntos = 3
 
-                ganado = pos_local.juegos_ganados
+                    if partido_local.goles_local < partido_local.goles_visitante:
 
-                perdido = pos_local.juegos_perdidos
+                        perdido = 1
 
-                empatado = pos_local.juegos_empatados + 1
+                    if partido_local.goles_local == partido_local.goles_visitante:
 
-                puntos = pos_local.puntos + 1
+                        empatado = 1
 
-            pos_local.juegos_jugados  = pos_local.juegos_jugados + 1
-            pos_local.juegos_ganados  = ganado
-            pos_local.juegos_empatados = empatado
-            pos_local.juegos_perdidos = perdido
-            pos_local.puntos = puntos
-            pos_local.goles_favor = pos_local.goles_favor + partido.goles_local
-            pos_local.goles_contra = pos_local.goles_contra + partido.goles_visitante
-            pos_local.diferencia_goles = pos_local.goles_favor - pos_local.goles_contra
+                        puntos = 1
+
+                    gf = gf + partido_local.goles_local
+                    gc = gc + partido_local.goles_visitante
+
+                if partido_local.visitante == partido.local:
+
+                    if partido_local.goles_local > partido_local.goles_visitante:
+
+                        perdido = 1
+
+
+                    if partido_local.goles_local < partido_local.goles_visitante:
+
+                        ganado = 1
+
+                        puntos = 3
+
+                    if partido_local.goles_local == partido_local.goles_visitante:
+
+                        empatado = 1
+
+                        puntos = 1
+
+                    gf = gf + partido_local.goles_visitante
+                    gc = gc + partido_local.goles_local
+
+                jj = jj +1
+                jg = jg + ganado
+                je = je + empatado
+                jp = jp + perdido                
+                pts = pts + puntos
+
+            pos_local.juegos_jugados  = jj
+            pos_local.juegos_ganados  = jg
+            pos_local.juegos_empatados = je
+            pos_local.juegos_perdidos = jp
+            pos_local.goles_favor = gf
+            pos_local.goles_contra = gc
+            pos_local.diferencia_goles = gf - gc      
+            pos_local.puntos = pts
+
+                
 
             pos_local.modificado_por = _fn.clean_string(sub)
             pos_local.modificado_el = _dt.datetime.now()
 
             db.commit()
             db.refresh(pos_local)
+
+        
 
 
         if pos_visitante is None:   
@@ -946,44 +990,86 @@ def create_partido(
 
         else:
 
-            if partido.goles_local > partido.goles_visitante:
+            partidos_list = db.query(_models.Partidos).filter(or_(_models.Partidos.local == partido.visitante,_models.Partidos.visitante == partido.visitante)).filter(_models.Partidos.temporada == get_temporada.temporada).filter(_models.Partidos.estatus == 2).all()
 
-                ganado = pos_visitante.juegos_ganados
+            jj =0
+            jg = 0
+            jp = 0
+            je = 0
+            gf = 0
+            gc = 0
+            pts = 0
+            
 
-                perdido = pos_visitante.juegos_perdidos + 1
+            for partido_visita in partidos_list:
 
-                empatado = pos_visitante.juegos_empatados
+                ganado = 0
 
-                puntos = pos_visitante.puntos 
+                perdido = 0
 
-            if partido.goles_local < partido.goles_visitante:
+                empatado = 0   
 
-                ganado = pos_visitante.juegos_ganados + 1
+                puntos = 0
 
-                perdido = pos_visitante.juegos_perdidos
+                if partido_visita.local == partido.visitante:
 
-                empatado = pos_visitante.juegos_empatados
+                    if partido_visita.goles_local > partido_visita.goles_visitante:
 
-                puntos = pos_visitante.puntos + 3
+                        ganado = 1
 
-            if partido.goles_local == partido.goles_visitante:
+                        puntos = 3
 
-                ganado = pos_visitante.juegos_ganados
+                    if partido_visita.goles_local < partido_visita.goles_visitante:
 
-                perdido = pos_visitante.juegos_perdidos
+                        perdido = 1
 
-                empatado = pos_visitante.juegos_empatados + 1
+                    if partido_visita.goles_local == partido_visita.goles_visitante:
 
-                puntos = pos_visitante.puntos + 1
+                        empatado = 1
 
-            pos_visitante.juegos_jugados  = pos_visitante.juegos_jugados + 1
-            pos_visitante.juegos_ganados  =  ganado
-            pos_visitante.juegos_empatados = empatado
-            pos_visitante.juegos_perdidos = perdido
-            pos_visitante.puntos = puntos
-            pos_visitante.goles_favor = pos_visitante.goles_favor + partido.goles_visitante
-            pos_visitante.goles_contra = pos_visitante.goles_contra + partido.goles_local
-            pos_visitante.diferencia_goles = pos_visitante.goles_favor - pos_visitante.goles_contra
+                        puntos = 1
+
+                    gf = gf + partido_visita.goles_local
+                    gc = gc + partido_visita.goles_visitante
+
+                if partido_visita.visitante == partido.visitante:
+
+                    if partido_visita.goles_local > partido_visita.goles_visitante:
+
+                        perdido = 1
+
+
+                    if partido_visita.goles_local < partido_visita.goles_visitante:
+
+                        ganado = 1
+
+                        puntos = 3
+
+                    if partido_visita.goles_local == partido_visita.goles_visitante:
+
+                        empatado = 1
+
+                        puntos = 1
+
+                    gf = gf + partido_visita.goles_visitante
+                    gc = gc + partido_visita.goles_local
+
+                jj = jj +1
+                jg = jg + ganado
+                je = je + empatado
+                jp = jp + perdido                
+                pts = pts + puntos
+
+            pos_visitante.juegos_jugados  = jj
+            pos_visitante.juegos_ganados  = jg
+            pos_visitante.juegos_empatados = je
+            pos_visitante.juegos_perdidos = jp
+            pos_visitante.goles_favor = gf
+            pos_visitante.goles_contra = gc
+            pos_visitante.diferencia_goles = gf - gc      
+            pos_visitante.puntos = pts
+
+                
 
             pos_visitante.modificado_por = _fn.clean_string(sub)
             pos_visitante.modificado_el = _dt.datetime.now()
@@ -991,9 +1077,9 @@ def create_partido(
             db.commit()
             db.refresh(pos_visitante)
 
-        db_partido.registro_tabla == True
-        db.commit()
-        db.refresh(db_partido)
+            db_partido.registro_tabla = True
+            db.commit()
+            db.refresh(db_partido)
 
     return db_partido 
 
