@@ -561,6 +561,92 @@ class Goleadores(_GoleadoresBase):
 
     id: int = 0
     
+    @_pydantic.root_validator
+    def value_img_equipos(cls, values) -> _typing.Dict:
+        try:
+           
+            return_value = _fn.get_field_value(
+                    table_name="equipos",
+                    search_field="id",
+                    search_type="",
+                    search_value=values["id_equipo"],
+                    return_field="img_equipo",
+                    filter_optional="",
+                    sort_optional="",
+                )
+            if return_value != "":
+                values["img_equipo"] = return_value
+            else:
+                 values["img_equipo"] = ""
+        except Exception as e:
+            _logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
+
+            values["img_equipo"] = ""
+
+        try:
+           
+            return_value = _fn.get_field_value(
+                    table_name="equipos",
+                    search_field="id",
+                    search_type="",
+                    search_value=values["id_equipo"],
+                    return_field="nombre",
+                    filter_optional="",
+                    sort_optional="",
+                )
+            if return_value != "":
+                values["nombre_equipo"] = return_value
+            else:
+                 values["nombre_equipo"] = ""
+        except Exception as e:
+            _logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
+
+            values["nombre_equipo"] = ""
+
+
+        return values
+    
+    @_pydantic.root_validator
+    def value_img_jugador(cls, values) -> _typing.Dict:
+        try:
+           
+            return_value = _fn.get_field_value(
+                    table_name="jugadores",
+                    search_field="id",
+                    search_type="",
+                    search_value=values["id_jugador"],
+                    return_field="img",
+                    filter_optional="",
+                    sort_optional="",
+                )
+            if return_value != "":
+                values["img_jugador"] = return_value
+            else:
+                 values["img_jugador"] = ""
+        except Exception as e:
+            _logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
+
+            values["img_jugador"] = ""
+
+        try:
+           
+            return_value = _fn.get_field_value(
+                    table_name="jugadores",
+                    search_field="id",
+                    search_type="",
+                    search_value=values["id_jugador"],
+                    return_field="nombre",
+                    filter_optional="",
+                    sort_optional="",
+                )
+            if return_value != "":
+                values["nombre_jugador"] = return_value
+            else:
+                 values["nombre_jugador"] = ""
+        except Exception as e:
+            _logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
+
+            values["nombre_jugador"] = ""
 
     class Config:
         orm_mode = True
@@ -581,7 +667,7 @@ class _TarjetasBase(_pydantic.BaseModel):
     jornada_regreso: _typing.Optional[int] = 0
     temporada: _typing.Optional[str] = ""
     descripcion: _typing.Optional[str] = ""
-    
+    estatus:  _typing.Optional[int] = 0
     
 
 
@@ -600,6 +686,96 @@ class Tarjetas(_TarjetasBase):
 
     id: int = 0
     
+    @_pydantic.root_validator
+    def value_img_equipos(cls, values) -> _typing.Dict:
+        try:
+           
+            return_value = _fn.get_field_value(
+                    table_name="equipos",
+                    search_field="id",
+                    search_type="",
+                    search_value=values["id_equipo"],
+                    return_field="img_equipo",
+                    filter_optional="",
+                    sort_optional="",
+                )
+            if return_value != "":
+                values["img_equipo"] = return_value
+            else:
+                 values["img_equipo"] = ""
+        except Exception as e:
+            _logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
 
+            values["img_equipo"] = ""
+
+        try:
+           
+            return_value = _fn.get_field_value(
+                    table_name="equipos",
+                    search_field="id",
+                    search_type="",
+                    search_value=values["id_equipo"],
+                    return_field="nombre",
+                    filter_optional="",
+                    sort_optional="",
+                )
+            if return_value != "":
+                values["nombre_equipo"] = return_value
+            else:
+                 values["nombre_equipo"] = ""
+        except Exception as e:
+            _logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
+
+            values["nombre_equipo"] = ""
+
+
+        return values
+    
+
+    @_pydantic.root_validator
+    def value_img_jugador(cls, values) -> _typing.Dict:
+        try:
+           
+            return_value = _fn.get_field_value(
+                    table_name="jugadores",
+                    search_field="id",
+                    search_type="",
+                    search_value=values["id_jugador"],
+                    return_field="img",
+                    filter_optional="",
+                    sort_optional="",
+                )
+            if return_value != "":
+                values["img_jugador"] = return_value
+            else:
+                 values["img_jugador"] = ""
+        except Exception as e:
+            _logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
+
+            values["img_jugador"] = ""
+
+        try:
+           
+            return_value = _fn.get_field_value(
+                    table_name="jugadores",
+                    search_field="id",
+                    search_type="",
+                    search_value=values["id_jugador"],
+                    return_field="nombre",
+                    filter_optional="",
+                    sort_optional="",
+                )
+            if return_value != "":
+                values["nombre_jugador"] = return_value
+            else:
+                 values["nombre_jugador"] = ""
+        except Exception as e:
+            _logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
+
+            values["nombre_jugador"] = ""
+
+
+        return values
+    
     class Config:
         orm_mode = True

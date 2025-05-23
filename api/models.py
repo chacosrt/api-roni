@@ -232,6 +232,8 @@ class Tarjetas(_database.Base):
     temporada =  _sql.Column(_sql.String(150), default="", index=True)
     descripcion = _sql.Column(_sql.Text, default="")
     sanciones_vig = _sql.Column(_sql.Boolean, default=False)
+    estatus  = _sql.Column(_sql.Integer, default=0, index=True)
+    tar_susp = _sql.Column(_sql.Integer, default=0, index=True)
         
     creado_por = _sql.Column(_sql.String(50), default="", index=True)
     creado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)

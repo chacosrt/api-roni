@@ -11,7 +11,7 @@ import fastapi as _fastapi
 import json as _json
 import sqlalchemy.orm as _orm
 import sqlalchemy.sql.expression as _expression
-from sqlalchemy import or_
+from sqlalchemy import func, or_
 
 
 import auth as _auth
@@ -1473,3 +1473,117 @@ def get_tabla_temporadas(db: _orm.Session, token: str, id_torneo:int):
     )
 
     return posiciones
+
+# *************************************************************************************************************************************
+# SECCION: TARJETAS
+# *************************************************************************************************************************************
+
+def get_tarjetas(
+    db: _orm.Session,
+    token: str,
+    skip: int = 0,
+    limit: int = RETURN_DEFAULT_ROWS,
+):
+    skip = _fn.is_null(skip, 0)
+    limit = _fn.is_null(limit, RETURN_DEFAULT_ROWS)
+
+    if (limit > RETURN_MAX_ROWS) and (
+        _auth.token_decode(token)["roles"].upper() != "ADMINISTRATOR"
+    ):
+        _logger.warning(f"Solicitud maxima de registros excedida [{limit}]")
+        limit = RETURN_DEFAULT_ROWS
+
+    results = (
+        db.query(_models.Tarjetas)
+        #.order_by(_models.Tarjetas.jornada.desc())
+        .offset(skip)        
+        .all()
+    )
+
+    return results
+
+# *************************************************************************************************************************************
+
+
+def create_tarjetas(
+    db: _orm.Session,
+    jugador: _schemas.TarjetasCreate,
+    token: str,
+):
+
+    sub = _auth.token_claim(token, "sub")
+
+    db_jugador = _models.Tarjetas(
+
+        id_equipo = _fn.is_null(jugador.id_equipo,0),
+        id_jugador = _fn.is_null(jugador.id_jugador,0),
+        ta = _fn.is_null(jugador.ta,0),
+        tr = _fn.is_null(jugador.tr,0),
+        suspensiones = _fn.is_null(jugador.suspensiones,0),
+        numero_juegos = _fn.is_null(jugador.numero_juegos,0),
+        jornada_regreso = _fn.is_null(jugador.jornada_regreso,0),
+        temporada= _fn.clean_string(jugador.temporada),
+        descripcion= _fn.clean_string(jugador.descripcion),        
+        
+    )
+
+    db_jugador.estatus = 1
+
+    db_jugador.creado_por = _fn.clean_string(sub)
+    db_jugador.creado_el = _dt.datetime.now()
+    db_jugador.modificado_por = _fn.clean_string(sub)
+    db_jugador.modificado_el = _dt.datetime.now()
+
+    db.add(db_jugador)
+    db.commit()
+    db.refresh(db_jugador)    
+
+    return db_jugador
+
+#********************************************************************************************************************
+
+def update_tarjetas(
+    db: _orm.Session,
+    token: str,
+    db_jugador: _models.Tarjetas,
+    jugador: _schemas.TarjetasCreate,
+):
+    sub = _auth.token_claim(token, "sub")
+
+    tam = db_jugador.ta + jugador.ta
+    tro = db_jugador.tr + jugador.tr
+    susp = db_jugador.suspensiones + jugador.suspensiones
+    tar_s = db_jugador.tar_susp + jugador.ta
+
+    
+    torneo = db.query(_models.Equipos).filter(_models.Equipos.id == jugador.id_equipo).first()
+    jornada_actual = db.query(_models.Partidos).filter(_models.Partidos.jornada == func.max(_models.Partidos.jornada)).filter(_models.Partidos.temporada == jugador.temporada).filter(_models.Partidos.liga == torneo.liga).first()
+
+    if tar_s == 4:
+        
+        susp = db_jugador.suspensiones + 1
+        tar_s = 0
+        jr = jornada_actual.jornada +1
+        db_jugador.suspensiones = _fn.is_null(susp,0)
+        db_jugador.numero_juegos = _fn.is_null(1,0)
+        db_jugador.jornada_regreso = _fn.is_null(jr,0)
+        db_jugador.temporada= _fn.clean_string(jugador.temporada)
+        db_jugador.descripcion = _fn.clean_string(jugador.descripcion)
+        db_jugador.tar_susp = _fn.is_null(tar_s,0)
+
+        
+    
+    # db_actividades.clave = _fn.clean_string(actividad.clave).upper()
+    db_jugador.id_equipo = _fn.is_null(jugador.id_equipo,0)
+    db_jugador.id_jugador = _fn.is_null(jugador.id_jugador,0)
+    db_jugador.ta = _fn.is_null(tam,0)
+    db_jugador.tr = _fn.is_null(tro,0)
+    
+
+    db_jugador.modificado_por = _fn.clean_string(sub)
+    db_jugador.modificado_el = _dt.datetime.now()
+
+    db.commit()
+    db.refresh(db_jugador)
+
+    return db_jugador
