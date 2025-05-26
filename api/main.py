@@ -502,6 +502,30 @@ async def read_jugadores_por_id(
     return db_jugadores
 
 # *************************************************************************************************************************************
+@app.get(
+    "/jugadores/{equipo_id}/id",
+    response_model=_schemas.Jugadores,
+    status_code=_fastapi.status.HTTP_200_OK,
+    tags=["Jugadores"],
+)
+async def read_jugadores_por_equipo_id(
+    equipo_id: str,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_jugadores = _services.get_jugadores_por_equipo_id(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(equipo_id),
+    )
+    if db_jugadores is None:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+
+    return db_jugadores
+
+# *************************************************************************************************************************************
 
 
 @app.post(
