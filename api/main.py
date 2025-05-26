@@ -849,6 +849,50 @@ async def read_tabla(
 
 
 # *************************************************************************************************************************************
+
+@app.get(
+    "/tarjetas/list",
+    response_model=List[_schemas.Tarjetas],
+    status_code=_fastapi.status.HTTP_200_OK,
+    tags=["Estadisticas"],
+)
+async def read_tarjetas(
+    skip: Optional[int] = None,
+    limit: Optional[int] = None,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_tarjetas = _services.get_tarjetas(
+        db=db,
+        token=token, 
+        skip=skip,
+        limit=limit
+
+    )
+    if len(db_tarjetas) == 0:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+    
+    # *************************************************************************************************************************************
+
+
+@app.post(
+    "/tarjetas/",
+    response_model=_schemas.Partidos,
+    status_code=_fastapi.status.HTTP_201_CREATED,
+    tags=["Estadisticas"],
+)
+def create_tarjetas(
+    jugador: _schemas.TarjetasCreate,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    # return _services.create_actividad(db=db, actividad=actividad)
+    return _services.create_tarjetas(db=db, token=token, jugador=jugador)
+
+
+# *************************************************************************************************************************************
 # SECCION: ADMIN
 # *************************************************************************************************************************************
 
