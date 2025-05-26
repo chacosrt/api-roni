@@ -487,7 +487,7 @@ def get_jugadores_por_id(db: _orm.Session, token: str, id: int):
 
 
 def get_jugadores_por_equipo_id(db: _orm.Session, token: str, id: int):
-    jugador = db.query(_models.Jugadores).filter(_models.Jugadores.equipo == id).first()
+    jugador = db.query(_models.Jugadores).filter(_models.Jugadores.equipo == id).all()
     return jugador
 
 # *************************************************************************************************************************************
