@@ -503,7 +503,7 @@ async def read_jugadores_por_id(
 
 # *************************************************************************************************************************************
 @app.get(
-    "/jugadores/{equipo_id}/id",
+    "/jugadores/{equipo_id}/equipo_id",
     response_model=List[_schemas.Jugadores],
     status_code=_fastapi.status.HTTP_200_OK,
     tags=["Jugadores"],
