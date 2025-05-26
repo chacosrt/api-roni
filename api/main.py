@@ -891,6 +891,39 @@ def create_tarjetas(
     # return _services.create_actividad(db=db, actividad=actividad)
     return _services.create_tarjetas(db=db, token=token, jugador=jugador)
 
+# *************************************************************************************************************************************
+
+
+@app.post(
+    "/tarjetas/{id}",
+    response_model=_schemas.TarjetasCreate,
+    status_code=_fastapi.status.HTTP_201_CREATED,
+    tags=["Estadisticas"],
+)
+async def update_partido(
+    id: str,
+    jugador: _schemas.TarjetasCreate,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_jugador = _services.get_tarjetas_por_id(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    if db_jugador is None:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+
+    return _services.update_tarjetas(
+        db=db,
+        token=token,
+        db_jugador=db_jugador,
+        jugador=jugador,
+    )
+
+
 
 # *************************************************************************************************************************************
 # SECCION: ADMIN
