@@ -1533,6 +1533,7 @@ def create_tarjetas(
 
         db_jugador = _models.Tarjetas(
 
+            id_liga = _fn.is_null(jugador.id_liga,0),
             id_equipo = _fn.is_null(jugador.id_equipo,0),
             id_jugador = _fn.is_null(jugador.id_jugador,0),
             ta = _fn.is_null(jugador.ta,0),
