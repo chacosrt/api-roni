@@ -1531,6 +1531,8 @@ def create_tarjetas(
 
     if registroExist == None:
 
+        torneo = db.query(_models.Torneos).filter(_models.Torneos.id == jugador.id_liga).first()
+
         db_jugador = _models.Tarjetas(
 
             id_liga = _fn.is_null(jugador.id_liga,0),
@@ -1541,7 +1543,7 @@ def create_tarjetas(
             suspensiones = _fn.is_null(jugador.suspensiones,0),
             numero_juegos = _fn.is_null(jugador.numero_juegos,0),
             jornada_regreso = _fn.is_null(jugador.jornada_regreso,0),
-            temporada= _fn.clean_string(jugador.temporada),
+            temporada= _fn.clean_string(torneo.temporada),
             descripcion= _fn.clean_string(jugador.descripcion),        
             
         )
