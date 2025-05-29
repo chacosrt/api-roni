@@ -1527,30 +1527,38 @@ def create_tarjetas(
 
     sub = _auth.token_claim(token, "sub")
 
-    db_jugador = _models.Tarjetas(
+    registroExist = db.query(_models.Tarjetas).filter(_models.Tarjetas.id_jugador == jugador.id_jugador).filter(_models.Tarjetas.temporada == jugador.temporada).first()
 
-        id_equipo = _fn.is_null(jugador.id_equipo,0),
-        id_jugador = _fn.is_null(jugador.id_jugador,0),
-        ta = _fn.is_null(jugador.ta,0),
-        tr = _fn.is_null(jugador.tr,0),
-        suspensiones = _fn.is_null(jugador.suspensiones,0),
-        numero_juegos = _fn.is_null(jugador.numero_juegos,0),
-        jornada_regreso = _fn.is_null(jugador.jornada_regreso,0),
-        temporada= _fn.clean_string(jugador.temporada),
-        descripcion= _fn.clean_string(jugador.descripcion),        
-        
-    )
+    if registroExist == None:
 
-    db_jugador.estatus = 1
+        db_jugador = _models.Tarjetas(
 
-    db_jugador.creado_por = _fn.clean_string(sub)
-    db_jugador.creado_el = _dt.datetime.now()
-    db_jugador.modificado_por = _fn.clean_string(sub)
-    db_jugador.modificado_el = _dt.datetime.now()
+            id_equipo = _fn.is_null(jugador.id_equipo,0),
+            id_jugador = _fn.is_null(jugador.id_jugador,0),
+            ta = _fn.is_null(jugador.ta,0),
+            tr = _fn.is_null(jugador.tr,0),
+            suspensiones = _fn.is_null(jugador.suspensiones,0),
+            numero_juegos = _fn.is_null(jugador.numero_juegos,0),
+            jornada_regreso = _fn.is_null(jugador.jornada_regreso,0),
+            temporada= _fn.clean_string(jugador.temporada),
+            descripcion= _fn.clean_string(jugador.descripcion),        
+            
+        )
 
-    db.add(db_jugador)
-    db.commit()
-    db.refresh(db_jugador)    
+        db_jugador.estatus = 1
+
+        db_jugador.creado_por = _fn.clean_string(sub)
+        db_jugador.creado_el = _dt.datetime.now()
+        db_jugador.modificado_por = _fn.clean_string(sub)
+        db_jugador.modificado_el = _dt.datetime.now()
+
+        db.add(db_jugador)
+        db.commit()
+        db.refresh(db_jugador)    
+
+    else:
+
+        db_jugador = None
 
     return db_jugador
 
