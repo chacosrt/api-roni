@@ -496,7 +496,7 @@ async def read_jugadores_por_id(
     )
     if db_jugadores is None:
         raise _fastapi.HTTPException(
-            status_code=404, detail="No se encontraron registros."
+            status_code=404, detail="Error al guardar los datos"
         )
 
     return db_jugadores
