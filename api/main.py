@@ -903,7 +903,7 @@ async def read_tarjetas(
 
 @app.post(
     "/tarjetas/",
-    response_model=_schemas.Partidos,
+    response_model=_schemas.Tarjetas,
     status_code=_fastapi.status.HTTP_201_CREATED,
     tags=["Estadisticas"],
 )
@@ -920,7 +920,7 @@ def create_tarjetas(
 
 @app.post(
     "/tarjetas/{id}",
-    response_model=_schemas.TarjetasCreate,
+    response_model=_schemas.Tarjetas,
     status_code=_fastapi.status.HTTP_201_CREATED,
     tags=["Estadisticas"],
 )
