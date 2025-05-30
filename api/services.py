@@ -1527,11 +1527,12 @@ def create_tarjetas(
 
     sub = _auth.token_claim(token, "sub")
 
-    registroExist = db.query(_models.Tarjetas).filter(_models.Tarjetas.id_jugador == jugador.id_jugador).filter(_models.Tarjetas.temporada == jugador.temporada).first()
+    torneo = db.query(_models.Torneos).filter(_models.Torneos.id == jugador.id_liga).first()
+
+    registroExist = db.query(_models.Tarjetas).filter(_models.Tarjetas.id_jugador == jugador.id_jugador).filter(_models.Tarjetas.temporada == torneo.temporada).first()
 
     if registroExist == None:
-
-        torneo = db.query(_models.Torneos).filter(_models.Torneos.id == jugador.id_liga).first()
+        
 
         db_jugador = _models.Tarjetas(
 
