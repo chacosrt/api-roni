@@ -898,6 +898,7 @@ async def read_tarjetas(
             status_code=404, detail="No se encontraron registros."
         )
     
+    return db_tarjetas
     # *************************************************************************************************************************************
 
 
