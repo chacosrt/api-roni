@@ -782,7 +782,7 @@ class Tarjetas(_TarjetasBase):
 
         try:
            
-            return_value = _fn.get_field_value(
+            return_value = _fn.get_row_value(
                     table_name="jugadores",
                     search_field="id",
                     search_type="",
@@ -792,7 +792,7 @@ class Tarjetas(_TarjetasBase):
                     sort_optional="",
                 )
             if return_value != "":
-                values["nombre_jugador"] = return_value
+                values["nombre_jugador"] = return_value[1] + ' ' + return_value[2] + ' ' + return_value[3]
             else:
                  values["nombre_jugador"] = ""
         except Exception as e:
