@@ -903,7 +903,7 @@ async def read_tarjetas(
 
 @app.get(
     "/tarjetas/{id_jugador}/get_tarjetas_id",
-    response_model=List[_schemas.Posiciones],
+    response_model=_schemas.Tarjetas,
     status_code=_fastapi.status.HTTP_200_OK,
     tags=["Estadisticas"],
 )
