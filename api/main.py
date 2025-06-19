@@ -899,7 +899,31 @@ async def read_tarjetas(
         )
     
     return db_tarjetas
-    # *************************************************************************************************************************************
+# *************************************************************************************************************************************
+
+@app.get(
+    "/tarjetas/{id_jugador}/get_tarjetas_id",
+    response_model=List[_schemas.Posiciones],
+    status_code=_fastapi.status.HTTP_200_OK,
+    tags=["Estadisticas"],
+)
+async def read_tabla(
+    id_jugador:str,   
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_torneos = _services.get_tarjetas_por_id(
+        db=db,
+          token=token, 
+          id_torneo=_fn.parameter_id(id_jugador),          
+
+    )
+    if len(db_torneos) == 0:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+    return db_torneos
+# *************************************************************************************************************************************
 
 
 @app.post(
