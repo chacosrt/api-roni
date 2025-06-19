@@ -918,7 +918,7 @@ async def read_tabla(
           id=_fn.parameter_id(id_jugador),          
 
     )
-    if len(db_torneos) == 0:
+    if db_torneos is None:
         raise _fastapi.HTTPException(
             status_code=404, detail="No se encontraron registros."
         )
