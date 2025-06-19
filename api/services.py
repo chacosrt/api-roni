@@ -1513,7 +1513,7 @@ def get_tarjetas(
 
 
 def get_tarjetas_por_id(db: _orm.Session, token: str, id: int):
-    jugador = db.query(_models.Tarjetas).filter(_models.Tarjetas.id_jugador == id).first()
+    jugador = db.query(_models.Tarjetas).filter(_models.Tarjetas.id == id).first()
     return jugador
 
 # *************************************************************************************************************************************
