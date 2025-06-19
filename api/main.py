@@ -915,7 +915,7 @@ async def read_tabla(
     db_torneos = _services.get_tarjetas_por_id(
         db=db,
           token=token, 
-          id_torneo=_fn.parameter_id(id_jugador),          
+          id=_fn.parameter_id(id_jugador),          
 
     )
     if len(db_torneos) == 0:
