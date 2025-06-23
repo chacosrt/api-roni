@@ -1576,14 +1576,14 @@ def update_tarjetas(
 ):
     sub = _auth.token_claim(token, "sub")
 
-    tam = db_jugador.ta + jugador.ta
-    tro = db_jugador.tr + jugador.tr
-    susp = db_jugador.suspensiones + jugador.suspensiones
+    tam =  jugador.ta
+    tro =  jugador.tr
+    susp = jugador.suspensiones
     tar_s = db_jugador.tar_susp + jugador.ta
 
     
-    torneo = db.query(_models.Equipos).filter(_models.Equipos.id == jugador.id_equipo).first()
-    jornada_actual = db.query(_models.Partidos).filter(_models.Partidos.jornada == func.max(_models.Partidos.jornada)).filter(_models.Partidos.temporada == jugador.temporada).filter(_models.Partidos.liga == torneo.liga).first()
+    torneo = torneo = db.query(_models.Torneos).filter(_models.Torneos.id == jugador.id_liga).first()
+    jornada_actual = db.query(_models.Partidos).filter(_models.Partidos.temporada == torneo.temporada).filter(_models.Partidos.liga == torneo.id).order_by(_models.Partidos.jornada.desc()).first()
 
     if tar_s == 4:
         
