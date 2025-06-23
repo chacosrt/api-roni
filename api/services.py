@@ -1601,7 +1601,7 @@ def update_tarjetas(
     
     # db_actividades.clave = _fn.clean_string(actividad.clave).upper()
     db_jugador.id_equipo = _fn.is_null(jugador.id_equipo,0)
-    db_jugador.id_jugador = _fn.is_null(jugador.id_jugador,0)
+    #db_jugador.id_jugador = _fn.is_null(jugador.id_jugador,0)
     db_jugador.ta = _fn.is_null(tam,0)
     db_jugador.tr = _fn.is_null(tro,0)
     
