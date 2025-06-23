@@ -1589,7 +1589,7 @@ def update_tarjetas(
         
         susp = db_jugador.suspensiones + 1
         tar_s = 0
-        jr = jornada_actual.jornada +1
+        jr = jornada_actual.jornada +2
         db_jugador.suspensiones = _fn.is_null(susp,0)
         db_jugador.numero_juegos = _fn.is_null(1,0)
         db_jugador.jornada_regreso = _fn.is_null(jr,0)
