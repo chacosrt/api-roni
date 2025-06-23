@@ -1576,19 +1576,20 @@ def update_tarjetas(
 ):
     sub = _auth.token_claim(token, "sub")
 
-    tam =  jugador.ta
-    tro =  jugador.tr
-    susp = jugador.suspensiones
+    tam = db_jugador.ta + jugador.ta
+    tro = db_jugador.tr + jugador.tr
+    susp = db_jugador.suspensiones + jugador.suspensiones
     tar_s = db_jugador.tar_susp + jugador.ta
 
     
     torneo = torneo = db.query(_models.Torneos).filter(_models.Torneos.id == jugador.id_liga).first()
     jornada_actual = db.query(_models.Partidos).filter(_models.Partidos.temporada == torneo.temporada).filter(_models.Partidos.liga == torneo.id).order_by(_models.Partidos.jornada.desc()).first()
 
-    if tar_s == 4:
+    if tar_s == 4 or jugador.tr == 1:
         
         susp = db_jugador.suspensiones + 1
-        tar_s = 0
+        if tar_s == 4:
+            tar_s = 0
         jr = jornada_actual.jornada +2
         db_jugador.suspensiones = _fn.is_null(susp,0)
         db_jugador.numero_juegos = _fn.is_null(1,0)
@@ -1600,7 +1601,7 @@ def update_tarjetas(
         
     
     # db_actividades.clave = _fn.clean_string(actividad.clave).upper()
-    db_jugador.id_equipo = _fn.is_null(jugador.id_equipo,0)
+    #db_jugador.id_equipo = _fn.is_null(jugador.id_equipo,0)
     #db_jugador.id_jugador = _fn.is_null(jugador.id_jugador,0)
     db_jugador.ta = _fn.is_null(tam,0)
     db_jugador.tr = _fn.is_null(tro,0)
