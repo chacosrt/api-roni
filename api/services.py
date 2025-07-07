@@ -1642,7 +1642,7 @@ def update_tarjetas(
     if jr > jornada_actual.jornada:
 
         db_jugador.sanciones_vig = 1
-        db_jugador.jornada_regreso = jr
+        jr = jornada_actual.jornada +2
     else:
         db_jugador.sanciones_vig = 0
         db_jugador.jornada_regreso = 0
