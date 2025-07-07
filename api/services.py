@@ -1619,10 +1619,13 @@ def update_tarjetas(
     jornada_actual = db.query(_models.Partidos).filter(_models.Partidos.temporada == torneo.temporada).filter(_models.Partidos.liga == torneo.id).order_by(_models.Partidos.jornada.desc()).first()
 
     jr = 0
+
+    desc = jugador.descripcion
     if tar_s == 4 or jugador.tr == 1:
         
         susp = db_jugador.suspensiones + 1
         jr = jornada_actual.jornada +2
+        desc = "suspensión por acumulación de tarjetas"
         if tar_s == 4:
             tar_s = 0
         
@@ -1648,7 +1651,7 @@ def update_tarjetas(
     db_jugador.numero_juegos = _fn.is_null(1,0)
     #db_jugador.jornada_regreso = _fn.is_null(jr,0)
     db_jugador.temporada= _fn.clean_string(torneo.temporada)
-    db_jugador.descripcion = _fn.clean_string(jugador.descripcion)
+    db_jugador.descripcion = _fn.clean_string(desc)
     db_jugador.tar_susp = _fn.is_null(tar_s,0)
 
         
