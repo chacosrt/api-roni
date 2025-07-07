@@ -1631,11 +1631,22 @@ def update_tarjetas(
             tar_s = 0
         jr = jornada_actual.jornada +2
 
+        if db_jugador.tr == 1:        
+
+            db_jugador.sanciones_vig = 1
+            db_jugador.jornada_regreso = jr
+        else:
+            db_jugador.sanciones_vig = 0
+            db_jugador.jornada_regreso = 0
+
+        
         if jr > jornada_actual.jornada:
 
             db_jugador.sanciones_vig = 1
+            db_jugador.jornada_regreso = jr
         else:
             db_jugador.sanciones_vig = 0
+            db_jugador.jornada_regreso = 0
 
         db_jugador.suspensiones = _fn.is_null(susp,0)
         db_jugador.numero_juegos = _fn.is_null(1,0)
