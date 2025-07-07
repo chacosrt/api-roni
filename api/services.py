@@ -1580,13 +1580,7 @@ def create_tarjetas(
             db_jugador.jornada_regreso = 0
 
         
-        if jr > jornada_actual.jornada:
-
-            db_jugador.sanciones_vig = 1
-            db_jugador.jornada_regreso = jr
-        else:
-            db_jugador.sanciones_vig = 0
-            db_jugador.jornada_regreso = 0
+        
 
         db_jugador.estatus = 1
 
@@ -1624,10 +1618,11 @@ def update_tarjetas(
     torneo = torneo = db.query(_models.Torneos).filter(_models.Torneos.id == jugador.id_liga).first()
     jornada_actual = db.query(_models.Partidos).filter(_models.Partidos.temporada == torneo.temporada).filter(_models.Partidos.liga == torneo.id).order_by(_models.Partidos.jornada.desc()).first()
 
-    jr = jornada_actual.jornada +2
+    jr = 0
     if tar_s == 4 or jugador.tr == 1:
         
         susp = db_jugador.suspensiones + 1
+        jr = jornada_actual.jornada +2
         if tar_s == 4:
             tar_s = 0
         
