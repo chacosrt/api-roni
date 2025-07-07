@@ -1088,6 +1088,16 @@ def create_partido(
             db.commit()
             db.refresh(db_partido)
 
+    suspensiones = db.query(_models.Tarjetas).filter(_models.Tarjetas.sanciones_vig == 1 ).all()
+
+    for susp in suspensiones:
+
+        if susp.jornada_regreso <= db_partido.jornada:
+
+            susp.sanciones_vig = 0
+            db.commit()
+            db.refresh(susp)
+
     return db_partido 
 
 # *************************************************************************************************************************************
@@ -1438,7 +1448,15 @@ def update_partido(
             db.commit()
             db.refresh(db_partido)
 
+    suspensiones = db.query(_models.Tarjetas).filter(_models.Tarjetas.sanciones_vig == 1 ).all()
 
+    for susp in suspensiones:
+
+        if susp.jornada_regreso <= db_partido.jornada:
+
+            susp.sanciones_vig = 0
+            db.commit()
+            db.refresh(susp)
     
     return db_partido
 
