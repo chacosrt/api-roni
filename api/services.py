@@ -1571,7 +1571,7 @@ def create_tarjetas(
 
         jr = jornada_actual.jornada +2
 
-        if db_jugador.tr == 1:        
+        if jugador.tr == 1:        
 
             db_jugador.sanciones_vig = 1
             db_jugador.jornada_regreso = jr
@@ -1631,7 +1631,7 @@ def update_tarjetas(
             tar_s = 0
         jr = jornada_actual.jornada +2
 
-        if db_jugador.tr == 1:        
+        if jugador.tr == 1:        
 
             db_jugador.sanciones_vig = 1
             db_jugador.jornada_regreso = jr
