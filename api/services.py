@@ -1648,12 +1648,12 @@ def update_tarjetas(
             db_jugador.sanciones_vig = 0
             db_jugador.jornada_regreso = 0
 
-        db_jugador.suspensiones = _fn.is_null(susp,0)
-        db_jugador.numero_juegos = _fn.is_null(1,0)
-        db_jugador.jornada_regreso = _fn.is_null(jr,0)
-        db_jugador.temporada= _fn.clean_string(torneo.temporada)
-        db_jugador.descripcion = _fn.clean_string(jugador.descripcion)
-        db_jugador.tar_susp = _fn.is_null(tar_s,0)
+    db_jugador.suspensiones = _fn.is_null(susp,0)
+    db_jugador.numero_juegos = _fn.is_null(1,0)
+    db_jugador.jornada_regreso = _fn.is_null(jr,0)
+    db_jugador.temporada= _fn.clean_string(torneo.temporada)
+    db_jugador.descripcion = _fn.clean_string(jugador.descripcion)
+    db_jugador.tar_susp = _fn.is_null(tar_s,0)
 
         
     
