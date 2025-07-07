@@ -663,6 +663,7 @@ class _TarjetasBase(_pydantic.BaseModel):
     id_jugador: _typing.Optional[int] = 0
     ta: _typing.Optional[int] = 0
     tr: _typing.Optional[int] = 0
+    sanciones_vig:  _typing.Optional[int] = 0
     suspensiones: _typing.Optional[int] = 0
     numero_juegos: _typing.Optional[int] = 0
     jornada_regreso: _typing.Optional[int] = 0
