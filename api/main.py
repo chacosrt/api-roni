@@ -949,7 +949,7 @@ def create_tarjetas(
     status_code=_fastapi.status.HTTP_201_CREATED,
     tags=["Estadisticas"],
 )
-async def update_partido(
+async def update_tarjetas(
     id: str,
     jugador: _schemas.TarjetasCreate,
     db: _orm.Session = _fastapi.Depends(_services.get_db),
@@ -972,6 +972,108 @@ async def update_partido(
         jugador=jugador,
     )
 
+# *************************************************************************************************************************************
+# SECCION: GOLES
+# *************************************************************************************************************************************
+
+
+@app.get(
+    "/goles/list",
+    response_model=List[_schemas.Goleadores],
+    status_code=_fastapi.status.HTTP_200_OK,
+    tags=["Estadisticas"],
+)
+async def read_goles(
+    skip: Optional[int] = None,
+    limit: Optional[int] = None,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_goles = _services.get_goles(
+        db=db,
+        token=token, 
+        skip=skip,
+        limit=limit
+
+    )
+    if len(db_goles) == 0:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+    
+    return db_goles
+# *************************************************************************************************************************************
+
+@app.get(
+    "/goles/{id}/get_goles_id",
+    response_model=_schemas.Tarjetas,
+    status_code=_fastapi.status.HTTP_200_OK,
+    tags=["Estadisticas"],
+)
+async def read_goles_id(
+    id:str,   
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_torneos = _services.get_goles_por_id(
+        db=db,
+          token=token, 
+          id=_fn.parameter_id(id),          
+
+    )
+    if db_torneos is None:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+    return db_torneos
+# *************************************************************************************************************************************
+
+
+@app.post(
+    "/goles/",
+    response_model=_schemas.Goleadores,
+    status_code=_fastapi.status.HTTP_201_CREATED,
+    tags=["Estadisticas"],
+)
+def create_goles(
+    jugador: _schemas.GoleadoresCreate,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    # return _services.create_actividad(db=db, actividad=actividad)
+    return _services.create_goles(db=db, token=token, jugador=jugador)
+
+# *************************************************************************************************************************************
+
+
+@app.post(
+    "/goles/{id}",
+    response_model=_schemas.Goleadores,
+    status_code=_fastapi.status.HTTP_201_CREATED,
+    tags=["Estadisticas"],
+)
+async def update_goles(
+    id: str,
+    jugador: _schemas.TarjetasCreate,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_jugador = _services.get_goles_por_id(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    if db_jugador is None:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+
+    return _services.update_goles(
+        db=db,
+        token=token,
+        db_jugador=db_jugador,
+        jugador=jugador,
+    )
 
 
 # *************************************************************************************************************************************

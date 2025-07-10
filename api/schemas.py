@@ -537,6 +537,7 @@ class Posiciones(_PosicionesBase):
 
 class _GoleadoresBase(_pydantic.BaseModel):
 
+    id_liga:_typing.Optional[int] = 0
     id_equipo:_typing.Optional[int] = 0
     id_jugador: _typing.Optional[int] = 0
     goles: _typing.Optional[int] = 0
@@ -560,6 +561,31 @@ class GoleadoresCreate(_GoleadoresBase):
 class Goleadores(_GoleadoresBase):
 
     id: int = 0
+
+    @_pydantic.root_validator
+    def value_img_torneo(cls, values) -> _typing.Dict:
+        try:
+           
+            return_value = _fn.get_field_value(
+                    table_name="torneos",
+                    search_field="id",
+                    search_type="",
+                    search_value=values["id_liga"],
+                    return_field="nombre_torneo",
+                    filter_optional="",
+                    sort_optional="",
+                )
+            if return_value != "":
+                values["nombre_torneo"] = return_value
+            else:
+                 values["nombre_torneo"] = ""
+        except Exception as e:
+            _logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
+
+            values["nombre_torneo"] = ""
+
+
+        return values
     
     @_pydantic.root_validator
     def value_img_equipos(cls, values) -> _typing.Dict:

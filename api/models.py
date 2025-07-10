@@ -196,7 +196,7 @@ class Goleadores(_database.Base):
     # campos
     id = _sql.Column(_sql.Integer, primary_key=True, autoincrement=True, index=True)
     
-    #id_liga = _sql.Column(_sql.Integer, default=0, index=True)
+    id_liga = _sql.Column(_sql.Integer, default=0, index=True)
     id_equipo  = _sql.Column(_sql.Integer, default=0, index=True)
     id_jugador  = _sql.Column(_sql.Integer, default=0, index=True)
     #id_padre = _sql.Column(_sql.Integer, default=0, index=True)

@@ -1684,3 +1684,115 @@ def update_tarjetas(
     db.refresh(db_jugador)
 
     return db_jugador
+
+
+# *************************************************************************************************************************************
+# SECCION: GOLES
+# *************************************************************************************************************************************
+
+def get_goles(
+    db: _orm.Session,
+    token: str,
+    skip: int = 0,
+    limit: int = RETURN_DEFAULT_ROWS,
+):
+    skip = _fn.is_null(skip, 0)
+    limit = _fn.is_null(limit, RETURN_DEFAULT_ROWS)
+
+    if (limit > RETURN_MAX_ROWS) and (
+        _auth.token_decode(token)["roles"].upper() != "ADMINISTRATOR"
+    ):
+        _logger.warning(f"Solicitud maxima de registros excedida [{limit}]")
+        limit = RETURN_DEFAULT_ROWS
+
+    results = (
+        db.query(_models.Goleadores)
+        #.order_by(_models.Tarjetas.jornada.desc())
+        .offset(skip)        
+        .all()
+    )
+
+    return results
+
+# *************************************************************************************************************************************
+
+
+def get_goles_por_id(db: _orm.Session, token: str, id: int):
+    jugador = db.query(_models.Goleadores).filter(_models.Goleadores.id == id).first()
+    return jugador
+
+
+# *************************************************************************************************************************************
+
+
+def create_goles(
+    db: _orm.Session,
+    jugador: _schemas.GoleadoresCreate,
+    token: str,
+):
+
+    sub = _auth.token_claim(token, "sub")
+
+    torneo = db.query(_models.Torneos).filter(_models.Torneos.id == jugador.id_liga).first()
+
+    registroExist = db.query(_models.Goleadores).filter(_models.Goleadores.id_jugador == jugador.id_jugador).filter(_models.Goleadores.temporada == torneo.temporada).first()
+
+    jornada_actual = db.query(_models.Partidos).filter(_models.Partidos.temporada == torneo.temporada).filter(_models.Partidos.liga == torneo.id).order_by(_models.Partidos.jornada.desc()).first()
+
+    if registroExist == None:
+        
+
+        db_jugador = _models.Goleadores(
+
+            id_liga = _fn.is_null(jugador.id_liga,0),
+            id_equipo = _fn.is_null(jugador.id_equipo,0),
+            id_jugador = _fn.is_null(jugador.id_jugador,0),
+            goles = _fn.is_null(jugador.goles,0),
+            jj = _fn.is_null(jugador.jj,0),
+            avg = jugador.goles / jugador.jj,            
+            temporada= _fn.clean_string(torneo.temporada),
+       
+            
+        )        
+
+        db_jugador.creado_por = _fn.clean_string(sub)
+        db_jugador.creado_el = _dt.datetime.now()
+        db_jugador.modificado_por = _fn.clean_string(sub)
+        db_jugador.modificado_el = _dt.datetime.now()
+
+        db.add(db_jugador)
+        db.commit()
+        db.refresh(db_jugador)    
+
+    else:
+
+        db_jugador = None
+
+    return db_jugador
+
+#********************************************************************************************************************
+
+def update_goles(
+    db: _orm.Session,
+    token: str,
+    db_jugador: _models.Goleadores,
+    jugador: _schemas.GoleadoresCreate,
+):
+    sub = _auth.token_claim(token, "sub")
+
+    goles = db_jugador.goles + jugador.goles
+    jj = db_jugador.jj + jugador.jj
+    avg = goles / jj   
+
+    db_jugador.goles = _fn.is_null(jugador.goles,0)
+    db_jugador.jj = _fn.is_null(jugador.jj,0)
+    db_jugador.avg = avg
+
+
+    db_jugador.modificado_por = _fn.clean_string(sub)
+    db_jugador.modificado_el = _dt.datetime.now()
+
+    db.commit()
+    db.refresh(db_jugador)
+
+    return db_jugador       
