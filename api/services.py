@@ -1707,7 +1707,7 @@ def get_goles(
 
     results = (
         db.query(_models.Goleadores)
-        #.order_by(_models.Tarjetas.jornada.desc())
+        .order_by(_models.Goleadores.goles.desc())
         .offset(skip)        
         .all()
     )
