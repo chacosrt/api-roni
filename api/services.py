@@ -1580,7 +1580,13 @@ def create_tarjetas(
             db_jugador.jornada_regreso = 0
 
         
-        
+        if db_jugador.suspensiones >= 1:
+
+            jr = jornada_actual.jornada + jugador.numero_juegos + 1
+
+            db_jugador.sanciones_vig = 1
+            db_jugador.numero_juegos = jugador.numero_juegos
+            db_jugador.jornada_regreso = jr
 
         db_jugador.estatus = 1
 
@@ -1646,6 +1652,14 @@ def update_tarjetas(
     else:
         db_jugador.sanciones_vig = 0
         db_jugador.jornada_regreso = 0
+
+    if db_jugador.suspensiones >= 1:
+
+        jr = jornada_actual.jornada + jugador.numero_juegos + 1
+
+        db_jugador.sanciones_vig = 1
+        db_jugador.numero_juegos = jugador.numero_juegos
+        db_jugador.jornada_regreso = jr
 
     db_jugador.suspensiones = _fn.is_null(susp,0)
     db_jugador.numero_juegos = _fn.is_null(1,0)
