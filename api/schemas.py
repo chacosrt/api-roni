@@ -674,6 +674,8 @@ class Goleadores(_GoleadoresBase):
 
             values["nombre_jugador"] = ""
 
+        return values
+
     class Config:
         orm_mode = True
 
