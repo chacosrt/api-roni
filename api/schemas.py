@@ -679,7 +679,7 @@ class Goleadores(_GoleadoresBase):
 
         try:
            
-            return_value = _fn.get_field_value(
+            return_value = _fn.get_row_value(
                     table_name="jugadores",
                     search_field="id",
                     search_type="",
