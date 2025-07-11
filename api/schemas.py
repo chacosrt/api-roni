@@ -689,7 +689,7 @@ class Goleadores(_GoleadoresBase):
                     sort_optional="",
                 )
             if return_value != "":
-                values["nombre_jugador"] = return_value
+                values["nombre_jugador"] = return_value[1] + ' ' + return_value[2] + ' ' + return_value[3]
             else:
                  values["nombre_jugador"] = ""
         except Exception as e:
