@@ -1784,8 +1784,8 @@ def update_goles(
     jj = db_jugador.jj + jugador.jj
     avg = goles / jj   
 
-    db_jugador.goles = _fn.is_null(jugador.goles,0)
-    db_jugador.jj = _fn.is_null(jugador.jj,0)
+    db_jugador.goles = _fn.is_null(goles,0)
+    db_jugador.jj = _fn.is_null(jj,0)
     db_jugador.avg = avg
 
 
