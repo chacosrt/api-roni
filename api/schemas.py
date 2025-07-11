@@ -646,7 +646,30 @@ class Goleadores(_GoleadoresBase):
                     sort_optional="",
                 )
             if return_value != "":
-                values["img_jugador"] = return_value
+                imgn = return_value.split(',')          
+                # Decodificar la cadena base64 a bytes
+                image_data = base64.b64decode(imgn[1])
+                
+                # Leer la imagen desde los bytes
+                buffer = BytesIO(image_data)
+                with Image.open(buffer) as img:
+                    # Redimensionar la imagen
+                    img = img.resize((100, 100), Image.Resampling.LANCZOS)
+                    form = imgn[0].split('/')[1]
+                    formato = form.split(';')[0]   
+                    # Convertir a RGB si la imagen está en RGBA o cualquier otro modo no compatible
+                    if img.mode != "RGB":
+                        img = img.convert("RGB")
+                    # Guardar la imagen redimensionada en un nuevo buffer
+                    output_buffer = BytesIO()
+                    img.save(output_buffer, format='jpeg', quality=85)  # Ajusta el formato y la calidad
+                    output_buffer.seek(0)
+                    
+                    # Convertir la imagen nuevamente a base64
+                    reduced_base64 = base64.b64encode(output_buffer.read()).decode('utf-8')
+
+                values["img_jugador"] = f"{imgn[0].replace(formato,'jpeg')},{reduced_base64}"
+                
             else:
                  values["img_jugador"] = ""
         except Exception as e:

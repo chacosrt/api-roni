@@ -1054,7 +1054,7 @@ def create_goles(
 )
 async def update_goles(
     id: str,
-    jugador: _schemas.TarjetasCreate,
+    jugador: _schemas.GoleadoresCreate,
     db: _orm.Session = _fastapi.Depends(_services.get_db),
     token: str = _fastapi.Depends(_auth.token_bearer()),
 ):
