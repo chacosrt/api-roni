@@ -1153,7 +1153,7 @@ def update_partido(
 
     #************ Seccion para insertar registro en tabla de posiciones ******************************************
 
-    if partido.estatus == 2:
+    if partido.estatus == 2 and partido.etapa.upper() == "REGULAR":
 
         
         pos_local = db.query(_models.Posiciones).filter(_models.Posiciones.liga==partido.liga).filter(_models.Posiciones.equipo==partido.local).filter(_models.Posiciones.temporada==get_temporada.temporada).first()
