@@ -79,12 +79,7 @@ def is_null(value, returnValue):
 def clean_string(value):
     value = is_null(value, "")
     try:
-        value = " ".join(
-            _unicodedata.normalize("NFD", value)
-            .encode("ascii", "ignore")
-            .decode("utf-8")
-            .split()
-        )
+        value = value.encode("utf-8", "ignore").decode("utf-8")
     except:
         value = value
     return str(value)
@@ -340,6 +335,8 @@ def format_nombre_propio(value):
     value = value.replace(" So ", " so ")
     value = value.replace(" Sobre ", " sobre ")
     value = value.replace(" Tras ", " tras ")
+
+    
 
     return str(value)
 
