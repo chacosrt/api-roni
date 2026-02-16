@@ -9,6 +9,7 @@ import functions.fn as _fn
 import functions.pills as _pills
 import functions.newton as _newton
 import pydantic as _pydantic
+from pydantic import root_validator
 import settings as _settings
 from PIL import Image
 import base64
@@ -294,6 +295,7 @@ class Partidos(_PartidosBase):
 
     id: int = 0
     liga_partido: Torneos
+    
 
     @_pydantic.root_validator
     def values_fechas(cls, values) -> _typing.Dict:
@@ -344,6 +346,68 @@ class Partidos(_PartidosBase):
             _logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
 
             values["nombre_visitante"] = ""
+
+
+        return values
+    
+    @_pydantic.root_validator
+    def value_jornadas_equipos(cls, values) -> _typing.Dict:
+        try:
+           
+            return_value = _fn.get_rows_value(
+                    table_name="partidos",
+                    search_field="liga",
+                    search_type="",
+                    search_value=values["liga"],
+                    return_field="jornada",
+                    filter_optional="AND temporada = " + values["temporada"] + " GROUP BY jornada",
+                    sort_optional="",
+                )
+            if return_value != "":
+                jornadas_list = []
+                j = ""
+                for jornada in return_value:
+                    if jornada[4] != j:
+                        j=jornada[4]
+                        jornadas_list.append(j)
+                values["jornadas"] = jornadas_list
+            else:
+                 values["jornadas"] = ""
+        except Exception as e:
+            _logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
+
+            values["jornadas"] = ""       
+
+
+        return values
+    
+    @_pydantic.root_validator
+    def value_temporadas_equipos(cls, values) -> _typing.Dict:
+        try:
+           
+            return_value = _fn.get_rows_value(
+                    table_name="partidos",
+                    search_field="liga",
+                    search_type="",
+                    search_value=values["liga"],
+                    return_field="temporada",
+                    filter_optional="",
+                    sort_optional="",
+                )
+            if return_value != "":
+                jornadas_list = []
+                j = ""
+                for jornada in return_value:
+                    if jornada[5] != j:
+                        j=jornada[5]
+                        jornadas_list.append(j)
+                values["temporadas"] = jornadas_list
+            else:
+                 values["temporadas"] = ""
+        except Exception as e:
+            _logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
+
+            values["temporadas"] = ""       
 
 
         return values

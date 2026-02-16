@@ -7,3 +7,4 @@ pytest-cov
 isort
 autoflake
 mysql-connector-python
+pillow

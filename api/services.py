@@ -626,7 +626,8 @@ def get_partidos(
 
     results = (
         db.query(_models.Partidos)
-        .order_by(_models.Partidos.jornada.desc())
+        .order_by(_models.Partidos.liga.asc())
+        .limit(20)
         .offset(skip)        
         .all()
     )
@@ -699,7 +700,9 @@ def get_partidos_por_torneo(
 def get_partidos_por_jornada(
     db: _orm.Session,
     token: str,
-    id: int,
+    torneo: int,
+    jornada: str,
+    temporada: str,
     skip: int = 0,    
     limit: int = RETURN_DEFAULT_ROWS,
     
@@ -713,27 +716,35 @@ def get_partidos_por_jornada(
         _logger.warning(f"Solicitud maxima de registros excedida [{limit}]")
         limit = RETURN_DEFAULT_ROWS
 
-    torneo = db.query(_models.Torneos).filter(_models.Torneos.id == id).first()
-    temporada = torneo.temporada
+    #torneo = db.query(_models.Torneos).filter(_models.Torneos.id == id).first()
+    #temporada = torneo.temporada
+    if torneo == 0:
 
-    results = (
-        db.query(_models.Partidos)
-        .distinct(_models.Partidos.jornada)
-        .filter(_models.Partidos.liga == id)
+        partidos = (
+        db.query(_models.Partidos)        
+        .filter(_models.Partidos.liga.in_([1,2]))          
         .filter(_models.Partidos.temporada == temporada)
-        .order_by(_models.Partidos.jornada.desc())   
+        .filter(_models.Partidos.jornada == jornada)
+        .order_by(_models.Partidos.horario.asc())   
         .all()
     )
+        
+    else:
 
-    jornada_list = []
+        partidos = (
+            db.query(_models.Partidos)        
+            .filter(_models.Partidos.liga == torneo)
+            .filter(_models.Partidos.temporada == temporada)
+            .filter(_models.Partidos.jornada == jornada)
+            .order_by(_models.Partidos.horario.asc())   
+            .all()
+        )
 
-    for res in results:
+    
+        
 
-        esq = res.__dict__
 
-        jornada_list.append(esq)
-
-    return jornada_list
+    return partidos
 
 
 # *************************************************************************************************************************************

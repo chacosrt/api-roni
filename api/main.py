@@ -711,13 +711,15 @@ async def read_partidos_torneo_id(
 # *************************************************************************************************************************************
 
 @app.get(
-    "/partidos/{id_torneo}/jornadas",
-    response_model=List[_schemas.Jornadas],
+    "/partidos/{id_torneo}/{jornada}/{temporada}/jornadas",
+    response_model=List[_schemas.Partidos],
     status_code=_fastapi.status.HTTP_200_OK,
     tags=["Partidos"],
 )
 async def read_partidos_jornada(
     id_torneo: str,
+    jornada:str,
+    temporada:str,
     skip: Optional[int] = None,
     limit: Optional[int] = None,
     db: _orm.Session = _fastapi.Depends(_services.get_db),
@@ -727,7 +729,9 @@ async def read_partidos_jornada(
         db=db,
           token=token, 
           skip=skip, limit=limit,
-          id=_fn.parameter_id(id_torneo)
+          torneo=_fn.parameter_id(id_torneo),
+          jornada=jornada,
+          temporada=temporada
     )
     if len(db_partidos) == 0:
         raise _fastapi.HTTPException(
