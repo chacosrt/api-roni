@@ -725,7 +725,7 @@ def get_partidos_por_jornada(
         .filter(_models.Partidos.liga.in_([1,2]))          
         .filter(_models.Partidos.temporada == temporada)
         .filter(_models.Partidos.jornada == jornada)
-        .order_by(_models.Partidos.horario.asc())   
+        .order_by(_models.Partidos.liga.asc())   
         .all()
     )
         

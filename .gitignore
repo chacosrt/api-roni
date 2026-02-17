@@ -7,7 +7,7 @@
 #.settings.yaml
 #.backend.yaml
 test.*
-
+.settings.yaml
 ### vscode
 .vscode*
 
