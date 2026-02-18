@@ -1162,7 +1162,7 @@ async def update_item_update_fields(
 
 
 @app.post(
-    "/usuarios/",
+    "/admin/usuarios/",
     response_model=_schemas.UsuariosLiga,
     status_code=_fastapi.status.HTTP_201_CREATED,
     tags=["Admin"],
@@ -1180,7 +1180,7 @@ def create_usuario(
 
 
 @app.post(
-    "/usuarios/{id}",
+    "/admin/usuarios/{id}",
     response_model=_schemas.UsuariosLiga,
     status_code=_fastapi.status.HTTP_201_CREATED,
     tags=["Admin"],
