@@ -1849,7 +1849,7 @@ def create_usuario(
             nombre_completo = _fn.clean_string(usuario.nombre_completo),
             email =  _fn.clean_string(usuario.nombre_completo),
             telefono =  _fn.clean_string(usuario.nombre_completo),
-            password =  _fn.clean_string(usuario.nombre_completo),
+            #password =  _fn.clean_string(usuario.nombre_completo),
             roles =  _fn.clean_string(usuario.nombre_completo),
             alias =  _fn.clean_string(usuario.nombre_completo),
             remote_id =  _fn.is_null(usuario.nivel,0),
@@ -1889,7 +1889,7 @@ def update_usuario(
     db_usuario.nombre_completo = _fn.clean_string(usuario.nombre_completo)
     db_usuario.email =  _fn.clean_string(usuario.nombre_completo)
     db_usuario.telefono =  _fn.clean_string(usuario.nombre_completo)
-    db_usuario.password =  _fn.clean_string(usuario.nombre_completo)
+    #db_usuario.password =  _fn.clean_string(usuario.nombre_completo)
     db_usuario.roles =  _fn.clean_string(usuario.nombre_completo)
     db_usuario.alias =  _fn.clean_string(usuario.nombre_completo)
     db_usuario.remote_id =  _fn.is_null(usuario.nivel,0)
