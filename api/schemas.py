@@ -921,3 +921,38 @@ class Tarjetas(_TarjetasBase):
     
     class Config:
         orm_mode = True
+
+# *************************************************************************************************************************************
+# SECCION: TORNEOS
+# *************************************************************************************************************************************
+
+class _UsuariosLigaBase(_pydantic.BaseModel):
+
+    id_equipo: _typing.Optional[int] = 0
+    nivel: _typing.Optional[int] = 0
+    nombre_completo:  _typing.Optional[str] = ""
+    email:  _typing.Optional[str] = ""
+    telefono:  _typing.Optional[str] = ""
+    password:  _typing.Optional[str] = ""
+    roles:  _typing.Optional[str] = ""
+    alias:  _typing.Optional[str] = ""
+    remote_id: _typing.Optional[int] = 0
+    estatus: _typing.Optional[int] = 0
+
+# *************************************************************************************************************************************
+
+# La clase Create hace referencia a la clase _Base
+# y hereda los campos de la misma
+class UsuariosLigaCreate(_UsuariosLigaBase):
+    pass
+
+
+# *************************************************************************************************************************************
+
+
+class UsuariosLiga(_UsuariosLigaBase):
+
+    id: int = 0    
+
+    class Config:
+        orm_mode = True

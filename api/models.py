@@ -241,3 +241,28 @@ class Tarjetas(_database.Base):
     modificado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)
 
 
+    # *************************************************************************************************************************************
+# Jugadores
+# *************************************************************************************************************************************		
+
+class UsuarioLiga(_database.Base):
+    # nombre de la tabla
+    __tablename__ = "usuarios_liga"
+    # campos
+    id = _sql.Column(_sql.Integer, primary_key=True, autoincrement=True, index=True)
+    id_equipo  = _sql.Column(_sql.Integer, default=0, index=True)
+    nivel  = _sql.Column(_sql.Integer, default=0, index=True)
+    nombre_completo = _sql.Column(_sql.String(255), default="")
+    email = _sql.Column(_sql.String(150), default="", index=True)
+    telefono = _sql.Column(_sql.String(50), default="", index=True)
+    password = _sql.Column(_sql.String(255), default="")
+    roles = _sql.Column(_sql.String(255), default="")
+    alias = _sql.Column(_sql.String(150), default="")
+    remote_id = _sql.Column(_sql.Integer, default=None, index=True)
+    estatus = _sql.Column(_sql.Integer, default=1)
+
+    creado_por = _sql.Column(_sql.String(50), default="", index=True)
+    creado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)
+    modificado_por = _sql.Column(_sql.String(50), default="", index=True)
+    modificado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)
+

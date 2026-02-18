@@ -1732,6 +1732,13 @@ def get_goles_por_id(db: _orm.Session, token: str, id: int):
     jugador = db.query(_models.Goleadores).filter(_models.Goleadores.id == id).first()
     return jugador
 
+# *************************************************************************************************************************************
+
+
+def get_usuario_por_id(db: _orm.Session, token: str, id: int):
+    usuario = db.query(_models.UsuarioLiga).filter(_models.UsuarioLiga.id == id).first()
+    return usuario
+
 
 # *************************************************************************************************************************************
 
@@ -1806,4 +1813,84 @@ def update_goles(
     db.commit()
     db.refresh(db_jugador)
 
-    return db_jugador       
+    return db_jugador     
+
+
+# *************************************************************************************************************************************
+
+
+def create_usuario(
+    db: _orm.Session,
+    usuario: _schemas.UsuariosLigaCreate,
+    token: str,
+):
+
+    sub = _auth.token_claim(token, "sub")
+
+    registroExist = db.query(_models.UsuarioLiga).filter(_models.UsuarioLiga.id_equipo == usuario.id_equipo).first()
+
+    
+    if registroExist == None:
+        
+
+        db_usuario = _models.UsuarioLiga(
+
+            id_equipo  = _fn.is_null(usuario.id_equipo,0),
+            nivel  = _fn.is_null(usuario.nivel,0),
+            nombre_completo = _fn.clean_string(usuario.nombre_completo),
+            email =  _fn.clean_string(usuario.nombre_completo),
+            telefono =  _fn.clean_string(usuario.nombre_completo),
+            password =  _fn.clean_string(usuario.nombre_completo),
+            roles =  _fn.clean_string(usuario.nombre_completo),
+            alias =  _fn.clean_string(usuario.nombre_completo),
+            remote_id =  _fn.is_null(usuario.nivel,0),
+            estatus = _fn.is_null(usuario.nivel,1),
+
+       
+            
+        )        
+
+        db_usuario.creado_por = _fn.clean_string(sub)
+        db_usuario.creado_el = _dt.datetime.now()
+        db_usuario.modificado_por = _fn.clean_string(sub)
+        db_usuario.modificado_el = _dt.datetime.now()
+
+        db.add(db_usuario)
+        db.commit()
+        db.refresh(db_usuario)    
+
+    else:
+
+        db_usuario = None
+
+    return db_usuario
+
+#********************************************************************************************************************
+
+def update_usuario(
+    db: _orm.Session,
+    token: str,
+    db_usuario: _models.UsuarioLiga,
+    usuario: _schemas.UsuariosLigaCreate,
+):
+    sub = _auth.token_claim(token, "sub")
+
+    db_usuario.id_equipo  = _fn.is_null(usuario.id_equipo,0)
+    db_usuario.nivel  = _fn.is_null(usuario.nivel,0)
+    db_usuario.nombre_completo = _fn.clean_string(usuario.nombre_completo)
+    db_usuario.email =  _fn.clean_string(usuario.nombre_completo)
+    db_usuario.telefono =  _fn.clean_string(usuario.nombre_completo)
+    db_usuario.password =  _fn.clean_string(usuario.nombre_completo)
+    db_usuario.roles =  _fn.clean_string(usuario.nombre_completo)
+    db_usuario.alias =  _fn.clean_string(usuario.nombre_completo)
+    db_usuario.remote_id =  _fn.is_null(usuario.nivel,0)
+    db_usuario.estatus = _fn.is_null(usuario.nivel,1)
+
+
+    db_usuario.modificado_por = _fn.clean_string(sub)
+    db_usuario.modificado_el = _dt.datetime.now()
+
+    db.commit()
+    db.refresh(db_usuario)
+
+    return db_usuario   

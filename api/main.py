@@ -1158,6 +1158,59 @@ async def update_item_update_fields(
     return {"message": "Los registros están siendo actualizados..."}
 
 
+# *************************************************************************************************************************************
+
+
+@app.post(
+    "/usuarios/",
+    response_model=_schemas.UsuariosLiga,
+    status_code=_fastapi.status.HTTP_201_CREATED,
+    tags=["Admin"],
+)
+def create_usuario(
+    usuario: _schemas.UsuariosLigaCreate,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    # return _services.create_actividad(db=db, actividad=actividad)
+    return _services.create_usuario(db=db, token=token, usuario=usuario)
+
+
+# *************************************************************************************************************************************
+
+
+@app.post(
+    "/usuarios/{id}",
+    response_model=_schemas.UsuariosLiga,
+    status_code=_fastapi.status.HTTP_201_CREATED,
+    tags=["Admin"],
+)
+async def update_usuario(
+    id: str,
+    usuario: _schemas.UsuariosLigaCreate,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_partidos = _services.get_usuario_por_id(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    if db_partidos is None:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+
+    return _services.update_usuario(
+        db=db,
+        token=token,
+        db_partido=db_partidos,
+        usuario=usuario,
+    )
+
+
+
+
 
 
 
