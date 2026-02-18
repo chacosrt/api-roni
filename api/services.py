@@ -1850,7 +1850,7 @@ def create_usuario(
             email =  _fn.clean_string(usuario.nombre_completo),
             telefono =  _fn.clean_string(usuario.nombre_completo),
             #password =  _fn.clean_string(usuario.nombre_completo),
-            roles =  _fn.clean_string(usuario.nombre_completo),
+            #roles =  _fn.clean_string(usuario.nombre_completo),
             alias =  _fn.clean_string(usuario.nombre_completo),
             remote_id =  _fn.is_null(usuario.nivel,0),
             estatus = _fn.is_null(usuario.nivel,1),
