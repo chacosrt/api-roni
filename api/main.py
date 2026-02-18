@@ -1113,6 +1113,31 @@ async def get_alpha_id(
 
 # *************************************************************************************************************************************
 
+@app.get(
+    "/admin/{id_equipo}/get_usuario_equipo",
+    response_model=_schemas.UsuariosLiga,
+    status_code=_fastapi.status.HTTP_200_OK,
+    tags=["Admin"],
+)
+async def read_usuarios_equipo(
+    id_equipo:str,   
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_torneos = _services.get_usuario_por_equipo(
+        db=db,
+          token=token, 
+          id=_fn.parameter_id(id_equipo),          
+
+    )
+    if db_torneos is None:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+    return db_torneos
+
+# *************************************************************************************************************************************
+
 
 @app.post(
     "/admin/deploy/me",
