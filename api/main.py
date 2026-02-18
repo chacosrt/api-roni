@@ -1172,6 +1172,15 @@ def create_usuario(
     db: _orm.Session = _fastapi.Depends(_services.get_db),
     token: str = _fastapi.Depends(_auth.token_bearer()),
 ):
+    db_partidos = _services.get_usuario_por_equipo(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(usuario.id_equipo),
+    )
+    if db_partidos != None:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="Ya existe un usuario para ese equipo"
+        )
     # return _services.create_actividad(db=db, actividad=actividad)
     return _services.create_usuario(db=db, token=token, usuario=usuario)
 

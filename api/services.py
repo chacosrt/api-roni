@@ -1732,12 +1732,6 @@ def get_goles_por_id(db: _orm.Session, token: str, id: int):
     jugador = db.query(_models.Goleadores).filter(_models.Goleadores.id == id).first()
     return jugador
 
-# *************************************************************************************************************************************
-
-
-def get_usuario_por_id(db: _orm.Session, token: str, id: int):
-    usuario = db.query(_models.UsuarioLiga).filter(_models.UsuarioLiga.id == id).first()
-    return usuario
 
 
 # *************************************************************************************************************************************
@@ -1813,7 +1807,22 @@ def update_goles(
     db.commit()
     db.refresh(db_jugador)
 
-    return db_jugador     
+    return db_jugador   
+
+# *************************************************************************************************************************************
+
+
+def get_usuario_por_id(db: _orm.Session, token: str, id: int):
+    usuario = db.query(_models.UsuarioLiga).filter(_models.UsuarioLiga.id == id).first()
+    return usuario
+
+# *************************************************************************************************************************************
+
+
+def get_usuario_por_equipo(db: _orm.Session, token: str, id: int):
+    usuario = db.query(_models.UsuarioLiga).filter(_models.UsuarioLiga.id_equipo == id).first()
+    return usuario
+
 
 
 # *************************************************************************************************************************************
