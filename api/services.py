@@ -1847,13 +1847,13 @@ def create_usuario(
             id_equipo  = _fn.is_null(usuario.id_equipo,0),
             nivel  = _fn.is_null(usuario.nivel,0),
             nombre_completo = _fn.clean_string(usuario.nombre_completo),
-            email =  _fn.clean_string(usuario.nombre_completo),
-            telefono =  _fn.clean_string(usuario.nombre_completo),
+            email =  _fn.clean_string(usuario.email),
+            telefono =  _fn.clean_string(usuario.telefono),
             #password =  _fn.clean_string(usuario.nombre_completo),
             #roles =  _fn.clean_string(usuario.nombre_completo),
-            alias =  _fn.clean_string(usuario.nombre_completo),
-            remote_id =  _fn.is_null(usuario.nivel,0),
-            estatus = _fn.is_null(usuario.nivel,1),
+            alias =  _fn.clean_string(usuario.alias),
+            remote_id =  _fn.is_null(usuario.remote_id,0),
+            estatus = _fn.is_null(usuario.estatus,1),
 
        
             
@@ -1887,13 +1887,13 @@ def update_usuario(
     db_usuario.id_equipo  = _fn.is_null(usuario.id_equipo,0)
     db_usuario.nivel  = _fn.is_null(usuario.nivel,0)
     db_usuario.nombre_completo = _fn.clean_string(usuario.nombre_completo)
-    db_usuario.email =  _fn.clean_string(usuario.nombre_completo)
-    db_usuario.telefono =  _fn.clean_string(usuario.nombre_completo)
+    db_usuario.email =  _fn.clean_string(usuario.email)
+    db_usuario.telefono =  _fn.clean_string(usuario.telefono)
     #db_usuario.password =  _fn.clean_string(usuario.nombre_completo)
     #db_usuario.roles =  _fn.clean_string(usuario.nombre_completo)
-    db_usuario.alias =  _fn.clean_string(usuario.nombre_completo)
-    db_usuario.remote_id =  _fn.is_null(usuario.nivel,0)
-    db_usuario.estatus = _fn.is_null(usuario.nivel,1)
+    db_usuario.alias =  _fn.clean_string(usuario.alias)
+    db_usuario.remote_id =  _fn.is_null(usuario.remote_id,0)
+    db_usuario.estatus = _fn.is_null(usuario.estatus,1)
 
 
     db_usuario.modificado_por = _fn.clean_string(sub)
