@@ -934,7 +934,7 @@ class _UsuariosLigaBase(_pydantic.BaseModel):
     email:  _typing.Optional[str] = ""
     telefono:  _typing.Optional[str] = ""
     #password:  _typing.Optional[str] = ""
-    roles:  _typing.Optional[str] = ""
+    #roles:  _typing.Optional[str] = ""
     alias:  _typing.Optional[str] = ""
     remote_id: _typing.Optional[int] = 0
     estatus: _typing.Optional[int] = 0

@@ -1890,7 +1890,7 @@ def update_usuario(
     db_usuario.email =  _fn.clean_string(usuario.nombre_completo)
     db_usuario.telefono =  _fn.clean_string(usuario.nombre_completo)
     #db_usuario.password =  _fn.clean_string(usuario.nombre_completo)
-    db_usuario.roles =  _fn.clean_string(usuario.nombre_completo)
+    #db_usuario.roles =  _fn.clean_string(usuario.nombre_completo)
     db_usuario.alias =  _fn.clean_string(usuario.nombre_completo)
     db_usuario.remote_id =  _fn.is_null(usuario.nivel,0)
     db_usuario.estatus = _fn.is_null(usuario.nivel,1)

@@ -256,7 +256,7 @@ class UsuarioLiga(_database.Base):
     email = _sql.Column(_sql.String(150), default="", index=True)
     telefono = _sql.Column(_sql.String(50), default="", index=True)
     #password = _sql.Column(_sql.String(255), default="")
-    roles = _sql.Column(_sql.String(255), default="")
+    #roles = _sql.Column(_sql.String(255), default="")
     alias = _sql.Column(_sql.String(150), default="")
     remote_id = _sql.Column(_sql.Integer, default=None, index=True)
     estatus = _sql.Column(_sql.Integer, default=1)
