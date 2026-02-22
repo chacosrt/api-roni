@@ -270,7 +270,7 @@ class UsuarioLiga(_database.Base):
 # Archivos
 # *************************************************************************************************************************************		
 
-class Arhivos(_database.Base):
+class Archivos(_database.Base):
     # nombre de la tabla
     __tablename__ = "archivos"
     # campos
