@@ -1348,7 +1348,34 @@ async def update_usuario(
 
 
 
+# *************************************************************************************************************************************
 
+
+@app.post(
+    "/archivos/{id}/delete",
+    status_code=_fastapi.status.HTTP_202_ACCEPTED,
+    tags=["Archivos"],
+)
+async def delete_archivo(
+    id: str,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_files = _services.get_archivos_por_id(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    if db_files is None:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+    _services.delete_archivo(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    return {"message": f"El registro: {id} ha sido eliminado"}
 
 
 
