@@ -1081,6 +1081,110 @@ async def update_goles(
 
 
 # *************************************************************************************************************************************
+# SECCION: ARCHIVOS
+# *************************************************************************************************************************************
+
+@app.get(
+    "/archivos_list/",
+    response_model=List[_schemas.Archivos],
+    status_code=_fastapi.status.HTTP_200_OK,
+    tags=["Archivos"],
+)
+async def read_archivos(
+    skip: Optional[int] = None,
+    limit: Optional[int] = None,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_archivos = _services.get_archivos(
+        db=db,
+          token=token, 
+          skip=skip, limit=limit
+    )
+    if len(db_archivos) == 0:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+    return db_archivos
+
+# *************************************************************************************************************************************
+@app.get(
+    "/archivos/{id}/id",
+    response_model=_schemas.Archivos,
+    status_code=_fastapi.status.HTTP_200_OK,
+    tags=["Archivos"],
+)
+async def read_archivos_por_id(
+    id: str,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_archivos = _services.get_archivos_por_id(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    if db_archivos is None:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+
+    return db_archivos
+
+
+# *************************************************************************************************************************************
+
+
+@app.post(
+    "/archivos/",
+    response_model=_schemas.Archivos,
+    status_code=_fastapi.status.HTTP_201_CREATED,
+    tags=["Archivos"],
+)
+def create_torneo(
+    archivo: _schemas.ArchivosCreate,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    # return _services.create_actividad(db=db, actividad=actividad)
+    return _services.create_archivo(db=db, token=token, file=archivo)
+
+
+# *************************************************************************************************************************************
+
+
+@app.post(
+    "/archivos/{id}",
+    response_model=_schemas.Archivos,
+    status_code=_fastapi.status.HTTP_201_CREATED,
+    tags=["Archivos"],
+)
+async def update_archivos(
+    id: str,
+    file: _schemas.ArchivosCreate,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_file = _services.get_archivos_por_id(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    if db_file is None:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+
+    return _services.update_archivo(
+        db=db,
+        token=token,
+        db_file=db_file,
+        file=file,
+    )
+
+
+
+# *************************************************************************************************************************************
 # SECCION: ADMIN
 # *************************************************************************************************************************************
 

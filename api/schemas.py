@@ -956,3 +956,34 @@ class UsuariosLiga(_UsuariosLigaBase):
 
     class Config:
         orm_mode = True
+
+
+# *************************************************************************************************************************************
+# SECCION: ARCHIVOS
+# *************************************************************************************************************************************
+
+class _ArchivosBase(_pydantic.BaseModel):
+
+    nombre:  _typing.Optional[str] = ""
+    file:  _typing.Optional[str] = ""
+    #password:  _typing.Optional[str] = ""
+    #roles:  _typing.Optional[str] = ""
+    
+
+# *************************************************************************************************************************************
+
+# La clase Create hace referencia a la clase _Base
+# y hereda los campos de la misma
+class ArchivosCreate(_ArchivosBase):
+    pass
+
+
+# *************************************************************************************************************************************
+
+
+class Archivos(_ArchivosBase):
+
+    id: int = 0    
+
+    class Config:
+        orm_mode = True

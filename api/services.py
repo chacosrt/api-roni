@@ -1903,3 +1903,107 @@ def update_usuario(
     db.refresh(db_usuario)
 
     return db_usuario   
+
+
+# *************************************************************************************************************************************
+
+def get_archivos(
+    db: _orm.Session,
+    token: str,
+    skip: int = 0,
+    limit: int = RETURN_DEFAULT_ROWS,
+):
+    skip = _fn.is_null(skip, 0)
+    limit = _fn.is_null(limit, RETURN_DEFAULT_ROWS)
+
+    if (limit > RETURN_MAX_ROWS) and (
+        _auth.token_decode(token)["roles"].upper() != "ADMINISTRATOR"
+    ):
+        _logger.warning(f"Solicitud maxima de registros excedida [{limit}]")
+        limit = RETURN_DEFAULT_ROWS
+
+    results = (
+        db.query(_models.Arhivos)
+        .order_by(_models.Arhivos.id)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+
+    return results
+
+# *************************************************************************************************************************************
+
+
+def get_archivos_por_id(db: _orm.Session, token: str, id: int):
+    equipo = db.query(_models.Equipos).filter(_models.Equipos.id == id).first()
+    return equipo
+
+
+# **************************************************************************
+
+def create_archivo(
+    db: _orm.Session,
+    file: _schemas.ArchivosCreate,
+    token: str,
+):
+
+    sub = _auth.token_claim(token, "sub")
+
+    #docExist = db.query(_models.Arhivos).filter(_models.Arhivos.file == usuario.id_equipo).first()
+
+    db_file = _models.Archivos(
+
+        nombre  =  _fn.clean_string(file.nombre),
+        file  =  _fn.clean_string(file.file),
+            
+    )        
+
+    db_file.creado_por = _fn.clean_string(sub)
+    db_file.creado_el = _dt.datetime.now()
+    db_file.modificado_por = _fn.clean_string(sub)
+    db_file.modificado_el = _dt.datetime.now()
+
+    db.add(db_file)
+    db.commit()
+    db.refresh(db_file)    
+
+
+
+    return db_file
+
+
+# *************************************************************************************************************************************
+
+def update_archivo(
+    db: _orm.Session,
+    db_file: _models.Arhivos,
+    file: _schemas.ArchivosCreate,
+    token: str,
+):
+
+    sub = _auth.token_claim(token, "sub")
+
+    docExist = db.query(_models.Arhivos).filter(_models.Arhivos.id == db_file.id).first()
+
+    docExist.nombre  =  _fn.clean_string(file.nombre)
+    docExist.file  =  _fn.clean_string(file.file)             
+
+    db_file.modificado_por = _fn.clean_string(sub)
+    db_file.modificado_el = _dt.datetime.now()
+
+    db.add(db_file)
+    db.commit()
+    db.refresh(db_file)    
+
+    return db_file
+
+# ****************************************************************************************
+
+
+def delete_archivo(db: _orm.Session, token: str, id: int):
+
+    archivo = get_archivos_por_id(db=db, token=token, id=id)
+    
+    db.query(_models.Arhivos).filter(_models.Arhivos.id == id).delete()
+    db.commit()
