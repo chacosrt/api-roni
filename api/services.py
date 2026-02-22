@@ -1955,6 +1955,7 @@ def create_archivo(
     db_file = _models.Archivos(
 
         nombre  =  _fn.clean_string(file.nombre),
+        nombre_archivo  =  _fn.clean_string(file.nombre_archivo),
         file  =  _fn.clean_string(file.file),
             
     )        
@@ -1987,6 +1988,7 @@ def update_archivo(
     docExist = db.query(_models.Archivos).filter(_models.Archivos.id == db_file.id).first()
 
     docExist.nombre  =  _fn.clean_string(file.nombre)
+    docExist.nombre_archivo  =  _fn.clean_string(file.nombre_archivo)
     docExist.file  =  _fn.clean_string(file.file)             
 
     db_file.modificado_por = _fn.clean_string(sub)

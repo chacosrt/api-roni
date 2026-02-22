@@ -965,6 +965,7 @@ class UsuariosLiga(_UsuariosLigaBase):
 class _ArchivosBase(_pydantic.BaseModel):
 
     nombre:  _typing.Optional[str] = ""
+    nombre_archivo:  _typing.Optional[str] = ""
     file:  _typing.Optional[str] = ""
     #password:  _typing.Optional[str] = ""
     #roles:  _typing.Optional[str] = ""
