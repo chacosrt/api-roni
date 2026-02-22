@@ -1923,8 +1923,8 @@ def get_archivos(
         limit = RETURN_DEFAULT_ROWS
 
     results = (
-        db.query(_models.Arhivos)
-        .order_by(_models.Arhivos.id)
+        db.query(_models.Archivos)
+        .order_by(_models.Archivos.id)
         .offset(skip)
         .limit(limit)
         .all()
@@ -1950,7 +1950,7 @@ def create_archivo(
 
     sub = _auth.token_claim(token, "sub")
 
-    #docExist = db.query(_models.Arhivos).filter(_models.Arhivos.file == usuario.id_equipo).first()
+    #docExist = db.query(_models.Archivos).filter(_models.Archivos.file == usuario.id_equipo).first()
 
     db_file = _models.Archivos(
 
@@ -1977,14 +1977,14 @@ def create_archivo(
 
 def update_archivo(
     db: _orm.Session,
-    db_file: _models.Arhivos,
+    db_file: _models.Archivos,
     file: _schemas.ArchivosCreate,
     token: str,
 ):
 
     sub = _auth.token_claim(token, "sub")
 
-    docExist = db.query(_models.Arhivos).filter(_models.Arhivos.id == db_file.id).first()
+    docExist = db.query(_models.Archivos).filter(_models.Archivos.id == db_file.id).first()
 
     docExist.nombre  =  _fn.clean_string(file.nombre)
     docExist.file  =  _fn.clean_string(file.file)             
@@ -2005,5 +2005,5 @@ def delete_archivo(db: _orm.Session, token: str, id: int):
 
     archivo = get_archivos_por_id(db=db, token=token, id=id)
     
-    db.query(_models.Arhivos).filter(_models.Arhivos.id == id).delete()
+    db.query(_models.Archivos).filter(_models.Archivos.id == id).delete()
     db.commit()
