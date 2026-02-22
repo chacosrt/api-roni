@@ -1936,8 +1936,8 @@ def get_archivos(
 
 
 def get_archivos_por_id(db: _orm.Session, token: str, id: int):
-    equipo = db.query(_models.Equipos).filter(_models.Equipos.id == id).first()
-    return equipo
+    archivo = db.query(_models.Archivos).filter(_models.Archivos.id == id).first()
+    return archivo
 
 
 # **************************************************************************
