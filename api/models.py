@@ -275,7 +275,8 @@ class Archivos(_database.Base):
     __tablename__ = "archivos"
     # campos
     id = _sql.Column(_sql.Integer, primary_key=True, autoincrement=True, index=True)
-    nombre  = _sql.Column(_sql.Integer, default=0, index=True)
+    nombre  = _sql.Column(_sql.String(255), default="", index=True)
+    nombre_archivo  = _sql.Column(_sql.String(255), default="", index=True)
     file  = _sql.Column(_sql.Text, default="")    
 
     creado_por = _sql.Column(_sql.String(50), default="", index=True)
