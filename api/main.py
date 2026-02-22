@@ -59,7 +59,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
+#app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
 
 # extrae valores de jwt *********************************************************************************************************
 @app.middleware("http")
