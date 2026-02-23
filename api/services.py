@@ -259,7 +259,7 @@ def get_equipos(
         db.query(_models.Equipos)
         .order_by(_models.Equipos.id)
         .offset(skip)
-        .limit(limit)
+        #.limit(limit)
         .all()
     )
 
@@ -1499,11 +1499,12 @@ def get_tabla_posiciones(db: _orm.Session, token: str, id_torneo:int, temporada:
 
 def get_tabla_temporadas(db: _orm.Session, token: str, id_torneo:int):
 
-    #torneo = db.query(_models.Torneos).filter(_models.Torneos.id == id_torneo).first()
+    torneo = db.query(_models.Torneos).filter(_models.Torneos.id == id_torneo).first()
 
     posiciones = (
         db.query(_models.Posiciones)
-        .filter(_models.Posiciones.liga==id_torneo)        
+        .filter(_models.Posiciones.liga==id_torneo)   
+        .filter(_models.Posiciones.temporada==torneo.temporada)      
         .order_by(_models.Posiciones.id.desc())
         .all()
     )
