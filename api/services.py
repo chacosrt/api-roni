@@ -1131,23 +1131,6 @@ def update_partido(
 ):
     sub = _auth.token_claim(token, "sub")
     ganador_partido = 0
-    # db_actividades.clave = _fn.clean_string(actividad.clave).upper()
-    db_partido.fecha =_fn.format_date(partido.fecha)
-    db_partido.horario = _fn.clean_string(partido.horario)
-    db_partido.etapa = _fn.clean_string(partido.etapa)
-    db_partido.jornada = _fn.clean_string(partido.jornada)
-    #db_partido.temporada = _fn.clean_string(partido.etapa)
-    db_partido.campo =  _fn.is_null(partido.campo,0)
-    db_partido.liga  =  _fn.is_null(partido.liga,0)
-    db_partido.local  =  _fn.is_null(partido.local,0)
-    db_partido.visitante =  _fn.is_null(partido.visitante,0)
-    db_partido.goles_local  =  _fn.is_null(partido.goles_local,0)
-    db_partido.goles_visitante  =  _fn.is_null(partido.goles_visitante,0)
-    #db_partido.ganador =  _fn.is_null(partido.ganador,0)     
-    db_partido.observaciones = _fn.clean_string(partido.observaciones)
-    db_partido.estatus = _fn.is_null(partido.estatus,0)
-
-    get_temporada = db.query(_models.Torneos).filter(_models.Torneos.id == partido.liga).first()
 
     posicion_local = db.query(_models.Posiciones).filter(_models.Posiciones.equipo == db_partido.local).first()
 
@@ -1190,6 +1173,24 @@ def update_partido(
         db.commit()
         db.refresh(posicion_local)
         db.refresh(posicion_visit)
+    # db_actividades.clave = _fn.clean_string(actividad.clave).upper()
+    db_partido.fecha =_fn.format_date(partido.fecha)
+    db_partido.horario = _fn.clean_string(partido.horario)
+    db_partido.etapa = _fn.clean_string(partido.etapa)
+    db_partido.jornada = _fn.clean_string(partido.jornada)
+    #db_partido.temporada = _fn.clean_string(partido.etapa)
+    db_partido.campo =  _fn.is_null(partido.campo,0)
+    db_partido.liga  =  _fn.is_null(partido.liga,0)
+    db_partido.local  =  _fn.is_null(partido.local,0)
+    db_partido.visitante =  _fn.is_null(partido.visitante,0)
+    db_partido.goles_local  =  _fn.is_null(partido.goles_local,0)
+    db_partido.goles_visitante  =  _fn.is_null(partido.goles_visitante,0)
+    #db_partido.ganador =  _fn.is_null(partido.ganador,0)     
+    db_partido.observaciones = _fn.clean_string(partido.observaciones)
+    db_partido.estatus = _fn.is_null(partido.estatus,0)
+
+    get_temporada = db.query(_models.Torneos).filter(_models.Torneos.id == partido.liga).first()
+    
 
     if partido.estatus == 2 and partido.goles_local > partido.goles_visitante:
 
