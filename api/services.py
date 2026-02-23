@@ -740,7 +740,7 @@ def get_partidos_por_jornada(
             .all()
         )
 
-    if partidos.length == 0:
+    if len(partidos) == 0:
 
         partidos = (
             db.query(_models.Partidos)        
