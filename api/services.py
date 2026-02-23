@@ -276,7 +276,7 @@ def get_equipos_por_id(db: _orm.Session, token: str, id: int):
 
 
 def get_equipos_por_id_torneo(db: _orm.Session, token: str, id: int):
-    equipo = db.query(_models.Equipos).filter(_models.Equipos.liga == id).all()
+    equipo = db.query(_models.Equipos).filter(_models.Equipos.liga == id).filter(_models.Equipos.estatus == 1).all()
     return equipo
 
 # *************************************************************************************************************************************
