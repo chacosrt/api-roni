@@ -1153,7 +1153,7 @@ def update_partido(
 
     posicion_visit = db.query(_models.Posiciones).filter(_models.Posiciones.equipo == db_partido.visitante).first()
 
-    if db_partido.estatus >= 2:
+    if db_partido.estatus >= 2 and db_partido.goles_local != partido.goles_local and db_partido.goles_visitante != partido.goles_visitante:
 
         if db_partido.ganador == db_partido.local:
 
