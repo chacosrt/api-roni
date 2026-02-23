@@ -1132,47 +1132,47 @@ def update_partido(
     sub = _auth.token_claim(token, "sub")
     ganador_partido = 0
 
-    posicion_local = db.query(_models.Posiciones).filter(_models.Posiciones.equipo == db_partido.local).first()
+    # posicion_local = db.query(_models.Posiciones).filter(_models.Posiciones.equipo == db_partido.local).first()
 
-    posicion_visit = db.query(_models.Posiciones).filter(_models.Posiciones.equipo == db_partido.visitante).first()
+    # posicion_visit = db.query(_models.Posiciones).filter(_models.Posiciones.equipo == db_partido.visitante).first()
 
-    if db_partido.estatus >= 2 and db_partido.goles_local != partido.goles_local and db_partido.goles_visitante != partido.goles_visitante:
+    # if db_partido.estatus >= 2 and db_partido.goles_local != partido.goles_local and db_partido.goles_visitante != partido.goles_visitante:
 
-        if db_partido.ganador == db_partido.local:
+    #     if db_partido.ganador == db_partido.local:
 
-            posicion_local.puntos = posicion_local.puntos - 3
-            posicion_local.juegos_ganados = posicion_local.juegos_ganados - 1
-            posicion_visit.juegos_perdidos = posicion_visit.juegos_perdidos - 1
+    #         posicion_local.puntos = posicion_local.puntos - 3
+    #         posicion_local.juegos_ganados = posicion_local.juegos_ganados - 1
+    #         posicion_visit.juegos_perdidos = posicion_visit.juegos_perdidos - 1
 
-        if db_partido.ganador == db_partido.visitante:
+    #     if db_partido.ganador == db_partido.visitante:
 
-            posicion_visit.puntos = posicion_visit.puntos - 3
-            posicion_visit.juegos_ganados = posicion_visit.juegos_ganados - 1
-            posicion_local.juegos_perdidos = posicion_local.juegos_perdidos - 1
+    #         posicion_visit.puntos = posicion_visit.puntos - 3
+    #         posicion_visit.juegos_ganados = posicion_visit.juegos_ganados - 1
+    #         posicion_local.juegos_perdidos = posicion_local.juegos_perdidos - 1
 
-        if db_partido.ganador == 0:
+    #     if db_partido.ganador == 0:
 
-            posicion_visit.puntos = posicion_visit.puntos - 1
-            posicion_local.puntos = posicion_local.puntos - 1
+    #         posicion_visit.puntos = posicion_visit.puntos - 1
+    #         posicion_local.puntos = posicion_local.puntos - 1
 
-            posicion_visit.juegos_empatados = posicion_visit.juegos_empatados - 1
-            posicion_local.juegos_empatados = posicion_local.juegos_empatados - 1
+    #         posicion_visit.juegos_empatados = posicion_visit.juegos_empatados - 1
+    #         posicion_local.juegos_empatados = posicion_local.juegos_empatados - 1
 
-        posicion_visit.juegos_jugados = posicion_visit.juegos_jugados - 1
-        posicion_local.juegos_jugados = posicion_local.juegos_jugados - 1
+    #     posicion_visit.juegos_jugados = posicion_visit.juegos_jugados - 1
+    #     posicion_local.juegos_jugados = posicion_local.juegos_jugados - 1
 
-        posicion_visit.goles_favor = posicion_visit.goles_favor - db_partido.goles_visitante
-        posicion_local.goles_favor = posicion_local.goles_favor - db_partido.goles_local
+    #     posicion_visit.goles_favor = posicion_visit.goles_favor - db_partido.goles_visitante
+    #     posicion_local.goles_favor = posicion_local.goles_favor - db_partido.goles_local
 
-        posicion_visit.goles_contra = posicion_visit.goles_contra - db_partido.goles_local
-        posicion_local.goles_contra = posicion_local.goles_contra - db_partido.goles_visitante
+    #     posicion_visit.goles_contra = posicion_visit.goles_contra - db_partido.goles_local
+    #     posicion_local.goles_contra = posicion_local.goles_contra - db_partido.goles_visitante
 
-        posicion_visit.diferencia_goles = posicion_visit.goles_favor - posicion_visit.goles_contra
-        posicion_local.diferencia_goles = posicion_local.goles_favor - posicion_local.goles_contra
+    #     posicion_visit.diferencia_goles = posicion_visit.goles_favor - posicion_visit.goles_contra
+    #     posicion_local.diferencia_goles = posicion_local.goles_favor - posicion_local.goles_contra
 
-        db.commit()
-        db.refresh(posicion_local)
-        db.refresh(posicion_visit)
+    #     db.commit()
+    #     db.refresh(posicion_local)
+    #     db.refresh(posicion_visit)
     # db_actividades.clave = _fn.clean_string(actividad.clave).upper()
     db_partido.fecha =_fn.format_date(partido.fecha)
     db_partido.horario = _fn.clean_string(partido.horario)
