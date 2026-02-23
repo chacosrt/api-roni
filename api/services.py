@@ -291,7 +291,7 @@ def create_equipo(
     sub = _auth.token_claim(token, "sub")
 
     db_equipos = _models.Equipos(
-        nombre=_fn.format_nombre_propio(equipo.nombre),
+        nombre=_fn.clean_string(equipo.nombre),
         liga=_fn.is_null(equipo.liga,0),
         delegado=_fn.clean_string(equipo.delegado),
         img_equipo=_fn.clean_string(equipo.img_equipo),  
