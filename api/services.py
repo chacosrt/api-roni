@@ -1580,12 +1580,12 @@ def delete_partido(db: _orm.Session, token: str, id: int):
 
 def get_tabla_posiciones(db: _orm.Session, token: str, id_torneo:int, temporada:str):
 
-    #torneo = db.query(_models.Torneos).filter(_models.Torneos.id == id_torneo).first()
+    torneo = db.query(_models.Torneos).filter(_models.Torneos.id == id_torneo).first()
 
     posiciones = (
         db.query(_models.Posiciones)
         .filter(_models.Posiciones.liga==id_torneo)
-        .filter(_models.Posiciones.temporada==temporada)
+        .filter(_models.Posiciones.temporada==torneo.temporada)
         .order_by(_models.Posiciones.puntos.desc(),_models.Posiciones.diferencia_goles.desc(),_models.Posiciones.goles_contra.asc(),_models.Posiciones.goles_favor.desc())
         .all()
     )
