@@ -322,7 +322,7 @@ def update_equipo(
     sub = _auth.token_claim(token, "sub")
 
     # db_actividades.clave = _fn.clean_string(actividad.clave).upper()
-    db_equipos.nombre=_fn.format_nombre_propio(equipo.nombre)
+    db_equipos.nombre=_fn.clean_string(equipo.nombre)
     db_equipos.liga=_fn.is_null(equipo.liga,0)
     db_equipos.delegado=_fn.clean_string(equipo.delegado)
     db_equipos.img_equipo=_fn.clean_string(equipo.img_equipo)
