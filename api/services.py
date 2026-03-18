@@ -725,14 +725,26 @@ def get_partidos_por_jornada(
 
         lastJornada = db.query(func.max(_models.Partidos.jornada)).filter(_models.Partidos.liga.in_([1,2])).filter(_models.Partidos.temporada == temporada).first()
 
-        partidos = (
-        db.query(_models.Partidos)        
-        .filter(_models.Partidos.liga.in_([1,2]))          
-        .filter(_models.Partidos.temporada == temporada)
-        .filter(_models.Partidos.jornada == jornada)
-        .order_by(_models.Partidos.liga.asc())   
-        .all()
-    )
+        if jornada == 0 :
+            partidos = (
+                db.query(_models.Partidos)        
+                .filter(_models.Partidos.liga.in_([1,2]))          
+                .filter(_models.Partidos.temporada == temporada)
+                .filter(_models.Partidos.jornada == lastJornada[0])
+                .order_by(_models.Partidos.liga.asc())   
+                .all()
+            )
+
+        else:
+
+            partidos = (
+                db.query(_models.Partidos)        
+                .filter(_models.Partidos.liga.in_([1,2]))          
+                .filter(_models.Partidos.temporada == temporada)
+                .filter(_models.Partidos.jornada == jornada)
+                .order_by(_models.Partidos.liga.asc())   
+                .all()
+            )
         
     else:
 
