@@ -725,7 +725,7 @@ def get_partidos_por_jornada(
 
         lastJornada = db.query(func.max(_models.Partidos.jornada)).filter(_models.Partidos.liga.in_([1,2])).filter(_models.Partidos.temporada == temporada).first()
 
-        if jornada == 0 :
+        if jornada == '0' :
             partidos = (
                 db.query(_models.Partidos)        
                 .filter(_models.Partidos.liga.in_([1,2]))          
