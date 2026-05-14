@@ -1629,7 +1629,7 @@ def get_tabla_posiciones(db: _orm.Session, token: str, id_torneo:int, temporada:
 
 # *************************************************************************************************************************************
 
-def get_partidos_copa(db: _orm.Session, token: str, id_torneo:int, temporada:str):
+def get_partidos_copa(db: _orm.Session, token: str, id_torneo:int):
 
     torneo = db.query(_models.Torneos).filter(_models.Torneos.id == id_torneo).first()
 
