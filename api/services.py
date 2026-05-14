@@ -1636,8 +1636,8 @@ def get_partidos_copa(db: _orm.Session, token: str, id_torneo:int):
     posiciones = (
         db.query(_models.Partidos)
         .filter(_models.Partidos.liga==id_torneo)
-        .filter(_models.Posiciones.temporada==torneo.temporada)
-        .order_by(_models.Posiciones.num_llave.asc())
+        .filter(_models.Partidos.temporada==torneo.temporada)
+        .order_by(_models.Partidos.num_llave.asc())
         .all()
     )
 
