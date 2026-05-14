@@ -279,6 +279,7 @@ class _PartidosBase(_pydantic.BaseModel):
     observaciones:  _typing.Optional[str] = ""
     registro_tabla:  _typing.Optional[bool] = False
     llave:  _typing.Optional[str] = ""
+    num_llave: _typing.Optional[int] = 0
 
 
 # *************************************************************************************************************************************

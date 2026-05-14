@@ -133,6 +133,7 @@ class Partidos(_database.Base):
     observaciones = _sql.Column(_sql.Text, default="")
     registro_tabla =_sql.Column(_sql.Boolean, default=False) 
     llave = _sql.Column(_sql.Text, default="")
+    num_llave = _sql.Column(_sql.Integer, default=0, index=True)
 
     creado_por = _sql.Column(_sql.String(50), default="", index=True)
     creado_el = _sql.Column(_sql.DateTime, default=_dt.datetime.now(), index=True)
