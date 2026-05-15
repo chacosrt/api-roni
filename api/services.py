@@ -1554,58 +1554,59 @@ def update_partido(
 
         etapas = ["OCTAVOS DE FINAL","CUARTOS DE FINAL","SEMIFINALES","FINAL"]
 
-        estapa_sig = etapas.index(partido.llave) + 1
+        estapa_sig = etapas.index(db_partido.llave) +1
 
-        if partido.ganador != 0 and partido.ganador != None:
+        siguiente_num_llave = (db_partido.num_llave + 1) // 2
 
-            if partido.num_llave % 2 == 0:
+        juega_de_local = (db_partido.num_llave % 2 != 0)
 
-                new_llave = partido.num_llave -1
+        if db_partido.ganador != 0 and db_partido.ganador != None:
 
-            else:
+            siguiente_partido = db.query(_models.Partidos).filter(_models.Partidos.liga==db_partido.liga).filter(_models.Partidos.llave==etapas[estapa_sig]).filter(_models.Partidos.num_llave==siguiente_num_llave).first()
 
-                new_llave = partido.num_llave
-
-            partido_sig = db.query(_models.Partidos).filter(_models.Partidos.num_llave == new_llave).filter(_models.Partidos.liga == partido.liga).filter(_models.Partidos.llave == etapas[estapa_sig]).first()
             
-                        
-            if partido_sig == None:
+            if siguiente_partido == None:         
                 
 
-                db_partido = _models.Partidos(                    
-                    etapa = _fn.clean_string(partido.etapa),                    
+                db_newpartido = _models.Partidos(                    
+                    etapa = _fn.clean_string(db_partido.etapa),                    
                     #temporada = _fn.clean_string(partido.etapa),                    
-                    liga  =  _fn.is_null(partido.liga,0),
-                    local  =  _fn.is_null(partido.ganador,0),     
-                    jornada = partido.jornada + 1,
+                    liga  =  _fn.is_null(db_partido.liga,0),
+                    #local  =  _fn.is_null(db_partido.ganador,0),     
+                    jornada = db_partido.jornada + 1,
                     llave = etapas[estapa_sig],
-                    num_llave = new_llave,
+                    num_llave = siguiente_num_llave,
                     #ganador =  _fn.is_null(partido.ganador,0),        
-                    observaciones = _fn.clean_string(partido.observaciones),
+                    #observaciones = _fn.clean_string(partido.observaciones),
                 
                 )
 
+                if juega_de_local:
+                    db_newpartido.local = db_partido.ganador
+                else:
+                    db_newpartido.visitante = db_partido.ganador
+
                 get_temporada = db.query(_models.Torneos).filter(_models.Torneos.id == partido.liga).first()                
 
-                db_partido.estatus = 1
+                db_newpartido.estatus = 1
                 #db_partido.ganador = ganador_partido
-                db_partido.temporada = get_temporada.temporada
+                db_newpartido.temporada = get_temporada.temporada
 
-                db_partido.creado_por = _fn.clean_string(sub)
-                db_partido.creado_el = _dt.datetime.now()
-                db_partido.modificado_por = _fn.clean_string(sub)
-                db_partido.modificado_el = _dt.datetime.now()
+                db_newpartido.creado_por = _fn.clean_string(sub)
+                db_newpartido.creado_el = _dt.datetime.now()
+                db_newpartido.modificado_por = _fn.clean_string(sub)
+                db_newpartido.modificado_el = _dt.datetime.now()
 
-                db.add(db_partido)
+                db.add(db_newpartido)
                 db.commit()
-                db.refresh(db_partido)
+                db.refresh(db_newpartido)
 
             else:
 
-                partido_sig.visitante = partido.ganador
+                siguiente_partido.visitante = db_partido.ganador
 
                 db.commit()
-                db.refresh(partido_sig)
+                db.refresh(siguiente_partido)
 
     suspensiones = db.query(_models.Tarjetas).filter(_models.Tarjetas.sanciones_vig == 1 ).all()
 
@@ -1698,7 +1699,7 @@ def get_partidos_copa(db: _orm.Session, token: str, id_torneo:int):
         db.query(_models.Partidos)
         .filter(_models.Partidos.liga==id_torneo)
         .filter(_models.Partidos.temporada==torneo.temporada)
-        .order_by(_models.Partidos.id.asc(),_models.Partidos.num_llave.asc())
+        .order_by(_models.Partidos.id.asc())
         .all()
     )
 
