@@ -1577,7 +1577,7 @@ def update_partido(
                     #temporada = _fn.clean_string(partido.etapa),                    
                     liga  =  _fn.is_null(partido.liga,0),
                     local  =  _fn.is_null(partido.ganador,0),     
-                    
+                    jornada = partido.jornada + 1
                     llave = etapas[estapa_sig],
                     num_llave = new_llave,
                     #ganador =  _fn.is_null(partido.ganador,0),        
