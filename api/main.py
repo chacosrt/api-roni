@@ -720,7 +720,7 @@ async def read_partidos_torneo_id(
 )
 async def read_partidos_jornada(
     id_torneo: str,
-    jornada:str,
+    jornada:int,
     temporada:str,
     skip: Optional[int] = None,
     limit: Optional[int] = None,

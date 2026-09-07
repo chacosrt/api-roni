@@ -701,7 +701,7 @@ def get_partidos_por_jornada(
     db: _orm.Session,
     token: str,
     torneo: int,
-    jornada: str,
+    jornada: int,
     temporada: str,
     skip: int = 0,    
     limit: int = RETURN_DEFAULT_ROWS,
@@ -724,8 +724,10 @@ def get_partidos_por_jornada(
         temporada = torneos.temporada
 
         lastJornada = db.query(func.max(_models.Partidos.jornada)).filter(_models.Partidos.liga.in_([1,2])).filter(_models.Partidos.temporada == temporada).first()
-
-        if jornada == '0' :
+        
+        liguillaExist =  db.query(_models.Partidos).filter(_models.Partidos.etapa == 3).filter(_models.Partidos.temporada == temporada).first()
+        
+        if jornada == 0 and liguillaExist == None :
             partidos = (
                 db.query(_models.Partidos)        
                 .filter(_models.Partidos.liga.in_([1,2]))          
@@ -736,23 +738,47 @@ def get_partidos_por_jornada(
             )
 
         else:
+            if liguillaExist != None and jornada == 0:
 
-            partidos = (
-                db.query(_models.Partidos)        
-                .filter(_models.Partidos.liga.in_([1,2]))          
-                .filter(_models.Partidos.temporada == temporada)
-                .filter(_models.Partidos.jornada == jornada)
-                .order_by(_models.Partidos.liga.asc())   
-                .all()
-            )
+                lastJornada = db.query(_models.Partidos).filter(
+                    _models.Partidos.liga.in_([1, 2]),
+                    _models.Partidos.etapa >= 3,
+                    _models.Partidos.temporada.like(temporada)
+                ).order_by(_models.Partidos.etapa.desc()).all()
+
+                partidos = (
+                    db.query(_models.Partidos)        
+                    .filter(_models.Partidos.liga.in_([1,2]))          
+                    .filter(_models.Partidos.temporada == temporada)
+                    .filter(_models.Partidos.etapa == lastJornada[0].etapa)
+                    .order_by(_models.Partidos.liga.asc())   
+                    .all()
+                )
+
+            else:
+
+                
+
+                partidos = (
+                    db.query(_models.Partidos)        
+                    .filter(_models.Partidos.liga.in_([1,2]))          
+                    .filter(_models.Partidos.temporada == temporada)
+                    .filter(_models.Partidos.jornada == jornada)
+                    .order_by(_models.Partidos.liga.asc())   
+                    .all()
+                )
         
     else:
 
         torneos = db.query(_models.Torneos).filter(_models.Torneos.id == torneo).first()
-        temporada = torneos.temporada
-        lastJornada = db.query(func.max(_models.Partidos.jornada)).filter(_models.Partidos.liga == torneo).filter(_models.Partidos.temporada == temporada).first()
 
-        if jornada == '0' :
+        if temporada == "" or temporada == "0":
+            temporada = torneos.temporada
+            
+        lastJornada = db.query(func.max(_models.Partidos.jornada)).filter(_models.Partidos.liga == torneo).filter(_models.Partidos.temporada == temporada).first()
+        liguillaExist =  db.query(_models.Partidos).filter(_models.Partidos.liga == torneo).filter(_models.Partidos.etapa == 3).filter(_models.Partidos.temporada == temporada).first()
+
+        if jornada == 0 :
             partidos = (
                 db.query(_models.Partidos)        
                 .filter(_models.Partidos.liga == torneo)         
@@ -764,14 +790,34 @@ def get_partidos_por_jornada(
 
         else:
 
-           partidos = (
-            db.query(_models.Partidos)        
-            .filter(_models.Partidos.liga == torneo)
-            .filter(_models.Partidos.temporada == temporada)
-            .filter(_models.Partidos.jornada == jornada)
-            .order_by(_models.Partidos.horario.asc())   
-            .all()
-        )
+            if liguillaExist != None and jornada == 0:
+           
+                lastJornada = db.query(_models.Partidos).filter(
+                    _models.Partidos.liga == torneo,
+                    _models.Partidos.etapa >= 3,
+                    _models.Partidos.temporada.like(temporada)
+                ).order_by(_models.Partidos.etapa.desc()).all()
+
+                partidos = (
+                    db.query(_models.Partidos)        
+                    .filter(_models.Partidos.liga == torneo)          
+                    .filter(_models.Partidos.temporada == temporada)
+                    .filter(_models.Partidos.etapa == lastJornada[0].etapa)
+                    .order_by(_models.Partidos.liga.asc())   
+                    .all()
+                )
+
+            else:
+                
+
+                partidos = (
+                    db.query(_models.Partidos)        
+                    .filter(_models.Partidos.liga == torneo)          
+                    .filter(_models.Partidos.temporada == temporada)
+                    .filter(_models.Partidos.jornada == jornada)
+                    .order_by(_models.Partidos.liga.asc())   
+                    .all()
+                )
 
         
 
@@ -807,7 +853,7 @@ def create_partido(
         fecha =_fn.format_date(partido.fecha),
         horario =_fn.clean_string(partido.horario),
         etapa = _fn.clean_string(partido.etapa),
-        jornada = _fn.clean_string(partido.jornada),
+        jornada = _fn.is_null(partido.jornada),
         #temporada = _fn.clean_string(partido.etapa),
         campo =  _fn.is_null(partido.campo,0),
         liga  =  _fn.is_null(partido.liga,0),

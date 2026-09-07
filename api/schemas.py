@@ -355,18 +355,22 @@ class Partidos(_PartidosBase):
     @_pydantic.root_validator
     def value_jornadas_equipos(cls, values) -> _typing.Dict:
         try:
-           
+            cuartos = False
+            semis = False
+            final = False
+            jornadas_list = []            
+            
             return_value = _fn.get_rows_value(
                     table_name="partidos",
                     search_field="liga",
                     search_type="",
                     search_value=values["liga"],
                     return_field="jornada",
-                    filter_optional="AND temporada = " + values["temporada"] + " GROUP BY jornada",
+                    filter_optional="AND temporada = '" + values["temporada"] + "' GROUP BY jornada",
                     sort_optional="",
                 )
             if return_value != "":
-                jornadas_list = []
+                
                 j = ""
                 for jornada in return_value:
                     if jornada[4] != j:
@@ -375,6 +379,38 @@ class Partidos(_PartidosBase):
                 values["jornadas"] = jornadas_list
             else:
                  values["jornadas"] = ""
+
+            return_value1 = _fn.get_rows_value(
+                                table_name="partidos",
+                                search_field="liga",
+                                search_type="",
+                                search_value=values["liga"],
+                                return_field="etapa",
+                                filter_optional="AND etapa >= 3 AND temporada = '" + values["temporada"] + "' ORDER BY etapa DESC",
+                                sort_optional="",
+                            )
+
+            if return_value1 != "":
+                
+                j = ""
+                for jornada in return_value1:
+                    if jornada[3] == 3 or jornada[3] == '3':
+                        if cuartos == False:
+                            cuartos= True
+                            jornadas_list.append("Cuartos de Final")
+
+                    if jornada[3] == 4 or jornada[3] == '4':
+                        if semis == False:
+                            semis= True
+                            jornadas_list.append("Semifinales")
+
+                    if jornada[3] == 5 or jornada[3] == '5':
+                        if final == False:
+                            final= True
+                            jornadas_list.append("Final")
+                values["jornadas"] = jornadas_list
+            else:
+                    values["jornadas"] = ""
         except Exception as e:
             _logger.error("[" + _inspect.stack()[0][3] + "] " + str(e))
 
