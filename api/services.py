@@ -774,7 +774,7 @@ def get_partidos_por_jornada(
 
         if temporada == "" or temporada == "0":
             temporada = torneos.temporada
-            
+
         lastJornada = db.query(func.max(_models.Partidos.jornada)).filter(_models.Partidos.liga == torneo).filter(_models.Partidos.temporada == temporada).first()
         liguillaExist =  db.query(_models.Partidos).filter(_models.Partidos.liga == torneo).filter(_models.Partidos.etapa == 3).filter(_models.Partidos.temporada == temporada).first()
 
@@ -853,7 +853,7 @@ def create_partido(
         fecha =_fn.format_date(partido.fecha),
         horario =_fn.clean_string(partido.horario),
         etapa = _fn.clean_string(partido.etapa),
-        jornada = _fn.is_null(partido.jornada),
+        jornada = _fn.is_null(partido.jornada,0),
         #temporada = _fn.clean_string(partido.etapa),
         campo =  _fn.is_null(partido.campo,0),
         liga  =  _fn.is_null(partido.liga,0),
