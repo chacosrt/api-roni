@@ -2066,6 +2066,16 @@ def update_goles(
 
     return db_jugador   
 
+# ****************************************************************************************
+
+
+def delete_goles(db: _orm.Session, token: str, id: int):
+
+    archivo = get_goles_por_id(db=db, token=token, id=id)
+    
+    db.query(_models.Goleadores).filter(_models.Goleadores.id == id).delete()
+    db.commit()
+
 # *************************************************************************************************************************************
 
 

@@ -1109,6 +1109,35 @@ async def update_goles(
 
 
 # *************************************************************************************************************************************
+
+
+@app.post(
+    "/goles/{id}/delete",
+    status_code=_fastapi.status.HTTP_202_ACCEPTED,
+    tags=["Estadisticas"],
+)
+async def delete_goles(
+    id: str,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    token: str = _fastapi.Depends(_auth.token_bearer()),
+):
+    db_partido = _services.get_goles_por_id(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    if db_partido is None:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="No se encontraron registros."
+        )
+    _services.delete_goles(
+        db=db,
+        token=token,
+        id=_fn.parameter_id(id),
+    )
+    return {"message": f"El registro: {id} ha sido eliminado"}
+
+# *************************************************************************************************************************************
 # SECCION: ARCHIVOS
 # *************************************************************************************************************************************
 
